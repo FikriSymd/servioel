@@ -197,7 +197,7 @@ pelanggan.
 | Tautan pelanggan | Token 32 huruf heksadesimal per nota, halaman publik `/n/<token>` tanpa perlu masuk |
 | Halaman 404 | `src/app/not-found.tsx`, berbahasa Indonesia, dipakai juga kalau token tautannya salah |
 | Migrasi | `20261012205848_tautan_dan_jejak_ubah` |
-| Uji | `npm run check:nota` (25 pemeriksaan) + 5 pemeriksaan baru di `npm run check:isolasi` |
+| Uji | `npm run check:nota` (25 pemeriksaan) + `npm run check:isolasi` (16 pemeriksaan, 6 di antaranya baru) |
 
 **Nomor servis dan tahap tidak bisa diubah dari formulir pembetulan.** Nomornya
 sudah tercetak di nota yang mungkin sudah dipegang pelanggan, dan perpindahan
