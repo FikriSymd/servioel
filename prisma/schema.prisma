@@ -1,0 +1,111 @@
+// Skema Servioel. Satu database, banyak toko.
+//
+// Aturan yang dipegang di sini:
+// - Tiap baris milik satu toko. Tabel yang bisa dibaca toko lain selalu punya
+//   kolom tokoId, dan query-nya disaring di server dari sesi, bukan dari
+//   parameter yang dikirim klien.
+// - Peran dan tahap disimpan sebagai teks, bukan enum database. Alasannya:
+//   daftar tahap dan peran sudah jadi satu sumber kebenaran di src/lib/types.ts
+//   dan src/lib/stages.ts, dan menambah tahap nanti tidak perlu migrasi enum.
+// - Nomor servis tidak dihitung dari jumlah baris. Barisnya bisa dihapus dan
+//   nomornya terpakai ulang. Dipakai baris penghitung yang dinaikkan di dalam
+//   transaksi yang sama dengan penyimpanan pesanannya.
+
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model Toko {
+  id         String   @id @default(cuid())
+  nama       String
+  dibuatPada DateTime @default(now())
+
+  pengguna User[]
+  pesanan  ServiceOrder[]
+
+  @@map("toko")
+}
+
+model User {
+  id         String   @id @default(cuid())
+  tokoId     String
+  email      String   @unique
+  nama       String
+  kataSandi  String // hash scrypt, format: scrypt$N$r$p$salt$kunci
+  peran      String   @default("teknisi") // owner | teknisi | kasir
+  aktif      Boolean  @default(true)
+  dibuatPada DateTime @default(now())
+
+  toko    Toko        @relation(fields: [tokoId], references: [id], onDelete: Cascade)
+  sesi    Sesi[]
+  gerakan StageMove[]
+
+  @@index([tokoId])
+  @@map("pengguna")
+}
+
+// Sesi disimpan di database supaya bisa dicabut (keluar dari semua perangkat).
+// Yang disimpan adalah hash dari token, bukan tokennya. Jadi kalau isi database
+// bocor, sesi yang sedang berjalan tidak bisa dipakai orang lain.
+model Sesi {
+  tokenHash String   @id
+  userId    String
+  expiresAt DateTime
+  dibuatPada DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@map("sesi")
+}
+
+model ServiceOrder {
+  id             String    @id @default(cuid())
+  tokoId         String
+  nomor          String // contoh SV-2026-0007
+  pelanggan      String
+  telepon        String
+  keluhan        String
+  stage          String    @default("barang-masuk")
+  masukTahapPada DateTime  @default(now())
+  dibuatPada     DateTime  @default(now())
+  diarsipPada    DateTime? // diisi saat unit sudah lama di Sudah Diambil
+
+  toko    Toko        @relation(fields: [tokoId], references: [id], onDelete: Cascade)
+  riwayat StageMove[]
+
+  @@unique([tokoId, nomor])
+  @@index([tokoId, stage])
+  @@index([tokoId, diarsipPada])
+  @@map("pesanan_servis")
+}
+
+model StageMove {
+  id        String   @id @default(cuid())
+  pesananId String
+  tokoId    String
+  dari      String? // null kalau ini pencatatan masuk pertama
+  ke        String
+  olehId    String
+  pada      DateTime @default(now())
+
+  pesanan ServiceOrder @relation(fields: [pesananId], references: [id], onDelete: Cascade)
+  oleh    User         @relation(fields: [olehId], references: [id])
+
+  @@index([pesananId])
+  @@index([tokoId])
+  @@map("gerakan_tahap")
+}
+
+// Penghitung nomor servis, per toko per tahun. Kuncinya "tokoId:tahun".
+model Penghitung {
+  kunci String @id
+  nilai Int    @default(0)
+
+  @@map("penghitung")
+}

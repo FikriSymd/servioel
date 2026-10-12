@@ -4,16 +4,17 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 
 /**
- * Kepala halaman. Nama toko ditulis sebagai teks, bukan lambang karangan,
- * karena lambang asli belum ada dan menciptakan aset palsu itu lebih buruk
- * daripada tidak ada.
+ * Kepala halaman untuk halaman terbuka. Nama produk ditulis sebagai teks, bukan
+ * lambang karangan, karena lambang asli belum ada dan menciptakan aset palsu itu
+ * lebih buruk daripada tidak ada.
  */
 export function SiteHeader() {
   const pathname = usePathname();
 
   const tautan = [
     { href: "/", label: "Beranda" },
-    { href: "/papan", label: "Papan" },
+    { href: "/papan", label: "Papan contoh" },
+    { href: "/masuk", label: "Masuk" },
   ];
 
   return (

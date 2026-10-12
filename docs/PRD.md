@@ -177,9 +177,9 @@ Yang jadi: landing page, kerangka aplikasi, papan kanban dengan drag-and-drop, a
 
 Bisa direview lewat tunnel Cloudflare. Revisi dari pemilik produk dikerjakan di fase ini.
 
-### Fase 2: Backend
+### Fase 2: Backend (selesai)
 
-PostgreSQL + Prisma, skema multi-toko, daftar dan login, tiga peran, papan tersambung ke data nyata, riwayat perpindahan tersimpan.
+PostgreSQL + Prisma, skema multi-toko, daftar dan login, tiga peran, papan tersambung ke data nyata, riwayat perpindahan tersimpan. Laporan buktinya di `docs/GATE-fase2.md`.
 
 ### Fase 3: Kesiapan Jualan
 
@@ -196,6 +196,11 @@ Halaman harga dan langganan, cetak nota, notifikasi, laporan, pengerasan (rate l
 | Kolom "Sudah Diambil" perlu berapa lama disimpan sebelum diarsip? | Pemilik produk | sebelum Fase 2 | Papan penuh kartu lama, papan jadi lambat dipakai |
 | Perlu bukti bayar atau DP saat terima barang? | Pemilik produk | sebelum Fase 2 | Kalau perlu, kartu butuh field pembayaran dan alur baru |
 | Di landing page, tulis harga atau "hubungi kami" dulu? | Pemilik produk | sebelum Fase 1 selesai | Harga palsu atau harga kosong dua-duanya merusak kepercayaan |
+
+Dua pertanyaan pertama sudah lewat batas waktunya tanpa jawaban. Supaya Fase 2
+tidak berhenti, dipakai nilai bawaan: **arsip 30 hari** dan **belum ada field
+pembayaran**. Keduanya ditulis di `docs/GATE-fase2.md` beserta cara mengubahnya.
+Kalau pemilik produk memilih lain, perubahannya kecil.
 
 ---
 
@@ -220,11 +225,17 @@ Halaman harga dan langganan, cetak nota, notifikasi, laporan, pengerasan (rate l
 | Kontras teks lolos AA | Hitung rasio tiap pasangan warna | **Lolos.** Audit di DOM: 0 gagal di /, /papan, /masuk. Script resmi, 13 pasangan PASS. Nilai: kertas/meja 14.27, tinta/kertas 16.47, tinta-redup/kertas 5.17, sinyal/meja 5.62, garis/meja 3.45, batas-kertas/kertas 3.48 |
 | Tautan publik hidup | Buka tautan tunnel dari luar, cek status HTTP | **Lolos.** /, /papan, /masuk semuanya 200 lewat trycloudflare, dan menyajikan build terbaru |
 | Tidak ada pola tampilan terlarang | Audit DOM: gradien, blur, bayangan dekoratif, garis tepi kiri, emoji | **Lolos.** Semuanya nol di ketiga halaman |
-| Data satu toko tidak bocor ke toko lain | Panggil fungsi domain langsung dari skrip dengan sesi toko lain | (diisi saat Fase 2) |
+| Data satu toko tidak bocor ke toko lain | Panggil fungsi domain langsung dari skrip dengan sesi toko lain | **Lolos.** `npm run check:isolasi`: 10 dari 10 pemeriksaan lolos. Toko B tidak bisa membaca, memindahkan, atau mengarsipkan nota toko A walau id-nya ditebak benar |
+| Toko bisa mendaftar sendiri lalu langsung masuk | Isi formulir `/daftar` lewat peramban, catat URL setelahnya | **Lolos.** Pindah ke `/app` dengan nama toko yang didaftarkan. Jalan lewat tunnel publik juga |
+| Nota tersimpan di database, bukan di memori | Buat nota, muat ulang, lalu baca `pesanan_servis` lewat `psql` | **Lolos.** Nota masih ada setelah muat ulang dan setelah server dinyalakan ulang |
+| Tiga peran punya wewenang berbeda | Masuk sebagai teknisi, buka `/app/staf` langsung | **Lolos.** Dialihkan ke `/app?ditolak=peran`, menu Staf dan tombol arsip tidak muncul |
+| Database mati tidak jadi halaman berbahasa Inggris | Matikan PostgreSQL, buka `/app`, lalu nyalakan lagi dan tekan Coba lagi | **Lolos.** Muncul pesan Indonesia dengan tindakan, dan papan pulih setelah database hidup |
 
 ### Known Gaps
 
 - Fase 1 (frontend) sudah dibangun dan diuji; lihat `docs/GATE.md`.
-- PostgreSQL belum terpasang di mesin ini.
-- Belum ada data toko nyata. Fase 1 memakai data contoh yang ditandai.
+- Fase 2 (backend) sudah dibangun dan diuji; lihat `docs/GATE-fase2.md`.
+- PostgreSQL 16.15 terpasang native di mesin ini (tanpa Docker). Basis data `servioel`, peran `servioel`, kata sandi di `.env` (tidak ikut masuk git).
+- Belum ada data toko nyata. Papan contoh di `/papan` memakai data contoh yang ditandai; papan asli di `/app` mulai dari kosong.
+- Belum ada verifikasi email dan lupa kata sandi. Belum ada rate limit di halaman masuk.
 - Harga dan model bisnis belum diputuskan.

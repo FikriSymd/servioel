@@ -77,6 +77,25 @@ Yang bergerak hanya nota yang diangkat saat diseret, dan umpan balik tombol yang
 
 ---
 
+## Halaman yang Ditambahkan di Fase 2
+
+Tidak ada arah visual baru. Halaman baru memakai bahan yang sama, supaya tidak
+terasa seperti tempelan.
+
+- **Daftar dan masuk.** Satu nota kertas di tengah meja gelap. Isian memakai
+  batas kertas (`paper-edge`, 3.48 di atas kertas), bukan kotak putih berbayang.
+  Satu tindakan utama per halaman.
+- **Kepala area kerja.** Menyebut nama toko dan nama pengguna beserta perannya.
+  Ini yang membedakan area kerja dari papan contoh, dan yang memberi tahu kasir
+  atau teknisi siapa yang sedang memakai.
+- **Kelola staf.** Tabel sederhana bergaris, bukan kartu-kartu. Aksi per baris
+  (aktif/nonaktif, setel ulang sandi) supaya satu baris terbaca sebagai satu
+  akun.
+- **Halaman gagal.** Dipakai saat server tidak menjawab. Menyebut penyebab yang
+  paling mungkin dan memberi satu tindakan, bukan "Terjadi kesalahan".
+
+---
+
 ## Yang Masih Terbuka
 
 1. Lambang toko. Sampai ada, nama ditulis sebagai teks. Lambang karangan tidak dibuat.

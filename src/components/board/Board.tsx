@@ -10,22 +10,55 @@ import {
   type DragEndEvent,
   type DragStartEvent,
 } from "@dnd-kit/core";
-import { useMemo, useState } from "react";
+import { useMemo, useState, type ReactNode } from "react";
 import { CardDetail } from "./CardDetail";
 import { Column } from "./Column";
 import { MobileStageList } from "./MobileStageList";
 import { NewCardForm } from "./NewCardForm";
 import { ServiceCardView } from "./ServiceCardView";
-import { StatePreview } from "./StatePreview";
 import { keyboardPindahKolom } from "./keyboardCoordinates";
-import { useBoard } from "@/lib/board-store";
 import { AMBANG_NYANGKUT_HARI, STAGES, hariDiTahap } from "@/lib/stages";
-import type { StageId } from "@/lib/types";
+import type { BoardStatus, ServiceOrder, StageId } from "@/lib/types";
 
-export function Board() {
-  const { mode, setMode, status, orders, muatUlang, pindahTahap, tambahKartu } =
-    useBoard();
+/**
+ * Papan kerja. Komponen ini tidak tahu dari mana datanya datang: papan contoh di
+ * halaman depan mengisinya dari data contoh, papan di dalam aplikasi mengisinya
+ * dari database. Tampilan dan ketiga jalur pindahnya (seret, ketuk, keyboard)
+ * sama persis, jadi yang diuji di halaman contoh memang yang dipakai kerja.
+ *
+ * Tiap aksi mengembalikan pesan untuk diumumkan pembaca layar. Pesannya datang
+ * dari server, jadi yang diucapkan adalah hasil sebenarnya.
+ */
+type Props = {
+  orders: ServiceOrder[];
+  status: BoardStatus;
+  judul?: string;
+  onPindah: (id: string, ke: StageId) => Promise<string | void> | string | void;
+  onTambah: (data: {
+    pelanggan: string;
+    telepon: string;
+    keluhan: string;
+  }) => Promise<string | void> | string | void;
+  onMuatUlang: () => void;
+  /** Kontrol tambahan di samping judul: pratinjau status, atau tombol arsip. */
+  kepala?: ReactNode;
+  /** Catatan di bawah judul: penanda data contoh, atau keadaan sambungan. */
+  catatan?: ReactNode;
+  /** Sedang menunggu server. Papan tetap bisa dipakai, cuma ditandai sibuk. */
+  sibuk?: boolean;
+};
 
+export function Board({
+  orders,
+  status,
+  judul = "Papan servis",
+  onPindah,
+  onTambah,
+  onMuatUlang,
+  kepala,
+  catatan,
+  sibuk = false,
+}: Props) {
   const [detailId, setDetailId] = useState<string | null>(null);
   const [formBuka, setFormBuka] = useState(false);
   const [dragId, setDragId] = useState<string | null>(null);
@@ -38,7 +71,7 @@ export function Board() {
   );
 
   const perTahap = useMemo(() => {
-    const peta = new Map<StageId, typeof orders>();
+    const peta = new Map<StageId, ServiceOrder[]>();
     for (const s of STAGES) peta.set(s.id, []);
     for (const o of orders) peta.get(o.stage)?.push(o);
     return peta;
@@ -53,27 +86,24 @@ export function Board() {
   const detail = orders.find((o) => o.id === detailId) ?? null;
   const sedangDrag = orders.find((o) => o.id === dragId) ?? null;
 
-  function catatPesan(nomor: string, ke: StageId) {
-    const tujuan = STAGES.find((s) => s.id === ke)?.label ?? ke;
-    setPesan(`${nomor} dipindahkan ke tahap ${tujuan}.`);
+  async function pindahDanUmumkan(id: string, ke: StageId) {
+    const hasil = await onPindah(id, ke);
+    if (typeof hasil === "string") setPesan(hasil);
   }
 
-  function onDragEnd(e: DragEndEvent) {
+  async function onDragEnd(e: DragEndEvent) {
     setDragId(null);
     const { active, over } = e;
     if (!over) return;
-    const ke = over.id as StageId;
-    const nota = orders.find((o) => o.id === String(active.id));
-    pindahTahap(String(active.id), ke);
-    if (nota && nota.stage !== ke) catatPesan(nota.nomor, ke);
+    await pindahDanUmumkan(String(active.id), over.id as StageId);
   }
 
   return (
-    <div className="flex flex-col gap-6">
+    <div className="flex flex-col gap-6" aria-busy={sibuk}>
       <div className="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
         <div>
           <h1 className="font-display text-2xl font-extrabold tracking-tight text-bench-text">
-            Papan servis
+            {judul}
           </h1>
           <p className="mt-1 text-sm text-bench-muted" aria-live="polite">
             {status === "siap"
@@ -90,21 +120,18 @@ export function Board() {
           >
             Nota servis baru
           </button>
-          <StatePreview mode={mode} setMode={setMode} />
+          {kepala}
         </div>
       </div>
 
-      <p className="border-t border-bench-line pt-3 text-[13px] text-bench-muted">
-        <span className="font-semibold text-bench-text">Data contoh.</span> Papan ini
-        belum tersambung database, jadi semua nota di bawah bukan data toko nyata.
-      </p>
+      {catatan}
 
       <p className="sr-only" role="status" aria-live="polite">
         {pesan}
       </p>
 
       {status === "memuat" && (
-        <div aria-busy="true" className="flex flex-col gap-3">
+        <div className="flex flex-col gap-3">
           <p role="status" className="text-sm text-bench-muted">
             Memuat papan servis.
           </p>
@@ -123,10 +150,7 @@ export function Board() {
       )}
 
       {status === "gagal" && (
-        <div
-          role="alert"
-          className="border border-bench-line px-4 py-10 text-center"
-        >
+        <div role="alert" className="border border-bench-line px-4 py-10 text-center">
           <h2 className="font-display text-lg font-bold text-bench-text">
             Papan gagal dimuat
           </h2>
@@ -136,7 +160,7 @@ export function Board() {
           </p>
           <button
             type="button"
-            onClick={muatUlang}
+            onClick={onMuatUlang}
             className="mt-4 min-h-11 rounded-control border border-bench-line px-4 text-sm font-semibold text-bench-text hover:border-signal"
           >
             Coba lagi
@@ -203,21 +227,17 @@ export function Board() {
         <CardDetail
           order={detail}
           onTutup={() => setDetailId(null)}
-          onPindah={(id, ke) => {
-            const nota = orders.find((o) => o.id === id);
-            pindahTahap(id, ke);
-            if (nota) catatPesan(nota.nomor, ke);
-          }}
+          onPindah={pindahDanUmumkan}
         />
       )}
 
       {formBuka && (
         <NewCardForm
           onTutup={() => setFormBuka(false)}
-          onSimpan={(data) => {
-            const baru = tambahKartu(data);
+          onSimpan={async (data) => {
             setFormBuka(false);
-            setPesan(`Nota ${baru.nomor} dibuat di tahap Barang Masuk.`);
+            const hasil = await onTambah(data);
+            if (typeof hasil === "string") setPesan(hasil);
           }}
         />
       )}

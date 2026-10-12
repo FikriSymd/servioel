@@ -27,24 +27,25 @@ export default function Beranda() {
               <p className="mt-5 max-w-lg text-base leading-relaxed text-bench-text/85">
                 Servioel mengganti tumpukan nota kertas di toko servis HP dan
                 elektronik. Tiap unit jadi satu nota bernomor yang bergerak dari
-                Barang Masuk sampai Sudah Diambil, dan tiap perpindahan dicatat.
+                Barang Masuk sampai Sudah Diambil, dan tiap perpindahan dicatat
+                beserta siapa yang memindahkan.
               </p>
               <div className="mt-7 flex flex-col gap-3 sm:flex-row">
                 <Link
-                  href="/papan"
+                  href="/daftar"
                   className="inline-flex min-h-11 items-center justify-center rounded-control bg-signal px-5 text-sm font-bold text-ink"
                 >
-                  Buka papan contoh
+                  Daftarkan toko
                 </Link>
                 <Link
-                  href="#nota"
+                  href="/papan"
                   className="inline-flex min-h-11 items-center justify-center rounded-control border border-bench-line px-5 text-sm font-semibold text-bench-text hover:border-signal"
                 >
-                  Lihat isi satu nota
+                  Coba papan contoh dulu
                 </Link>
               </div>
               <p className="mt-3 text-[13px] text-bench-muted">
-                Papan contoh memakai data contoh, bukan data toko nyata.
+                Papan contoh tidak perlu akun, dan isinya data contoh.
               </p>
             </div>
 
@@ -146,6 +147,47 @@ export default function Beranda() {
           </div>
         </section>
 
+        {/* Kalau dipakai kerja: apa yang berubah setelah ada akun toko. */}
+        <section className="border-b border-bench-line">
+          <div className="mx-auto grid max-w-6xl gap-10 px-4 py-12 lg:grid-cols-[minmax(0,0.85fr)_minmax(0,1fr)] lg:gap-16 lg:py-16">
+            <div>
+              <h2 className="font-display text-3xl font-extrabold tracking-tight text-bench-text">
+                Kalau dipakai kerja
+              </h2>
+              <p className="mt-4 max-w-lg text-base leading-relaxed text-bench-text/85">
+                Papan contoh hanya untuk mencoba. Yang dipakai kerja adalah papan
+                di dalam akun toko Anda, dan di sana tiap perubahan tersimpan.
+              </p>
+            </div>
+
+            <dl className="flex flex-col">
+              {[
+                [
+                  "Satu akun, satu toko",
+                  "Toko mendaftar sendiri, lalu akun teknisi dan kasir dibuat pemilik dari dalam aplikasi. Data antar toko dipisahkan di server, bukan cuma disembunyikan di tampilan.",
+                ],
+                [
+                  "Tiga peran",
+                  "Pemilik mengelola akun dan mengarsipkan unit lama. Teknisi dan kasir memakai papan: menulis nota baru dan memindahkan tahap.",
+                ],
+                [
+                  "Riwayat yang bisa ditelusuri",
+                  "Tiap perpindahan tercatat lengkap: dari tahap mana, ke tahap mana, kapan, dan oleh siapa. Bukan cuma tahap terakhirnya.",
+                ],
+                [
+                  "Papan tidak menumpuk selamanya",
+                  "Unit yang sudah diambil dan lewat 30 hari dikeluarkan dari papan oleh pemilik toko. Datanya tetap tersimpan, cuma tidak lagi menutupi yang masih jalan.",
+                ],
+              ].map(([istilah, arti]) => (
+                <div key={istilah} className="border-t border-bench-line py-4 first:border-t-0 first:pt-0">
+                  <dt className="font-display text-sm font-bold text-bench-text">{istilah}</dt>
+                  <dd className="mt-1 text-sm leading-relaxed text-bench-muted">{arti}</dd>
+                </div>
+              ))}
+            </dl>
+          </div>
+        </section>
+
         {/* Bagian jujur: yang belum jadi, ditulis apa adanya. */}
         <section className="border-b border-bench-line">
           <div className="mx-auto max-w-6xl px-4 py-12 lg:py-16">
@@ -155,11 +197,12 @@ export default function Beranda() {
               </h2>
               <ul className="flex flex-col">
                 {[
-                  "Papan masih memakai data contoh, belum tersambung database.",
-                  "Daftar toko dan login belum ada, jadi belum ada pemisahan data antar toko.",
-                  "Akun staf, teknisi dan kasir, belum bisa dibuat.",
                   "Cetak nota, invoice, dan pembayaran belum ada.",
                   "Notifikasi WhatsApp ke pelanggan belum ada.",
+                  "Laporan bulanan dan rata-rata lama pengerjaan belum ada.",
+                  "Lupa kata sandi belum ada. Kalau staf lupa, pemilik toko menyetel ulang sandinya dari halaman Staf.",
+                  "Toko yang mendaftar langsung aktif, belum ada verifikasi email.",
+                  "Field unit dan IMEI, estimasi biaya, dan tanggal janji belum ada di kartu.",
                   "Harga dan langganan belum diputuskan.",
                 ].map((t) => (
                   <li
@@ -177,24 +220,24 @@ export default function Beranda() {
         <section>
           <div className="mx-auto max-w-6xl px-4 py-12 lg:py-16">
             <h2 className="font-display text-3xl font-extrabold tracking-tight text-bench-text">
-              Coba papannya
+              Mulai dari toko Anda
             </h2>
             <p className="mt-4 max-w-xl text-base leading-relaxed text-bench-text/85">
-              Papan contoh bisa dibuka tanpa akun. Seret notanya, tulis nota baru,
-              lalu lihat riwayat perpindahannya.
+              Daftarkan tokonya, tulis nota pertama, lalu pindahkan sampai Sudah
+              Diambil. Papan contoh tetap bisa dibuka tanpa akun.
             </p>
             <div className="mt-7 flex flex-col gap-3 sm:flex-row">
               <Link
-                href="/papan"
+                href="/daftar"
                 className="inline-flex min-h-11 items-center justify-center rounded-control bg-signal px-5 text-sm font-bold text-ink"
               >
-                Buka papan contoh
+                Daftarkan toko
               </Link>
               <Link
                 href="/masuk"
                 className="inline-flex min-h-11 items-center justify-center rounded-control border border-bench-line px-5 text-sm font-semibold text-bench-text hover:border-signal"
               >
-                Lihat status daftar
+                Masuk kalau sudah punya akun
               </Link>
             </div>
           </div>
