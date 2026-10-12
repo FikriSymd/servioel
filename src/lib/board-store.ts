@@ -89,6 +89,9 @@ export function useBoard() {
         stage: "barang-masuk",
         masukTahapPada: sekarang,
         dibuatPada: sekarang,
+        token: `contoh-baru-${urutLokal}`,
+        diubahPada: null,
+        diubahOleh: null,
         riwayat: [
           {
             id: idBaru("rw"),
@@ -105,6 +108,33 @@ export function useBoard() {
     [nomorBerikut],
   );
 
+  /** Sama seperti di papan nyata: isi nota dibetulkan, tahapnya tidak ikut. */
+  const ubahKartu = useCallback(
+    (
+      id: string,
+      data: { perangkat: string; pelanggan: string; telepon: string; keluhan: string },
+    ) => {
+      const sekarang = new Date().toISOString();
+      setOrders((lama) =>
+        lama.map((o) =>
+          o.id === id
+            ? {
+                ...o,
+                perangkat: data.perangkat.trim(),
+                pelanggan: data.pelanggan.trim(),
+                telepon: data.telepon.trim(),
+                keluhan: data.keluhan.trim(),
+                diubahPada: sekarang,
+                diubahOleh: PENGGUNA_CONTOH,
+              }
+            : o,
+        ),
+      );
+      return orders.find((o) => o.id === id)?.nomor ?? "";
+    },
+    [orders],
+  );
+
   return {
     mode,
     setMode,
@@ -113,5 +143,6 @@ export function useBoard() {
     muatUlang,
     pindahTahap,
     tambahKartu,
+    ubahKartu,
   };
 }

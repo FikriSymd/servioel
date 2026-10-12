@@ -91,9 +91,12 @@ Sebagai pengguna, saya mau membuka satu kartu dan melihat isinya, supaya bisa me
 - Papan kanban 6 tahap: Barang Masuk, Diagnosa, Nunggu Sparepart, Dikerjakan, Selesai, Sudah Diambil.
 - Pencarian unit di papan: nomor HP, nama pelanggan, nama perangkat, atau nomor nota. Bentuk tulisan tidak perlu persis (spasi, tanda hubung, besar-kecil huruf diabaikan).
 - Buat kartu servis baru (perangkat, nama, nomor HP, keluhan).
+- Betulkan isi nota (perangkat, nama, nomor HP, keluhan). Nomor servis dan tahap tidak ikut berubah. Tercatat siapa yang membetulkan dan kapan.
 - Pindah kartu antar tahap lewat drag-and-drop (laptop), ketuk (HP), dan keyboard.
 - Riwayat perpindahan per kartu (siapa, kapan, dari dan ke tahap mana).
 - Detail kartu.
+- Nota siap cetak untuk diserahkan ke pelanggan (`/nota/<id>`).
+- Tautan status per nota (`/n/<token>`) yang bisa dibuka pelanggan tanpa akun, hanya menampilkan unitnya sudah sampai tahap mana.
 - Landing page jualan yang jujur: tidak ada angka karangan, tidak ada testimoni palsu, tidak ada tombol mati.
 
 ### Functional, P1 (setelah V1 terbukti)
@@ -102,12 +105,14 @@ Sebagai pengguna, saya mau membuka satu kartu dan melihat isinya, supaya bisa me
 - Catatan teknisi (internal, tidak dilihat pelanggan).
 - Tandai teknisi penanggung jawab di kartu.
 - Riwayat servis per pelanggan (pernah servis apa saja).
+- Alamat dan telepon toko, supaya ikut tercetak di nota.
+- Lupa kata sandi lewat email.
 
 ### Functional, P2 (nanti)
 
 - Model unit dan IMEI/serial number.
-- Cetak nota dan invoice.
-- Notifikasi WhatsApp ke pelanggan saat status berubah.
+- Invoice dan pembayaran.
+- Notifikasi WhatsApp otomatis ke pelanggan saat status berubah.
 - Langganan berbayar dan pembatasan jumlah staf per paket.
 - Laporan: jumlah servis per bulan, rata-rata lama pengerjaan.
 - Multi-cabang dalam satu toko.
@@ -183,7 +188,7 @@ PostgreSQL + Prisma, skema multi-toko, daftar dan login, tiga peran, papan tersa
 
 ### Fase 3: Kesiapan Jualan
 
-Halaman harga dan langganan, cetak nota, notifikasi, laporan, pengerasan (rate limit, validasi, audit akses antar toko).
+Halaman harga dan langganan, notifikasi, laporan, pengerasan (rate limit, validasi, audit akses antar toko), dan domain tetap supaya alamatnya tidak berganti tiap VM menyala ulang. Cetak nota dan tautan status pelanggan sudah dikerjakan lebih awal, lihat `docs/GATE-fase2.md` bagian 8.
 
 ---
 
@@ -238,6 +243,7 @@ Kalau pemilik produk memilih lain, perubahannya kecil.
 - Fase 1 (frontend) sudah dibangun dan diuji; lihat `docs/GATE.md`.
 - Fase 2 (backend) sudah dibangun dan diuji; lihat `docs/GATE-fase2.md`.
 - PostgreSQL 16.15 terpasang native di mesin ini (tanpa Docker). Basis data `servioel`, peran `servioel`, kata sandi di `.env` (tidak ikut masuk git).
-- Belum ada data toko nyata. Papan contoh di `/papan` memakai data contoh yang ditandai; papan asli di `/app` mulai dari kosong.
+- Basis data sudah berisi data toko nyata: `evey cell` dan `nin cell`, dua akun, dua nota. Data ini tidak boleh dihapus. Setiap migrasi wajib menambah kolom tanpa mengisi nilai karangan ke baris yang sudah ada.
+- Nota yang dibuat sebelum kolom perangkat ada tidak punya isi perangkat. Kartu dan detailnya menulis "Belum dicatat", bukan diisi tebakan.
 - Belum ada verifikasi email dan lupa kata sandi. Belum ada rate limit di halaman masuk.
 - Harga dan model bisnis belum diputuskan.

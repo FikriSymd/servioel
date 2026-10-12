@@ -3,6 +3,7 @@
 import {
   DndContext,
   DragOverlay,
+  KeyboardCode,
   KeyboardSensor,
   PointerSensor,
   useSensor,
@@ -14,7 +15,7 @@ import { useMemo, useState, type ReactNode } from "react";
 import { CardDetail } from "./CardDetail";
 import { Column } from "./Column";
 import { MobileStageList } from "./MobileStageList";
-import { NewCardForm } from "./NewCardForm";
+import { NewCardForm, type IsiNota } from "./NewCardForm";
 import { ServiceCardView } from "./ServiceCardView";
 import { keyboardPindahKolom } from "./keyboardCoordinates";
 import { AMBANG_NYANGKUT_HARI, STAGES, hariDiTahap } from "@/lib/stages";
@@ -38,12 +39,15 @@ type Props = {
   status: BoardStatus;
   judul?: string;
   onPindah: (id: string, ke: StageId) => Promise<string | void> | string | void;
-  onTambah: (data: {
-    perangkat: string;
-    pelanggan: string;
-    telepon: string;
-    keluhan: string;
-  }) => Promise<string | void> | string | void;
+  onTambah: (data: IsiNota) => Promise<string | void> | string | void;
+  /** Membetulkan isi nota. Tidak ada di papan contoh yang tanpa server. */
+  onUbah?: (id: string, data: IsiNota) => Promise<string | void> | string | void;
+  /**
+   * Alamat halaman cetak satu nota. Kalau tidak diisi, tombol cetak dan bagi
+   * tautan tidak muncul: papan contoh tidak punya baris di database, jadi
+   * tautannya akan menuju halaman kosong.
+   */
+  tautanCetak?: (order: ServiceOrder) => string;
   onMuatUlang: () => void;
   /** Kontrol tambahan di samping judul: pratinjau status, atau tombol arsip. */
   kepala?: ReactNode;
@@ -59,6 +63,8 @@ export function Board({
   judul = "Papan servis",
   onPindah,
   onTambah,
+  onUbah,
+  tautanCetak,
   onMuatUlang,
   kepala,
   catatan,
@@ -66,6 +72,7 @@ export function Board({
 }: Props) {
   const [detailId, setDetailId] = useState<string | null>(null);
   const [formBuka, setFormBuka] = useState(false);
+  const [ubahId, setUbahId] = useState<string | null>(null);
   const [dragId, setDragId] = useState<string | null>(null);
   const [pesan, setPesan] = useState("");
   const [cari, setCari] = useState("");
@@ -73,7 +80,24 @@ export function Board({
   const sensors = useSensors(
     // Jarak 8px: klik tanpa geser tetap membuka detail, bukan dibaca sebagai seret.
     useSensor(PointerSensor, { activationConstraint: { distance: 8 } }),
-    useSensor(KeyboardSensor, { coordinateGetter: keyboardPindahKolom }),
+    useSensor(KeyboardSensor, {
+      coordinateGetter: keyboardPindahKolom,
+      /*
+        Bawaannya dnd-kit memakai Space DAN Enter untuk mulai mengangkat nota.
+        Karena kartunya juga tombol "buka detail", Enter jadi rebutan, dan dnd-kit
+        yang menang: tekan Enter, notanya terangkat, detailnya tidak pernah
+        terbuka. Akibatnya seluruh isi panel detail (pindah tahap, betulkan nota,
+        cetak, bagi tautan) tidak terjangkau keyboard.
+
+        Jadi pembagiannya dibuat tegas: Enter membuka detail, Space mengangkat
+        nota untuk digeser. Dua-duanya tetap ada, tidak ada yang dikorbankan.
+      */
+      keyboardCodes: {
+        start: [KeyboardCode.Space],
+        cancel: [KeyboardCode.Esc],
+        end: [KeyboardCode.Space, KeyboardCode.Enter],
+      },
+    }),
   );
 
   const terfilter = useMemo(() => saringPesanan(orders, cari), [orders, cari]);
@@ -93,6 +117,7 @@ export function Board({
   ).length;
 
   const detail = orders.find((o) => o.id === detailId) ?? null;
+  const sedangUbah = orders.find((o) => o.id === ubahId) ?? null;
   const sedangDrag = orders.find((o) => o.id === dragId) ?? null;
 
   async function pindahDanUmumkan(id: string, ke: StageId) {
@@ -267,6 +292,11 @@ export function Board({
           <MobileStageList orders={terfilter} onBuka={setDetailId} kueri={cari} />
 
           <div className="hidden lg:block">
+            <p className="sr-only">
+              Papan bisa dipakai tanpa mouse. Tab untuk berpindah antar nota,
+              Enter untuk membuka detail nota, Space untuk mengangkat nota lalu
+              panah kiri dan kanan untuk memindahkannya ke tahap lain.
+            </p>
             <DndContext
               sensors={sensors}
               onDragStart={(e: DragStartEvent) => setDragId(String(e.active.id))}
@@ -303,6 +333,36 @@ export function Board({
           order={detail}
           onTutup={() => setDetailId(null)}
           onPindah={pindahDanUmumkan}
+          /*
+            Panel detail ditutup dulu sebelum formulir pembetulan dibuka. Dua
+            lapisan yang sama-sama mengunci fokus akan saling tarik, dan yang
+            di depan belum tentu yang terakhir dibuka.
+          */
+          onUbah={
+            onUbah
+              ? () => {
+                  setUbahId(detail.id);
+                  setDetailId(null);
+                }
+              : undefined
+          }
+          tautanCetak={tautanCetak?.(detail)}
+        />
+      )}
+
+      {sedangUbah && (
+        <NewCardForm
+          awal={sedangUbah}
+          onTutup={() => setUbahId(null)}
+          onSimpan={async (data) => {
+            const id = sedangUbah.id;
+            setUbahId(null);
+            const hasil = await onUbah?.(id, data);
+            if (typeof hasil === "string") setPesan(hasil);
+            // Dibuka lagi supaya yang membetulkan langsung melihat hasilnya,
+            // bukan menebak apakah perubahannya tersimpan.
+            setDetailId(id);
+          }}
         />
       )}
 

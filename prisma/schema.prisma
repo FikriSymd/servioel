@@ -44,6 +44,7 @@ model User {
   toko    Toko        @relation(fields: [tokoId], references: [id], onDelete: Cascade)
   sesi    Sesi[]
   gerakan StageMove[]
+  diubah  ServiceOrder[] @relation("DiubahOleh")
 
   @@index([tokoId])
   @@map("pengguna")
@@ -77,8 +78,20 @@ model ServiceOrder {
   dibuatPada     DateTime  @default(now())
   diarsipPada    DateTime? // diisi saat unit sudah lama di Sudah Diambil
 
-  toko    Toko        @relation(fields: [tokoId], references: [id], onDelete: Cascade)
-  riwayat StageMove[]
+  // Token acak untuk tautan nota yang boleh dibuka pelanggan tanpa masuk.
+  // Dibuat di Node (crypto.randomBytes), bukan dihitung dari id, supaya tidak
+  // bisa ditebak dari nomor servis atau id nota.
+  tokenPublik String @unique
+
+  // Jejak perubahan isi nota. Tahapnya sendiri punya catatan sendiri di
+  // gerakan_tahap; dua kolom ini hanya menandai "nota ini pernah dibetulkan,
+  // oleh siapa, kapan".
+  diubahPada   DateTime?
+  diubahOlehId String?
+
+  toko       Toko        @relation(fields: [tokoId], references: [id], onDelete: Cascade)
+  riwayat    StageMove[]
+  diubahOleh User?       @relation("DiubahOleh", fields: [diubahOlehId], references: [id], onDelete: SetNull)
 
   @@unique([tokoId, nomor])
   @@index([tokoId, stage])

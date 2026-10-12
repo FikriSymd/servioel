@@ -10,7 +10,7 @@ import { NextResponse, type NextRequest } from "next/server";
  * tidak melihat kerangka aplikasi dulu. Pemeriksaan yang sungguhan ada di
  * src/lib/dal.ts, di dekat datanya, dan tiap query tetap disaring per toko.
  */
-const RUTE_PRIBADI = ["/app"];
+const RUTE_PRIBADI = ["/app", "/nota"];
 
 export default function proxy(req: NextRequest) {
   const { pathname } = req.nextUrl;

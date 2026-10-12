@@ -183,7 +183,69 @@ diuji di halaman lain (`/`, `/papan`, `/masuk`, `/daftar`) yang tidak punya
 
 ---
 
-## 8. Yang belum diuji, dan itu jujur
+## 8. Betulkan nota, cetak nota, dan tautan status pelanggan
+
+Dua permintaan pemilik produk dikerjakan sekaligus, karena keduanya soal nota
+sebagai benda: satu untuk membetulkan isinya, satu untuk menyerahkannya ke
+pelanggan.
+
+| Bagian | Perubahan |
+|---|---|
+| Betulkan isi nota | `ubahPesanan` di `src/lib/orders.ts`, `aksiUbahPesanan`, tombol "Betulkan" di panel detail |
+| Jejak pembetulan | Kolom `diubahPada` dan `diubahOlehId`; panel detail menulis "Terakhir dibetulkan ... oleh ..." |
+| Nota siap cetak | Halaman `/nota/<id>`, di luar kerangka area kerja supaya yang dicetak cuma notanya |
+| Tautan pelanggan | Token 32 huruf heksadesimal per nota, halaman publik `/n/<token>` tanpa perlu masuk |
+| Halaman 404 | `src/app/not-found.tsx`, berbahasa Indonesia, dipakai juga kalau token tautannya salah |
+| Migrasi | `20261012205848_tautan_dan_jejak_ubah` |
+| Uji | `npm run check:nota` (25 pemeriksaan) + 5 pemeriksaan baru di `npm run check:isolasi` |
+
+**Nomor servis dan tahap tidak bisa diubah dari formulir pembetulan.** Nomornya
+sudah tercetak di nota yang mungkin sudah dipegang pelanggan, dan perpindahan
+tahap punya jalurnya sendiri supaya riwayatnya tetap satu catatan per
+perpindahan. Yang bisa dibetulkan: perangkat, nama, nomor HP, keluhan.
+
+**Tautan pelanggan diambil dari token, bukan dari id nota.** Tokennya 16 byte
+acak dari `crypto.randomBytes`, jadi tidak bisa ditebak dari nomor servis atau id.
+Nota lama ikut dapat tokennya sendiri lewat migrasi, diisi PostgreSQL dengan
+`gen_random_uuid()`, bukan dikarang di aplikasi.
+
+**Yang boleh dilihat pelanggan dibatasi di query, bukan di tampilan.** Halaman
+`/n/<token>` mengambil nomor, perangkat, nama, tahap, dan waktu pembaruan saja.
+Nomor HP, isi keluhan, riwayat lengkap, dan data toko lain tidak diambil dari
+database sama sekali. `check:nota` memeriksa daftar kolom yang dikembalikan,
+jadi kalau nanti ada yang menambah `telepon` ke situ, ujinya gagal.
+
+**Toko dan alamat belum ada di nota.** Datanya memang belum ada, jadi bagian itu
+dibiarkan kosong, bukan diisi contoh karangan.
+
+### Cacat yang ketemu: panel detail tidak bisa dibuka pakai keyboard
+
+Waktu menguji jalur keyboard, ketemu cacat nyata yang sudah ada sejak Fase 2:
+kartu di papan adalah satu tombol yang merangkap dua pekerjaan, jadi pengangkat
+nota sekaligus tombol buka detail. Sensor keyboard dnd-kit memakai Space DAN
+Enter untuk mulai mengangkat nota, dan dnd-kit yang menang. Akibatnya tekan
+Enter di kartu mengangkat notanya, panel detailnya tidak pernah terbuka, dan
+seluruh isi panel itu tidak terjangkau keyboard.
+
+Ini baru ketahuan sekarang karena panel itu tadinya cuma berisi tombol pindah
+tahap, dan pindah tahap sudah punya jalur keyboard sendiri lewat seret. Setelah
+panel itu jadi pintu masuk untuk membetulkan nota, mencetak, dan membagi tautan,
+cacatnya jadi serius.
+
+Perbaikannya: pembagiannya dibuat tegas. Enter membuka detail, Space mengangkat
+nota untuk digeser. Satu baris petunjuk ditambahkan di papan untuk pembaca layar.
+Dua-duanya tetap ada, tidak ada yang dikorbankan.
+
+**Bukti.** Fokus ke kartu, tekan Enter: panel detail terbuka dan fokus pindah ke
+tombol Tutup. Tab ke "Betulkan", tekan Enter: formulir terbuka dengan isi nota
+yang sekarang dan fokus di isian pertama. Tab ke "Simpan perubahan", tekan
+Enter: tersimpan dan panel detail terbuka lagi dengan isi baru. Escape menutup
+panel dan fokus kembali ke kartu. Space, panah kanan, Space masih memindahkan
+nota satu tahap seperti sebelumnya.
+
+---
+
+## 9. Yang belum diuji, dan itu jujur
 
 - **Beban.** Belum diuji dengan banyak toko sekaligus atau papan berisi ratusan
   nota. Angka "papan 200 kartu tetap responsif" di PRD masih belum dibuktikan.

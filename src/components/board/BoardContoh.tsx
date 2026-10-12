@@ -12,7 +12,7 @@ import type { StageId } from "@/lib/types";
  * sama, jadi yang bisa dicoba pengunjung memang tampilan yang dipakai kerja.
  */
 export function BoardContoh() {
-  const { mode, setMode, status, orders, muatUlang, pindahTahap, tambahKartu } =
+  const { mode, setMode, status, orders, muatUlang, pindahTahap, tambahKartu, ubahKartu } =
     useBoard();
 
   return (
@@ -29,6 +29,10 @@ export function BoardContoh() {
       onTambah={(data) => {
         const baru = tambahKartu(data);
         return `Nota ${baru.nomor} dibuat di tahap Barang Masuk.`;
+      }}
+      onUbah={(id, data) => {
+        const nomor = ubahKartu(id, data);
+        return nomor ? `Nota ${nomor} diperbarui.` : "";
       }}
       onMuatUlang={muatUlang}
       kepala={<StatePreview mode={mode} setMode={setMode} />}

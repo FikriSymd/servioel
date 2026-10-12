@@ -36,6 +36,9 @@ export type ServiceOrderMinAggregateOutputType = {
   masukTahapPada: Date | null
   dibuatPada: Date | null
   diarsipPada: Date | null
+  tokenPublik: string | null
+  diubahPada: Date | null
+  diubahOlehId: string | null
 }
 
 export type ServiceOrderMaxAggregateOutputType = {
@@ -50,6 +53,9 @@ export type ServiceOrderMaxAggregateOutputType = {
   masukTahapPada: Date | null
   dibuatPada: Date | null
   diarsipPada: Date | null
+  tokenPublik: string | null
+  diubahPada: Date | null
+  diubahOlehId: string | null
 }
 
 export type ServiceOrderCountAggregateOutputType = {
@@ -64,6 +70,9 @@ export type ServiceOrderCountAggregateOutputType = {
   masukTahapPada: number
   dibuatPada: number
   diarsipPada: number
+  tokenPublik: number
+  diubahPada: number
+  diubahOlehId: number
   _all: number
 }
 
@@ -80,6 +89,9 @@ export type ServiceOrderMinAggregateInputType = {
   masukTahapPada?: true
   dibuatPada?: true
   diarsipPada?: true
+  tokenPublik?: true
+  diubahPada?: true
+  diubahOlehId?: true
 }
 
 export type ServiceOrderMaxAggregateInputType = {
@@ -94,6 +106,9 @@ export type ServiceOrderMaxAggregateInputType = {
   masukTahapPada?: true
   dibuatPada?: true
   diarsipPada?: true
+  tokenPublik?: true
+  diubahPada?: true
+  diubahOlehId?: true
 }
 
 export type ServiceOrderCountAggregateInputType = {
@@ -108,6 +123,9 @@ export type ServiceOrderCountAggregateInputType = {
   masukTahapPada?: true
   dibuatPada?: true
   diarsipPada?: true
+  tokenPublik?: true
+  diubahPada?: true
+  diubahOlehId?: true
   _all?: true
 }
 
@@ -195,6 +213,9 @@ export type ServiceOrderGroupByOutputType = {
   masukTahapPada: Date
   dibuatPada: Date
   diarsipPada: Date | null
+  tokenPublik: string
+  diubahPada: Date | null
+  diubahOlehId: string | null
   _count: ServiceOrderCountAggregateOutputType | null
   _min: ServiceOrderMinAggregateOutputType | null
   _max: ServiceOrderMaxAggregateOutputType | null
@@ -230,8 +251,12 @@ export type ServiceOrderWhereInput = {
   masukTahapPada?: Prisma.DateTimeFilter<"ServiceOrder"> | Date | string
   dibuatPada?: Prisma.DateTimeFilter<"ServiceOrder"> | Date | string
   diarsipPada?: Prisma.DateTimeNullableFilter<"ServiceOrder"> | Date | string | null
+  tokenPublik?: Prisma.StringFilter<"ServiceOrder"> | string
+  diubahPada?: Prisma.DateTimeNullableFilter<"ServiceOrder"> | Date | string | null
+  diubahOlehId?: Prisma.StringNullableFilter<"ServiceOrder"> | string | null
   toko?: Prisma.XOR<Prisma.TokoScalarRelationFilter, Prisma.TokoWhereInput>
   riwayat?: Prisma.StageMoveListRelationFilter
+  diubahOleh?: Prisma.XOR<Prisma.UserNullableScalarRelationFilter, Prisma.UserWhereInput> | null
 }
 
 export type ServiceOrderOrderByWithRelationInput = {
@@ -246,12 +271,17 @@ export type ServiceOrderOrderByWithRelationInput = {
   masukTahapPada?: Prisma.SortOrder
   dibuatPada?: Prisma.SortOrder
   diarsipPada?: Prisma.SortOrderInput | Prisma.SortOrder
+  tokenPublik?: Prisma.SortOrder
+  diubahPada?: Prisma.SortOrderInput | Prisma.SortOrder
+  diubahOlehId?: Prisma.SortOrderInput | Prisma.SortOrder
   toko?: Prisma.TokoOrderByWithRelationInput
   riwayat?: Prisma.StageMoveOrderByRelationAggregateInput
+  diubahOleh?: Prisma.UserOrderByWithRelationInput
 }
 
 export type ServiceOrderWhereUniqueInput = Prisma.AtLeast<{
   id?: string
+  tokenPublik?: string
   tokoId_nomor?: Prisma.ServiceOrderTokoIdNomorCompoundUniqueInput
   AND?: Prisma.ServiceOrderWhereInput | Prisma.ServiceOrderWhereInput[]
   OR?: Prisma.ServiceOrderWhereInput[]
@@ -266,9 +296,12 @@ export type ServiceOrderWhereUniqueInput = Prisma.AtLeast<{
   masukTahapPada?: Prisma.DateTimeFilter<"ServiceOrder"> | Date | string
   dibuatPada?: Prisma.DateTimeFilter<"ServiceOrder"> | Date | string
   diarsipPada?: Prisma.DateTimeNullableFilter<"ServiceOrder"> | Date | string | null
+  diubahPada?: Prisma.DateTimeNullableFilter<"ServiceOrder"> | Date | string | null
+  diubahOlehId?: Prisma.StringNullableFilter<"ServiceOrder"> | string | null
   toko?: Prisma.XOR<Prisma.TokoScalarRelationFilter, Prisma.TokoWhereInput>
   riwayat?: Prisma.StageMoveListRelationFilter
-}, "id" | "tokoId_nomor">
+  diubahOleh?: Prisma.XOR<Prisma.UserNullableScalarRelationFilter, Prisma.UserWhereInput> | null
+}, "id" | "tokenPublik" | "tokoId_nomor">
 
 export type ServiceOrderOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
@@ -282,6 +315,9 @@ export type ServiceOrderOrderByWithAggregationInput = {
   masukTahapPada?: Prisma.SortOrder
   dibuatPada?: Prisma.SortOrder
   diarsipPada?: Prisma.SortOrderInput | Prisma.SortOrder
+  tokenPublik?: Prisma.SortOrder
+  diubahPada?: Prisma.SortOrderInput | Prisma.SortOrder
+  diubahOlehId?: Prisma.SortOrderInput | Prisma.SortOrder
   _count?: Prisma.ServiceOrderCountOrderByAggregateInput
   _max?: Prisma.ServiceOrderMaxOrderByAggregateInput
   _min?: Prisma.ServiceOrderMinOrderByAggregateInput
@@ -302,6 +338,9 @@ export type ServiceOrderScalarWhereWithAggregatesInput = {
   masukTahapPada?: Prisma.DateTimeWithAggregatesFilter<"ServiceOrder"> | Date | string
   dibuatPada?: Prisma.DateTimeWithAggregatesFilter<"ServiceOrder"> | Date | string
   diarsipPada?: Prisma.DateTimeNullableWithAggregatesFilter<"ServiceOrder"> | Date | string | null
+  tokenPublik?: Prisma.StringWithAggregatesFilter<"ServiceOrder"> | string
+  diubahPada?: Prisma.DateTimeNullableWithAggregatesFilter<"ServiceOrder"> | Date | string | null
+  diubahOlehId?: Prisma.StringNullableWithAggregatesFilter<"ServiceOrder"> | string | null
 }
 
 export type ServiceOrderCreateInput = {
@@ -315,8 +354,11 @@ export type ServiceOrderCreateInput = {
   masukTahapPada?: Date | string
   dibuatPada?: Date | string
   diarsipPada?: Date | string | null
+  tokenPublik: string
+  diubahPada?: Date | string | null
   toko: Prisma.TokoCreateNestedOneWithoutPesananInput
   riwayat?: Prisma.StageMoveCreateNestedManyWithoutPesananInput
+  diubahOleh?: Prisma.UserCreateNestedOneWithoutDiubahInput
 }
 
 export type ServiceOrderUncheckedCreateInput = {
@@ -331,6 +373,9 @@ export type ServiceOrderUncheckedCreateInput = {
   masukTahapPada?: Date | string
   dibuatPada?: Date | string
   diarsipPada?: Date | string | null
+  tokenPublik: string
+  diubahPada?: Date | string | null
+  diubahOlehId?: string | null
   riwayat?: Prisma.StageMoveUncheckedCreateNestedManyWithoutPesananInput
 }
 
@@ -345,8 +390,11 @@ export type ServiceOrderUpdateInput = {
   masukTahapPada?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   dibuatPada?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   diarsipPada?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  tokenPublik?: Prisma.StringFieldUpdateOperationsInput | string
+  diubahPada?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   toko?: Prisma.TokoUpdateOneRequiredWithoutPesananNestedInput
   riwayat?: Prisma.StageMoveUpdateManyWithoutPesananNestedInput
+  diubahOleh?: Prisma.UserUpdateOneWithoutDiubahNestedInput
 }
 
 export type ServiceOrderUncheckedUpdateInput = {
@@ -361,6 +409,9 @@ export type ServiceOrderUncheckedUpdateInput = {
   masukTahapPada?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   dibuatPada?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   diarsipPada?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  tokenPublik?: Prisma.StringFieldUpdateOperationsInput | string
+  diubahPada?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  diubahOlehId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   riwayat?: Prisma.StageMoveUncheckedUpdateManyWithoutPesananNestedInput
 }
 
@@ -376,6 +427,9 @@ export type ServiceOrderCreateManyInput = {
   masukTahapPada?: Date | string
   dibuatPada?: Date | string
   diarsipPada?: Date | string | null
+  tokenPublik: string
+  diubahPada?: Date | string | null
+  diubahOlehId?: string | null
 }
 
 export type ServiceOrderUpdateManyMutationInput = {
@@ -389,6 +443,8 @@ export type ServiceOrderUpdateManyMutationInput = {
   masukTahapPada?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   dibuatPada?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   diarsipPada?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  tokenPublik?: Prisma.StringFieldUpdateOperationsInput | string
+  diubahPada?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
 
 export type ServiceOrderUncheckedUpdateManyInput = {
@@ -403,6 +459,9 @@ export type ServiceOrderUncheckedUpdateManyInput = {
   masukTahapPada?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   dibuatPada?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   diarsipPada?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  tokenPublik?: Prisma.StringFieldUpdateOperationsInput | string
+  diubahPada?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  diubahOlehId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 export type ServiceOrderListRelationFilter = {
@@ -432,6 +491,9 @@ export type ServiceOrderCountOrderByAggregateInput = {
   masukTahapPada?: Prisma.SortOrder
   dibuatPada?: Prisma.SortOrder
   diarsipPada?: Prisma.SortOrder
+  tokenPublik?: Prisma.SortOrder
+  diubahPada?: Prisma.SortOrder
+  diubahOlehId?: Prisma.SortOrder
 }
 
 export type ServiceOrderMaxOrderByAggregateInput = {
@@ -446,6 +508,9 @@ export type ServiceOrderMaxOrderByAggregateInput = {
   masukTahapPada?: Prisma.SortOrder
   dibuatPada?: Prisma.SortOrder
   diarsipPada?: Prisma.SortOrder
+  tokenPublik?: Prisma.SortOrder
+  diubahPada?: Prisma.SortOrder
+  diubahOlehId?: Prisma.SortOrder
 }
 
 export type ServiceOrderMinOrderByAggregateInput = {
@@ -460,6 +525,9 @@ export type ServiceOrderMinOrderByAggregateInput = {
   masukTahapPada?: Prisma.SortOrder
   dibuatPada?: Prisma.SortOrder
   diarsipPada?: Prisma.SortOrder
+  tokenPublik?: Prisma.SortOrder
+  diubahPada?: Prisma.SortOrder
+  diubahOlehId?: Prisma.SortOrder
 }
 
 export type ServiceOrderScalarRelationFilter = {
@@ -509,8 +577,54 @@ export type ServiceOrderUncheckedUpdateManyWithoutTokoNestedInput = {
   deleteMany?: Prisma.ServiceOrderScalarWhereInput | Prisma.ServiceOrderScalarWhereInput[]
 }
 
+export type ServiceOrderCreateNestedManyWithoutDiubahOlehInput = {
+  create?: Prisma.XOR<Prisma.ServiceOrderCreateWithoutDiubahOlehInput, Prisma.ServiceOrderUncheckedCreateWithoutDiubahOlehInput> | Prisma.ServiceOrderCreateWithoutDiubahOlehInput[] | Prisma.ServiceOrderUncheckedCreateWithoutDiubahOlehInput[]
+  connectOrCreate?: Prisma.ServiceOrderCreateOrConnectWithoutDiubahOlehInput | Prisma.ServiceOrderCreateOrConnectWithoutDiubahOlehInput[]
+  createMany?: Prisma.ServiceOrderCreateManyDiubahOlehInputEnvelope
+  connect?: Prisma.ServiceOrderWhereUniqueInput | Prisma.ServiceOrderWhereUniqueInput[]
+}
+
+export type ServiceOrderUncheckedCreateNestedManyWithoutDiubahOlehInput = {
+  create?: Prisma.XOR<Prisma.ServiceOrderCreateWithoutDiubahOlehInput, Prisma.ServiceOrderUncheckedCreateWithoutDiubahOlehInput> | Prisma.ServiceOrderCreateWithoutDiubahOlehInput[] | Prisma.ServiceOrderUncheckedCreateWithoutDiubahOlehInput[]
+  connectOrCreate?: Prisma.ServiceOrderCreateOrConnectWithoutDiubahOlehInput | Prisma.ServiceOrderCreateOrConnectWithoutDiubahOlehInput[]
+  createMany?: Prisma.ServiceOrderCreateManyDiubahOlehInputEnvelope
+  connect?: Prisma.ServiceOrderWhereUniqueInput | Prisma.ServiceOrderWhereUniqueInput[]
+}
+
+export type ServiceOrderUpdateManyWithoutDiubahOlehNestedInput = {
+  create?: Prisma.XOR<Prisma.ServiceOrderCreateWithoutDiubahOlehInput, Prisma.ServiceOrderUncheckedCreateWithoutDiubahOlehInput> | Prisma.ServiceOrderCreateWithoutDiubahOlehInput[] | Prisma.ServiceOrderUncheckedCreateWithoutDiubahOlehInput[]
+  connectOrCreate?: Prisma.ServiceOrderCreateOrConnectWithoutDiubahOlehInput | Prisma.ServiceOrderCreateOrConnectWithoutDiubahOlehInput[]
+  upsert?: Prisma.ServiceOrderUpsertWithWhereUniqueWithoutDiubahOlehInput | Prisma.ServiceOrderUpsertWithWhereUniqueWithoutDiubahOlehInput[]
+  createMany?: Prisma.ServiceOrderCreateManyDiubahOlehInputEnvelope
+  set?: Prisma.ServiceOrderWhereUniqueInput | Prisma.ServiceOrderWhereUniqueInput[]
+  disconnect?: Prisma.ServiceOrderWhereUniqueInput | Prisma.ServiceOrderWhereUniqueInput[]
+  delete?: Prisma.ServiceOrderWhereUniqueInput | Prisma.ServiceOrderWhereUniqueInput[]
+  connect?: Prisma.ServiceOrderWhereUniqueInput | Prisma.ServiceOrderWhereUniqueInput[]
+  update?: Prisma.ServiceOrderUpdateWithWhereUniqueWithoutDiubahOlehInput | Prisma.ServiceOrderUpdateWithWhereUniqueWithoutDiubahOlehInput[]
+  updateMany?: Prisma.ServiceOrderUpdateManyWithWhereWithoutDiubahOlehInput | Prisma.ServiceOrderUpdateManyWithWhereWithoutDiubahOlehInput[]
+  deleteMany?: Prisma.ServiceOrderScalarWhereInput | Prisma.ServiceOrderScalarWhereInput[]
+}
+
+export type ServiceOrderUncheckedUpdateManyWithoutDiubahOlehNestedInput = {
+  create?: Prisma.XOR<Prisma.ServiceOrderCreateWithoutDiubahOlehInput, Prisma.ServiceOrderUncheckedCreateWithoutDiubahOlehInput> | Prisma.ServiceOrderCreateWithoutDiubahOlehInput[] | Prisma.ServiceOrderUncheckedCreateWithoutDiubahOlehInput[]
+  connectOrCreate?: Prisma.ServiceOrderCreateOrConnectWithoutDiubahOlehInput | Prisma.ServiceOrderCreateOrConnectWithoutDiubahOlehInput[]
+  upsert?: Prisma.ServiceOrderUpsertWithWhereUniqueWithoutDiubahOlehInput | Prisma.ServiceOrderUpsertWithWhereUniqueWithoutDiubahOlehInput[]
+  createMany?: Prisma.ServiceOrderCreateManyDiubahOlehInputEnvelope
+  set?: Prisma.ServiceOrderWhereUniqueInput | Prisma.ServiceOrderWhereUniqueInput[]
+  disconnect?: Prisma.ServiceOrderWhereUniqueInput | Prisma.ServiceOrderWhereUniqueInput[]
+  delete?: Prisma.ServiceOrderWhereUniqueInput | Prisma.ServiceOrderWhereUniqueInput[]
+  connect?: Prisma.ServiceOrderWhereUniqueInput | Prisma.ServiceOrderWhereUniqueInput[]
+  update?: Prisma.ServiceOrderUpdateWithWhereUniqueWithoutDiubahOlehInput | Prisma.ServiceOrderUpdateWithWhereUniqueWithoutDiubahOlehInput[]
+  updateMany?: Prisma.ServiceOrderUpdateManyWithWhereWithoutDiubahOlehInput | Prisma.ServiceOrderUpdateManyWithWhereWithoutDiubahOlehInput[]
+  deleteMany?: Prisma.ServiceOrderScalarWhereInput | Prisma.ServiceOrderScalarWhereInput[]
+}
+
 export type NullableDateTimeFieldUpdateOperationsInput = {
   set?: Date | string | null
+}
+
+export type NullableStringFieldUpdateOperationsInput = {
+  set?: string | null
 }
 
 export type ServiceOrderCreateNestedOneWithoutRiwayatInput = {
@@ -538,7 +652,10 @@ export type ServiceOrderCreateWithoutTokoInput = {
   masukTahapPada?: Date | string
   dibuatPada?: Date | string
   diarsipPada?: Date | string | null
+  tokenPublik: string
+  diubahPada?: Date | string | null
   riwayat?: Prisma.StageMoveCreateNestedManyWithoutPesananInput
+  diubahOleh?: Prisma.UserCreateNestedOneWithoutDiubahInput
 }
 
 export type ServiceOrderUncheckedCreateWithoutTokoInput = {
@@ -552,6 +669,9 @@ export type ServiceOrderUncheckedCreateWithoutTokoInput = {
   masukTahapPada?: Date | string
   dibuatPada?: Date | string
   diarsipPada?: Date | string | null
+  tokenPublik: string
+  diubahPada?: Date | string | null
+  diubahOlehId?: string | null
   riwayat?: Prisma.StageMoveUncheckedCreateNestedManyWithoutPesananInput
 }
 
@@ -596,6 +716,69 @@ export type ServiceOrderScalarWhereInput = {
   masukTahapPada?: Prisma.DateTimeFilter<"ServiceOrder"> | Date | string
   dibuatPada?: Prisma.DateTimeFilter<"ServiceOrder"> | Date | string
   diarsipPada?: Prisma.DateTimeNullableFilter<"ServiceOrder"> | Date | string | null
+  tokenPublik?: Prisma.StringFilter<"ServiceOrder"> | string
+  diubahPada?: Prisma.DateTimeNullableFilter<"ServiceOrder"> | Date | string | null
+  diubahOlehId?: Prisma.StringNullableFilter<"ServiceOrder"> | string | null
+}
+
+export type ServiceOrderCreateWithoutDiubahOlehInput = {
+  id?: string
+  nomor: string
+  perangkat: string
+  pelanggan: string
+  telepon: string
+  keluhan: string
+  stage?: string
+  masukTahapPada?: Date | string
+  dibuatPada?: Date | string
+  diarsipPada?: Date | string | null
+  tokenPublik: string
+  diubahPada?: Date | string | null
+  toko: Prisma.TokoCreateNestedOneWithoutPesananInput
+  riwayat?: Prisma.StageMoveCreateNestedManyWithoutPesananInput
+}
+
+export type ServiceOrderUncheckedCreateWithoutDiubahOlehInput = {
+  id?: string
+  tokoId: string
+  nomor: string
+  perangkat: string
+  pelanggan: string
+  telepon: string
+  keluhan: string
+  stage?: string
+  masukTahapPada?: Date | string
+  dibuatPada?: Date | string
+  diarsipPada?: Date | string | null
+  tokenPublik: string
+  diubahPada?: Date | string | null
+  riwayat?: Prisma.StageMoveUncheckedCreateNestedManyWithoutPesananInput
+}
+
+export type ServiceOrderCreateOrConnectWithoutDiubahOlehInput = {
+  where: Prisma.ServiceOrderWhereUniqueInput
+  create: Prisma.XOR<Prisma.ServiceOrderCreateWithoutDiubahOlehInput, Prisma.ServiceOrderUncheckedCreateWithoutDiubahOlehInput>
+}
+
+export type ServiceOrderCreateManyDiubahOlehInputEnvelope = {
+  data: Prisma.ServiceOrderCreateManyDiubahOlehInput | Prisma.ServiceOrderCreateManyDiubahOlehInput[]
+  skipDuplicates?: boolean
+}
+
+export type ServiceOrderUpsertWithWhereUniqueWithoutDiubahOlehInput = {
+  where: Prisma.ServiceOrderWhereUniqueInput
+  update: Prisma.XOR<Prisma.ServiceOrderUpdateWithoutDiubahOlehInput, Prisma.ServiceOrderUncheckedUpdateWithoutDiubahOlehInput>
+  create: Prisma.XOR<Prisma.ServiceOrderCreateWithoutDiubahOlehInput, Prisma.ServiceOrderUncheckedCreateWithoutDiubahOlehInput>
+}
+
+export type ServiceOrderUpdateWithWhereUniqueWithoutDiubahOlehInput = {
+  where: Prisma.ServiceOrderWhereUniqueInput
+  data: Prisma.XOR<Prisma.ServiceOrderUpdateWithoutDiubahOlehInput, Prisma.ServiceOrderUncheckedUpdateWithoutDiubahOlehInput>
+}
+
+export type ServiceOrderUpdateManyWithWhereWithoutDiubahOlehInput = {
+  where: Prisma.ServiceOrderScalarWhereInput
+  data: Prisma.XOR<Prisma.ServiceOrderUpdateManyMutationInput, Prisma.ServiceOrderUncheckedUpdateManyWithoutDiubahOlehInput>
 }
 
 export type ServiceOrderCreateWithoutRiwayatInput = {
@@ -609,7 +792,10 @@ export type ServiceOrderCreateWithoutRiwayatInput = {
   masukTahapPada?: Date | string
   dibuatPada?: Date | string
   diarsipPada?: Date | string | null
+  tokenPublik: string
+  diubahPada?: Date | string | null
   toko: Prisma.TokoCreateNestedOneWithoutPesananInput
+  diubahOleh?: Prisma.UserCreateNestedOneWithoutDiubahInput
 }
 
 export type ServiceOrderUncheckedCreateWithoutRiwayatInput = {
@@ -624,6 +810,9 @@ export type ServiceOrderUncheckedCreateWithoutRiwayatInput = {
   masukTahapPada?: Date | string
   dibuatPada?: Date | string
   diarsipPada?: Date | string | null
+  tokenPublik: string
+  diubahPada?: Date | string | null
+  diubahOlehId?: string | null
 }
 
 export type ServiceOrderCreateOrConnectWithoutRiwayatInput = {
@@ -653,7 +842,10 @@ export type ServiceOrderUpdateWithoutRiwayatInput = {
   masukTahapPada?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   dibuatPada?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   diarsipPada?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  tokenPublik?: Prisma.StringFieldUpdateOperationsInput | string
+  diubahPada?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   toko?: Prisma.TokoUpdateOneRequiredWithoutPesananNestedInput
+  diubahOleh?: Prisma.UserUpdateOneWithoutDiubahNestedInput
 }
 
 export type ServiceOrderUncheckedUpdateWithoutRiwayatInput = {
@@ -668,6 +860,9 @@ export type ServiceOrderUncheckedUpdateWithoutRiwayatInput = {
   masukTahapPada?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   dibuatPada?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   diarsipPada?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  tokenPublik?: Prisma.StringFieldUpdateOperationsInput | string
+  diubahPada?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  diubahOlehId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 export type ServiceOrderCreateManyTokoInput = {
@@ -681,6 +876,9 @@ export type ServiceOrderCreateManyTokoInput = {
   masukTahapPada?: Date | string
   dibuatPada?: Date | string
   diarsipPada?: Date | string | null
+  tokenPublik: string
+  diubahPada?: Date | string | null
+  diubahOlehId?: string | null
 }
 
 export type ServiceOrderUpdateWithoutTokoInput = {
@@ -694,7 +892,10 @@ export type ServiceOrderUpdateWithoutTokoInput = {
   masukTahapPada?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   dibuatPada?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   diarsipPada?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  tokenPublik?: Prisma.StringFieldUpdateOperationsInput | string
+  diubahPada?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   riwayat?: Prisma.StageMoveUpdateManyWithoutPesananNestedInput
+  diubahOleh?: Prisma.UserUpdateOneWithoutDiubahNestedInput
 }
 
 export type ServiceOrderUncheckedUpdateWithoutTokoInput = {
@@ -708,6 +909,9 @@ export type ServiceOrderUncheckedUpdateWithoutTokoInput = {
   masukTahapPada?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   dibuatPada?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   diarsipPada?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  tokenPublik?: Prisma.StringFieldUpdateOperationsInput | string
+  diubahPada?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  diubahOlehId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   riwayat?: Prisma.StageMoveUncheckedUpdateManyWithoutPesananNestedInput
 }
 
@@ -722,6 +926,75 @@ export type ServiceOrderUncheckedUpdateManyWithoutTokoInput = {
   masukTahapPada?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   dibuatPada?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   diarsipPada?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  tokenPublik?: Prisma.StringFieldUpdateOperationsInput | string
+  diubahPada?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  diubahOlehId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+}
+
+export type ServiceOrderCreateManyDiubahOlehInput = {
+  id?: string
+  tokoId: string
+  nomor: string
+  perangkat: string
+  pelanggan: string
+  telepon: string
+  keluhan: string
+  stage?: string
+  masukTahapPada?: Date | string
+  dibuatPada?: Date | string
+  diarsipPada?: Date | string | null
+  tokenPublik: string
+  diubahPada?: Date | string | null
+}
+
+export type ServiceOrderUpdateWithoutDiubahOlehInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  nomor?: Prisma.StringFieldUpdateOperationsInput | string
+  perangkat?: Prisma.StringFieldUpdateOperationsInput | string
+  pelanggan?: Prisma.StringFieldUpdateOperationsInput | string
+  telepon?: Prisma.StringFieldUpdateOperationsInput | string
+  keluhan?: Prisma.StringFieldUpdateOperationsInput | string
+  stage?: Prisma.StringFieldUpdateOperationsInput | string
+  masukTahapPada?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  dibuatPada?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  diarsipPada?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  tokenPublik?: Prisma.StringFieldUpdateOperationsInput | string
+  diubahPada?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  toko?: Prisma.TokoUpdateOneRequiredWithoutPesananNestedInput
+  riwayat?: Prisma.StageMoveUpdateManyWithoutPesananNestedInput
+}
+
+export type ServiceOrderUncheckedUpdateWithoutDiubahOlehInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  tokoId?: Prisma.StringFieldUpdateOperationsInput | string
+  nomor?: Prisma.StringFieldUpdateOperationsInput | string
+  perangkat?: Prisma.StringFieldUpdateOperationsInput | string
+  pelanggan?: Prisma.StringFieldUpdateOperationsInput | string
+  telepon?: Prisma.StringFieldUpdateOperationsInput | string
+  keluhan?: Prisma.StringFieldUpdateOperationsInput | string
+  stage?: Prisma.StringFieldUpdateOperationsInput | string
+  masukTahapPada?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  dibuatPada?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  diarsipPada?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  tokenPublik?: Prisma.StringFieldUpdateOperationsInput | string
+  diubahPada?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  riwayat?: Prisma.StageMoveUncheckedUpdateManyWithoutPesananNestedInput
+}
+
+export type ServiceOrderUncheckedUpdateManyWithoutDiubahOlehInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  tokoId?: Prisma.StringFieldUpdateOperationsInput | string
+  nomor?: Prisma.StringFieldUpdateOperationsInput | string
+  perangkat?: Prisma.StringFieldUpdateOperationsInput | string
+  pelanggan?: Prisma.StringFieldUpdateOperationsInput | string
+  telepon?: Prisma.StringFieldUpdateOperationsInput | string
+  keluhan?: Prisma.StringFieldUpdateOperationsInput | string
+  stage?: Prisma.StringFieldUpdateOperationsInput | string
+  masukTahapPada?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  dibuatPada?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  diarsipPada?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  tokenPublik?: Prisma.StringFieldUpdateOperationsInput | string
+  diubahPada?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
 
 
@@ -767,8 +1040,12 @@ export type ServiceOrderSelect<ExtArgs extends runtime.Types.Extensions.Internal
   masukTahapPada?: boolean
   dibuatPada?: boolean
   diarsipPada?: boolean
+  tokenPublik?: boolean
+  diubahPada?: boolean
+  diubahOlehId?: boolean
   toko?: boolean | Prisma.TokoDefaultArgs<ExtArgs>
   riwayat?: boolean | Prisma.ServiceOrder$riwayatArgs<ExtArgs>
+  diubahOleh?: boolean | Prisma.ServiceOrder$diubahOlehArgs<ExtArgs>
   _count?: boolean | Prisma.ServiceOrderCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["serviceOrder"]>
 
@@ -784,7 +1061,11 @@ export type ServiceOrderSelectCreateManyAndReturn<ExtArgs extends runtime.Types.
   masukTahapPada?: boolean
   dibuatPada?: boolean
   diarsipPada?: boolean
+  tokenPublik?: boolean
+  diubahPada?: boolean
+  diubahOlehId?: boolean
   toko?: boolean | Prisma.TokoDefaultArgs<ExtArgs>
+  diubahOleh?: boolean | Prisma.ServiceOrder$diubahOlehArgs<ExtArgs>
 }, ExtArgs["result"]["serviceOrder"]>
 
 export type ServiceOrderSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -799,7 +1080,11 @@ export type ServiceOrderSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.
   masukTahapPada?: boolean
   dibuatPada?: boolean
   diarsipPada?: boolean
+  tokenPublik?: boolean
+  diubahPada?: boolean
+  diubahOlehId?: boolean
   toko?: boolean | Prisma.TokoDefaultArgs<ExtArgs>
+  diubahOleh?: boolean | Prisma.ServiceOrder$diubahOlehArgs<ExtArgs>
 }, ExtArgs["result"]["serviceOrder"]>
 
 export type ServiceOrderSelectScalar = {
@@ -814,19 +1099,25 @@ export type ServiceOrderSelectScalar = {
   masukTahapPada?: boolean
   dibuatPada?: boolean
   diarsipPada?: boolean
+  tokenPublik?: boolean
+  diubahPada?: boolean
+  diubahOlehId?: boolean
 }
 
-export type ServiceOrderOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "tokoId" | "nomor" | "perangkat" | "pelanggan" | "telepon" | "keluhan" | "stage" | "masukTahapPada" | "dibuatPada" | "diarsipPada", ExtArgs["result"]["serviceOrder"]>
+export type ServiceOrderOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "tokoId" | "nomor" | "perangkat" | "pelanggan" | "telepon" | "keluhan" | "stage" | "masukTahapPada" | "dibuatPada" | "diarsipPada" | "tokenPublik" | "diubahPada" | "diubahOlehId", ExtArgs["result"]["serviceOrder"]>
 export type ServiceOrderInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   toko?: boolean | Prisma.TokoDefaultArgs<ExtArgs>
   riwayat?: boolean | Prisma.ServiceOrder$riwayatArgs<ExtArgs>
+  diubahOleh?: boolean | Prisma.ServiceOrder$diubahOlehArgs<ExtArgs>
   _count?: boolean | Prisma.ServiceOrderCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type ServiceOrderIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   toko?: boolean | Prisma.TokoDefaultArgs<ExtArgs>
+  diubahOleh?: boolean | Prisma.ServiceOrder$diubahOlehArgs<ExtArgs>
 }
 export type ServiceOrderIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   toko?: boolean | Prisma.TokoDefaultArgs<ExtArgs>
+  diubahOleh?: boolean | Prisma.ServiceOrder$diubahOlehArgs<ExtArgs>
 }
 
 export type $ServiceOrderPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -834,6 +1125,7 @@ export type $ServiceOrderPayload<ExtArgs extends runtime.Types.Extensions.Intern
   objects: {
     toko: Prisma.$TokoPayload<ExtArgs>
     riwayat: Prisma.$StageMovePayload<ExtArgs>[]
+    diubahOleh: Prisma.$UserPayload<ExtArgs> | null
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -847,6 +1139,9 @@ export type $ServiceOrderPayload<ExtArgs extends runtime.Types.Extensions.Intern
     masukTahapPada: Date
     dibuatPada: Date
     diarsipPada: Date | null
+    tokenPublik: string
+    diubahPada: Date | null
+    diubahOlehId: string | null
   }, ExtArgs["result"]["serviceOrder"]>
   composites: {}
 }
@@ -1243,6 +1538,7 @@ export interface Prisma__ServiceOrderClient<T, Null = never, ExtArgs extends run
   readonly [Symbol.toStringTag]: "PrismaPromise"
   toko<T extends Prisma.TokoDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.TokoDefaultArgs<ExtArgs>>): Prisma.Prisma__TokoClient<runtime.Types.Result.GetResult<Prisma.$TokoPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   riwayat<T extends Prisma.ServiceOrder$riwayatArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.ServiceOrder$riwayatArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$StageMovePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  diubahOleh<T extends Prisma.ServiceOrder$diubahOlehArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.ServiceOrder$diubahOlehArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1283,6 +1579,9 @@ export interface ServiceOrderFieldRefs {
   readonly masukTahapPada: Prisma.FieldRef<"ServiceOrder", 'DateTime'>
   readonly dibuatPada: Prisma.FieldRef<"ServiceOrder", 'DateTime'>
   readonly diarsipPada: Prisma.FieldRef<"ServiceOrder", 'DateTime'>
+  readonly tokenPublik: Prisma.FieldRef<"ServiceOrder", 'String'>
+  readonly diubahPada: Prisma.FieldRef<"ServiceOrder", 'DateTime'>
+  readonly diubahOlehId: Prisma.FieldRef<"ServiceOrder", 'String'>
 }
     
 
@@ -1705,6 +2004,25 @@ export type ServiceOrder$riwayatArgs<ExtArgs extends runtime.Types.Extensions.In
   take?: number
   skip?: number
   distinct?: Prisma.StageMoveScalarFieldEnum | Prisma.StageMoveScalarFieldEnum[]
+}
+
+/**
+ * ServiceOrder.diubahOleh
+ */
+export type ServiceOrder$diubahOlehArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the User
+   */
+  select?: Prisma.UserSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the User
+   */
+  omit?: Prisma.UserOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.UserInclude<ExtArgs> | null
+  where?: Prisma.UserWhereInput
 }
 
 /**

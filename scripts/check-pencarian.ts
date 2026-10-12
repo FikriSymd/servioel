@@ -26,6 +26,9 @@ function nota(isi: Partial<ServiceOrder>): ServiceOrder {
     stage: isi.stage ?? "barang-masuk",
     masukTahapPada: isi.masukTahapPada ?? new Date().toISOString(),
     dibuatPada: isi.dibuatPada ?? new Date().toISOString(),
+    token: isi.token ?? "0123456789abcdef0123456789abcdef",
+    diubahPada: isi.diubahPada ?? null,
+    diubahOleh: isi.diubahOleh ?? null,
     riwayat: isi.riwayat ?? [],
   };
 }

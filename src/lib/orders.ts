@@ -1,10 +1,25 @@
 import "server-only";
+import { randomBytes } from "node:crypto";
 import { db } from "./db";
 import { STAGES } from "./stages";
-import type { ServiceOrder, StageId } from "./types";
+import type { NotaPublik, ServiceOrder, StageId } from "./types";
 
 /** Unit di Sudah Diambil disimpan di papan selama ini, lalu diarsipkan. */
 export const AMBANG_ARSIP_HARI = 30;
+
+/**
+ * Token untuk tautan nota pelanggan. 16 byte acak, ditulis sebagai 32 huruf
+ * heksadesimal.
+ *
+ * Dibuat dari sumber acak, bukan dari id atau nomor servis: tautan ini boleh
+ * dibuka tanpa masuk, jadi kalau bisa ditebak dari nomor nota, tautan satu
+ * pelanggan bisa dipakai melihat nota pelanggan lain.
+ */
+export function tokenNotaBaru(): string {
+  return randomBytes(16).toString("hex");
+}
+
+const POLA_TOKEN = /^[0-9a-f]{32}$/;
 
 export function isStageId(nilai: unknown): nilai is StageId {
   return typeof nilai === "string" && STAGES.some((s) => s.id === nilai);
@@ -20,8 +35,37 @@ type BarisPesanan = {
   stage: string;
   masukTahapPada: Date;
   dibuatPada: Date;
+  tokenPublik: string;
+  diubahPada: Date | null;
+  diubahOleh: { nama: string } | null;
   riwayat: { id: string; pada: Date; dari: string | null; ke: string; oleh: { nama: string } }[];
 };
+
+/** Kolom yang dibaca untuk satu nota, dipakai daftar papan dan satu nota. */
+const KOLOM_NOTA = {
+  id: true,
+  nomor: true,
+  perangkat: true,
+  pelanggan: true,
+  telepon: true,
+  keluhan: true,
+  stage: true,
+  masukTahapPada: true,
+  dibuatPada: true,
+  tokenPublik: true,
+  diubahPada: true,
+  diubahOleh: { select: { nama: true } },
+  riwayat: {
+    orderBy: { pada: "asc" },
+    select: {
+      id: true,
+      pada: true,
+      dari: true,
+      ke: true,
+      oleh: { select: { nama: true } },
+    },
+  },
+} as const;
 
 /**
  * Memetakan baris database ke bentuk yang dipakai tampilan. Baris yang tahapnya
@@ -50,6 +94,9 @@ function keTampilan(baris: BarisPesanan): ServiceOrder | null {
     stage: baris.stage,
     masukTahapPada: baris.masukTahapPada.toISOString(),
     dibuatPada: baris.dibuatPada.toISOString(),
+    token: baris.tokenPublik,
+    diubahPada: baris.diubahPada?.toISOString() ?? null,
+    diubahOleh: baris.diubahOleh?.nama ?? null,
     riwayat,
   };
 }
@@ -62,30 +109,69 @@ export async function daftarPesanan(tokoId: string): Promise<ServiceOrder[]> {
   const baris = await db.serviceOrder.findMany({
     where: { tokoId, diarsipPada: null },
     orderBy: { dibuatPada: "desc" },
-    select: {
-      id: true,
-      nomor: true,
-      perangkat: true,
-      pelanggan: true,
-      telepon: true,
-      keluhan: true,
-      stage: true,
-      masukTahapPada: true,
-      dibuatPada: true,
-      riwayat: {
-        orderBy: { pada: "asc" },
-        select: {
-          id: true,
-          pada: true,
-          dari: true,
-          ke: true,
-          oleh: { select: { nama: true } },
-        },
-      },
-    },
+    select: KOLOM_NOTA,
   });
 
   return baris.map(keTampilan).filter((o): o is ServiceOrder => o !== null);
+}
+
+/**
+ * Satu nota milik satu toko, termasuk yang sudah diarsipkan.
+ *
+ * Dipakai halaman cetak: nota lama kadang perlu dicetak ulang, dan yang
+ * diarsipkan bukan berarti hilang. Penyaring tokoId tetap ada, jadi nota toko
+ * lain tidak bisa dibuka dari sini walau id-nya ditebak.
+ */
+export async function ambilPesanan(
+  tokoId: string,
+  pesananId: string,
+): Promise<ServiceOrder | null> {
+  const baris = await db.serviceOrder.findFirst({
+    where: { id: pesananId, tokoId },
+    select: KOLOM_NOTA,
+  });
+  return baris ? keTampilan(baris) : null;
+}
+
+/**
+ * Nota lewat tautan pelanggan. Tidak butuh sesi, jadi yang dikembalikan sengaja
+ * dipilih satu-satu: nomor, perangkat, nama, tahap, dan kapan terakhir berubah.
+ *
+ * Nomor HP, isi keluhan, dan riwayat lengkap tidak ikut. Tautan ini bisa
+ * diteruskan ke siapa saja, dan yang perlu diketahui pelanggan cuma "barang saya
+ * sudah sampai mana". Nama toko ikut supaya halaman itu tidak terasa anonim.
+ */
+export async function notaDariToken(token: string): Promise<NotaPublik | null> {
+  if (!POLA_TOKEN.test(token)) return null;
+
+  const baris = await db.serviceOrder.findUnique({
+    where: { tokenPublik: token },
+    select: {
+      nomor: true,
+      perangkat: true,
+      pelanggan: true,
+      stage: true,
+      masukTahapPada: true,
+      dibuatPada: true,
+      diubahPada: true,
+      toko: { select: { nama: true } },
+    },
+  });
+  if (!baris) return null;
+  if (!isStageId(baris.stage)) return null;
+
+  const terakhir = [baris.masukTahapPada, baris.diubahPada]
+    .filter((d): d is Date => d instanceof Date)
+    .sort((a, b) => b.getTime() - a.getTime())[0];
+
+  return {
+    nomor: baris.nomor,
+    perangkat: baris.perangkat,
+    pelanggan: baris.pelanggan,
+    stage: baris.stage,
+    diperbaruiPada: terakhir.toISOString(),
+    namaToko: baris.toko.nama,
+  };
 }
 
 /**
@@ -115,21 +201,36 @@ export type HasilAksi =
   | { ok: true; pesan: string }
   | { ok: false; pesan: string };
 
-/** Menyimpan pesanan baru di tahap Barang Masuk, sekaligus mencatat riwayatnya. */
-export async function buatPesanan(
-  tokoId: string,
-  olehId: string,
-  data: { perangkat: string; pelanggan: string; telepon: string; keluhan: string },
-): Promise<HasilAksi> {
+export type DataNota = {
+  perangkat: string;
+  pelanggan: string;
+  telepon: string;
+  keluhan: string;
+};
+
+/** Memeriksa isi nota sebelum disimpan. Dipakai buat dan ubah. */
+function bersihkan(data: DataNota): DataNota | string {
   const perangkat = data.perangkat.trim();
   const pelanggan = data.pelanggan.trim();
   const telepon = data.telepon.trim();
   const keluhan = data.keluhan.trim();
 
-  if (!perangkat) return { ok: false, pesan: "Nama perangkat belum diisi." };
-  if (!pelanggan) return { ok: false, pesan: "Nama pelanggan belum diisi." };
-  if (!telepon) return { ok: false, pesan: "Nomor HP belum diisi." };
-  if (!keluhan) return { ok: false, pesan: "Keluhan belum diisi." };
+  if (!perangkat) return "Nama perangkat belum diisi.";
+  if (!pelanggan) return "Nama pelanggan belum diisi.";
+  if (!telepon) return "Nomor HP belum diisi.";
+  if (!keluhan) return "Keluhan belum diisi.";
+
+  return { perangkat, pelanggan, telepon, keluhan };
+}
+
+/** Menyimpan pesanan baru di tahap Barang Masuk, sekaligus mencatat riwayatnya. */
+export async function buatPesanan(
+  tokoId: string,
+  olehId: string,
+  data: DataNota,
+): Promise<HasilAksi> {
+  const bersih = bersihkan(data);
+  if (typeof bersih === "string") return { ok: false, pesan: bersih };
 
   const tahun = new Date().getFullYear();
 
@@ -139,11 +240,9 @@ export async function buatPesanan(
       data: {
         tokoId,
         nomor: n,
-        perangkat,
-        pelanggan,
-        telepon,
-        keluhan,
+        ...bersih,
         stage: "barang-masuk",
+        tokenPublik: tokenNotaBaru(),
       },
       select: { id: true },
     });
@@ -160,6 +259,42 @@ export async function buatPesanan(
   });
 
   return { ok: true, pesan: `Nota ${nomor} dibuat di tahap Barang Masuk.` };
+}
+
+/**
+ * Membetulkan isi nota: perangkat, nama, nomor HP, keluhan.
+ *
+ * Tahap tidak diubah di sini. Perpindahan tahap punya jalurnya sendiri
+ * (`pindahTahap`) supaya riwayatnya tetap bersih: satu catatan, satu perpindahan.
+ *
+ * `updateMany` dengan saringan id DAN tokoId dipakai supaya toko lain tidak bisa
+ * mengubah nota yang bukan miliknya, walau id-nya ditebak benar. Nomor servis
+ * juga tidak bisa diubah dari sini: nomornya sudah dipakai di nota yang mungkin
+ * sudah dipegang pelanggan.
+ */
+export async function ubahPesanan(
+  tokoId: string,
+  olehId: string,
+  pesananId: string,
+  data: DataNota,
+): Promise<HasilAksi> {
+  const bersih = bersihkan(data);
+  if (typeof bersih === "string") return { ok: false, pesan: bersih };
+
+  const hasil = await db.serviceOrder.updateMany({
+    where: { id: pesananId, tokoId, diarsipPada: null },
+    data: { ...bersih, diubahPada: new Date(), diubahOlehId: olehId },
+  });
+
+  if (hasil.count === 0) {
+    return { ok: false, pesan: "Nota tidak ditemukan di toko ini." };
+  }
+
+  const nota = await db.serviceOrder.findUnique({
+    where: { id: pesananId },
+    select: { nomor: true },
+  });
+  return { ok: true, pesan: `Nota ${nota?.nomor ?? ""} diperbarui.` };
 }
 
 /**

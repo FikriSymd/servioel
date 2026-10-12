@@ -85,3 +85,23 @@ body {
 .on-paper :focus-visible {
   outline-color: var(--color-signal-ink);
 }
+
+/*
+  Cetak. Yang boleh keluar cuma notanya.
+  Meja kerja dilepas: latar dipaksa putih, dan cincin fokus disembunyikan karena
+  tidak ada gunanya di kertas. Tombol dan kepala area kerja sudah disembunyikan
+  di halamannya sendiri lewat print:hidden.
+*/
+@media print {
+  html {
+    color-scheme: light;
+  }
+
+  body {
+    background: #ffffff;
+  }
+
+  :focus-visible {
+    outline: none;
+  }
+}

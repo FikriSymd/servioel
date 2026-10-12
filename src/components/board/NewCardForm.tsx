@@ -1,30 +1,43 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import type { ServiceOrder } from "@/lib/types";
+
+export type IsiNota = {
+  perangkat: string;
+  pelanggan: string;
+  telepon: string;
+  keluhan: string;
+};
 
 type Props = {
   onTutup: () => void;
-  onSimpan: (data: {
-    perangkat: string;
-    pelanggan: string;
-    telepon: string;
-    keluhan: string;
-  }) => void;
+  onSimpan: (data: IsiNota) => void;
+  /**
+   * Kalau diisi, formulir ini membetulkan nota yang sudah ada, bukan menulis
+   * nota baru. Isinya dimulai dari isi nota sekarang, dan nomor servisnya
+   * ditampilkan tapi tidak bisa diubah: nomor itu sudah tercetak di nota yang
+   * mungkin sudah dipegang pelanggan.
+   */
+  awal?: ServiceOrder;
 };
 
-type Galat = Partial<Record<"perangkat" | "pelanggan" | "telepon" | "keluhan", string>>;
+type Galat = Partial<Record<keyof IsiNota, string>>;
 
 /**
- * Menulis nota baru: formulirnya sendiri berbentuk nota kertas.
+ * Formulir nota, dipakai untuk menulis nota baru dan untuk membetulkan isinya.
+ * Satu komponen, bukan dua: aturan isiannya sama persis, dan dua salinan
+ * formulir yang mirip pasti mulai berbeda begitu salah satunya diubah.
  *
  * Perangkat ditaruh paling atas karena itu yang pertama dilihat dan ditulis
- * saat unit diterima di meja. Nomor nota muncul di kartu setelah disimpan.
+ * saat unit diterima di meja.
  */
-export function NewCardForm({ onTutup, onSimpan }: Props) {
-  const [perangkat, setPerangkat] = useState("");
-  const [pelanggan, setPelanggan] = useState("");
-  const [telepon, setTelepon] = useState("");
-  const [keluhan, setKeluhan] = useState("");
+export function NewCardForm({ onTutup, onSimpan, awal }: Props) {
+  const ubah = Boolean(awal);
+  const [perangkat, setPerangkat] = useState(awal?.perangkat ?? "");
+  const [pelanggan, setPelanggan] = useState(awal?.pelanggan ?? "");
+  const [telepon, setTelepon] = useState(awal?.telepon ?? "");
+  const [keluhan, setKeluhan] = useState(awal?.keluhan ?? "");
   const [galat, setGalat] = useState<Galat>({});
   const inputRef = useRef<HTMLInputElement>(null);
 
@@ -64,25 +77,24 @@ export function NewCardForm({ onTutup, onSimpan }: Props) {
       <div
         role="dialog"
         aria-modal="true"
-        aria-labelledby="judul-nota-baru"
+        aria-labelledby="judul-nota"
         className="on-paper relative max-h-[92vh] w-full overflow-y-auto border-t-4 border-signal bg-paper p-4 text-ink sm:max-w-lg"
       >
         <div className="flex items-baseline justify-between gap-3">
-          <h2
-            id="judul-nota-baru"
-            className="font-display text-xl font-extrabold tracking-tight"
-          >
-            Nota servis baru
+          <h2 id="judul-nota" className="font-display text-xl font-extrabold tracking-tight">
+            {ubah ? "Betulkan nota" : "Nota servis baru"}
           </h2>
           <span className="angka text-[11px] font-semibold text-ink-muted">
-            nomor dibuat otomatis
+            {ubah ? `nomor ${awal?.nomor}` : "nomor dibuat otomatis"}
           </span>
         </div>
 
         <div className="mt-3 border-t border-dashed border-ink/30" />
 
         <p className="mt-3 text-sm text-ink-muted">
-          Nota langsung masuk tahap Barang Masuk dan muncul di papan.
+          {ubah
+            ? "Yang berubah cuma isi nota. Tahapnya dipindahkan dari papan, dan nomor servisnya tetap."
+            : "Nota langsung masuk tahap Barang Masuk dan muncul di papan."}
         </p>
 
         <form onSubmit={kirim} className="mt-4 flex flex-col gap-4" noValidate>
@@ -185,7 +197,7 @@ export function NewCardForm({ onTutup, onSimpan }: Props) {
               type="submit"
               className="min-h-11 rounded-control bg-ink px-4 text-sm font-semibold text-paper hover:bg-ink/90"
             >
-              Simpan nota
+              {ubah ? "Simpan perubahan" : "Simpan nota"}
             </button>
           </div>
         </form>

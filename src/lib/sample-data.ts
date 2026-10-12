@@ -47,6 +47,12 @@ function kartu(
     stage,
     masukTahapPada: iso(masukTahapHariLalu),
     dibuatPada: iso(dibuatHariLalu),
+    // Papan contoh tidak tersambung database, jadi tautan pelanggannya tidak
+    // pernah ada. Nilainya tetap diisi supaya bentuk datanya sama dengan yang
+    // datang dari server.
+    token: `contoh-${n}`,
+    diubahPada: null,
+    diubahOleh: null,
     riwayat,
   };
 }

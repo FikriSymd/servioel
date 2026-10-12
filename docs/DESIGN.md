@@ -93,6 +93,16 @@ terasa seperti tempelan.
   akun.
 - **Halaman gagal.** Dipakai saat server tidak menjawab. Menyebut penyebab yang
   paling mungkin dan memberi satu tindakan, bukan "Terjadi kesalahan".
+- **Nota siap cetak (`/nota/<id>`).** Notanya jadi satu lembar kertas di tengah
+  layar, tanpa kepala area kerja, tanpa papan, tanpa tombol selain Cetak dan
+  kembali. Yang dicetak memang cuma notanya. Aturan `@media print` menyembunyikan
+  tombol dan melepas latar gelap, jadi tintanya tidak habis buat meja kerja.
+- **Status untuk pelanggan (`/n/<token>`).** Satu kolom sempit, huruf lebih
+  besar, bahasa sehari-hari. Bukan salinan papan yang diperkecil. Yang tampil:
+  nomor servis, perangkat, nama pelanggan, tahap sekarang, dan urutan tahap mana
+  yang sudah lewat. Nomor HP dan keluhan tidak ikut, karena itu urusan toko.
+  Halaman ini dirender di server tanpa satu pun komponen klien, jadi isinya sudah
+  ada di HTML pertama dan tetap terbaca walau JavaScript belum jalan.
 
 ---
 

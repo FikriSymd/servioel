@@ -1,6 +1,6 @@
 import "dotenv/config";
 import { db } from "../src/lib/db";
-import { buatPesanan, daftarPesanan, pindahTahap, arsipkanPesananLama } from "../src/lib/orders";
+import { buatPesanan, daftarPesanan, pindahTahap, arsipkanPesananLama, ubahPesanan } from "../src/lib/orders";
 import { daftarStaf, daftarToko, tambahStaf } from "../src/lib/toko";
 
 /*
@@ -70,6 +70,62 @@ async function main() {
 
   const riwayatCurang = await db.stageMove.count({ where: { pesananId: notaA.id, tokoId: tokoB } });
   periksa("tidak ada riwayat palsu tercatat", riwayatCurang === 0);
+
+  // Ubah isi nota: jalur baru, serangan yang sama.
+  const isiCurang = {
+    perangkat: "Diubah toko B",
+    pelanggan: "Diubah toko B",
+    telepon: "0800-0000-0000",
+    keluhan: "Diubah toko B.",
+  };
+  const curangUbah = await ubahPesanan(tokoB, b.data.userId, notaA.id, isiCurang);
+  periksa("toko B tidak bisa membetulkan nota toko A", !curangUbah.ok, curangUbah.pesan);
+
+  const sesudahUbah = await db.serviceOrder.findUnique({
+    where: { id: notaA.id },
+    select: { perangkat: true, pelanggan: true, diubahOlehId: true, diubahPada: true },
+  });
+  periksa(
+    "isi nota toko A tidak ikut berubah",
+    sesudahUbah?.perangkat === "Unit uji A" && sesudahUbah?.pelanggan === "Pelanggan A",
+    `perangkat sekarang ${sesudahUbah?.perangkat}`,
+  );
+  periksa(
+    "tidak ada jejak ubah palsu dari toko B",
+    sesudahUbah?.diubahOlehId === null && sesudahUbah?.diubahPada === null,
+  );
+
+  // Toko A membetulkan notanya sendiri: harus boleh, dan jejaknya tercatat.
+  const betul = await ubahPesanan(tokoA, a.data.userId, notaA.id, {
+    ...isiCurang,
+    perangkat: "Unit uji A (dibetulkan)",
+  });
+  periksa("toko A bisa membetulkan notanya sendiri", betul.ok, betul.pesan);
+  const sesudahBetul = await db.serviceOrder.findUnique({
+    where: { id: notaA.id },
+    select: { perangkat: true, diubahOlehId: true },
+  });
+  periksa(
+    "perbaikan toko A tersimpan dan jejaknya terisi",
+    sesudahBetul?.perangkat === "Unit uji A (dibetulkan)" &&
+      sesudahBetul?.diubahOlehId === a.data.userId,
+  );
+
+  // Nomor servis tidak boleh bisa diubah lewat jalur ubah isi.
+  const nomorSebelum = (await db.serviceOrder.findUnique({
+    where: { id: notaA.id },
+    select: { nomor: true },
+  }))!.nomor;
+  await ubahPesanan(tokoA, a.data.userId, notaA.id, {
+    ...isiCurang,
+    // Field asing yang sengaja diselipkan; harus diabaikan, bukan ikut tersimpan.
+    nomor: "SV-1999-9999",
+  } as never);
+  const nomorSesudah = (await db.serviceOrder.findUnique({
+    where: { id: notaA.id },
+    select: { nomor: true },
+  }))!.nomor;
+  periksa("nomor servis tidak bisa diubah dari formulir", nomorSesudah === nomorSebelum, `${nomorSebelum} jadi ${nomorSesudah}`);
 
   // Arsip: toko B mengarsipkan, tidak boleh menyentuh nota toko A.
   await db.serviceOrder.update({ where: { id: notaA.id }, data: { stage: "sudah-diambil", masukTahapPada: new Date(Date.now() - 40 * 86_400_000) } });

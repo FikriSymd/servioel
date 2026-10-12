@@ -209,6 +209,7 @@ export type UserWhereInput = {
   toko?: Prisma.XOR<Prisma.TokoScalarRelationFilter, Prisma.TokoWhereInput>
   sesi?: Prisma.SesiListRelationFilter
   gerakan?: Prisma.StageMoveListRelationFilter
+  diubah?: Prisma.ServiceOrderListRelationFilter
 }
 
 export type UserOrderByWithRelationInput = {
@@ -223,6 +224,7 @@ export type UserOrderByWithRelationInput = {
   toko?: Prisma.TokoOrderByWithRelationInput
   sesi?: Prisma.SesiOrderByRelationAggregateInput
   gerakan?: Prisma.StageMoveOrderByRelationAggregateInput
+  diubah?: Prisma.ServiceOrderOrderByRelationAggregateInput
 }
 
 export type UserWhereUniqueInput = Prisma.AtLeast<{
@@ -240,6 +242,7 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
   toko?: Prisma.XOR<Prisma.TokoScalarRelationFilter, Prisma.TokoWhereInput>
   sesi?: Prisma.SesiListRelationFilter
   gerakan?: Prisma.StageMoveListRelationFilter
+  diubah?: Prisma.ServiceOrderListRelationFilter
 }, "id" | "email">
 
 export type UserOrderByWithAggregationInput = {
@@ -281,6 +284,7 @@ export type UserCreateInput = {
   toko: Prisma.TokoCreateNestedOneWithoutPenggunaInput
   sesi?: Prisma.SesiCreateNestedManyWithoutUserInput
   gerakan?: Prisma.StageMoveCreateNestedManyWithoutOlehInput
+  diubah?: Prisma.ServiceOrderCreateNestedManyWithoutDiubahOlehInput
 }
 
 export type UserUncheckedCreateInput = {
@@ -294,6 +298,7 @@ export type UserUncheckedCreateInput = {
   dibuatPada?: Date | string
   sesi?: Prisma.SesiUncheckedCreateNestedManyWithoutUserInput
   gerakan?: Prisma.StageMoveUncheckedCreateNestedManyWithoutOlehInput
+  diubah?: Prisma.ServiceOrderUncheckedCreateNestedManyWithoutDiubahOlehInput
 }
 
 export type UserUpdateInput = {
@@ -307,6 +312,7 @@ export type UserUpdateInput = {
   toko?: Prisma.TokoUpdateOneRequiredWithoutPenggunaNestedInput
   sesi?: Prisma.SesiUpdateManyWithoutUserNestedInput
   gerakan?: Prisma.StageMoveUpdateManyWithoutOlehNestedInput
+  diubah?: Prisma.ServiceOrderUpdateManyWithoutDiubahOlehNestedInput
 }
 
 export type UserUncheckedUpdateInput = {
@@ -320,6 +326,7 @@ export type UserUncheckedUpdateInput = {
   dibuatPada?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   sesi?: Prisma.SesiUncheckedUpdateManyWithoutUserNestedInput
   gerakan?: Prisma.StageMoveUncheckedUpdateManyWithoutOlehNestedInput
+  diubah?: Prisma.ServiceOrderUncheckedUpdateManyWithoutDiubahOlehNestedInput
 }
 
 export type UserCreateManyInput = {
@@ -402,6 +409,11 @@ export type UserScalarRelationFilter = {
   isNot?: Prisma.UserWhereInput
 }
 
+export type UserNullableScalarRelationFilter = {
+  is?: Prisma.UserWhereInput | null
+  isNot?: Prisma.UserWhereInput | null
+}
+
 export type UserCreateNestedManyWithoutTokoInput = {
   create?: Prisma.XOR<Prisma.UserCreateWithoutTokoInput, Prisma.UserUncheckedCreateWithoutTokoInput> | Prisma.UserCreateWithoutTokoInput[] | Prisma.UserUncheckedCreateWithoutTokoInput[]
   connectOrCreate?: Prisma.UserCreateOrConnectWithoutTokoInput | Prisma.UserCreateOrConnectWithoutTokoInput[]
@@ -462,6 +474,22 @@ export type UserUpdateOneRequiredWithoutSesiNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutSesiInput, Prisma.UserUpdateWithoutSesiInput>, Prisma.UserUncheckedUpdateWithoutSesiInput>
 }
 
+export type UserCreateNestedOneWithoutDiubahInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutDiubahInput, Prisma.UserUncheckedCreateWithoutDiubahInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutDiubahInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneWithoutDiubahNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutDiubahInput, Prisma.UserUncheckedCreateWithoutDiubahInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutDiubahInput
+  upsert?: Prisma.UserUpsertWithoutDiubahInput
+  disconnect?: Prisma.UserWhereInput | boolean
+  delete?: Prisma.UserWhereInput | boolean
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutDiubahInput, Prisma.UserUpdateWithoutDiubahInput>, Prisma.UserUncheckedUpdateWithoutDiubahInput>
+}
+
 export type UserCreateNestedOneWithoutGerakanInput = {
   create?: Prisma.XOR<Prisma.UserCreateWithoutGerakanInput, Prisma.UserUncheckedCreateWithoutGerakanInput>
   connectOrCreate?: Prisma.UserCreateOrConnectWithoutGerakanInput
@@ -486,6 +514,7 @@ export type UserCreateWithoutTokoInput = {
   dibuatPada?: Date | string
   sesi?: Prisma.SesiCreateNestedManyWithoutUserInput
   gerakan?: Prisma.StageMoveCreateNestedManyWithoutOlehInput
+  diubah?: Prisma.ServiceOrderCreateNestedManyWithoutDiubahOlehInput
 }
 
 export type UserUncheckedCreateWithoutTokoInput = {
@@ -498,6 +527,7 @@ export type UserUncheckedCreateWithoutTokoInput = {
   dibuatPada?: Date | string
   sesi?: Prisma.SesiUncheckedCreateNestedManyWithoutUserInput
   gerakan?: Prisma.StageMoveUncheckedCreateNestedManyWithoutOlehInput
+  diubah?: Prisma.ServiceOrderUncheckedCreateNestedManyWithoutDiubahOlehInput
 }
 
 export type UserCreateOrConnectWithoutTokoInput = {
@@ -550,6 +580,7 @@ export type UserCreateWithoutSesiInput = {
   dibuatPada?: Date | string
   toko: Prisma.TokoCreateNestedOneWithoutPenggunaInput
   gerakan?: Prisma.StageMoveCreateNestedManyWithoutOlehInput
+  diubah?: Prisma.ServiceOrderCreateNestedManyWithoutDiubahOlehInput
 }
 
 export type UserUncheckedCreateWithoutSesiInput = {
@@ -562,6 +593,7 @@ export type UserUncheckedCreateWithoutSesiInput = {
   aktif?: boolean
   dibuatPada?: Date | string
   gerakan?: Prisma.StageMoveUncheckedCreateNestedManyWithoutOlehInput
+  diubah?: Prisma.ServiceOrderUncheckedCreateNestedManyWithoutDiubahOlehInput
 }
 
 export type UserCreateOrConnectWithoutSesiInput = {
@@ -590,6 +622,7 @@ export type UserUpdateWithoutSesiInput = {
   dibuatPada?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   toko?: Prisma.TokoUpdateOneRequiredWithoutPenggunaNestedInput
   gerakan?: Prisma.StageMoveUpdateManyWithoutOlehNestedInput
+  diubah?: Prisma.ServiceOrderUpdateManyWithoutDiubahOlehNestedInput
 }
 
 export type UserUncheckedUpdateWithoutSesiInput = {
@@ -601,6 +634,75 @@ export type UserUncheckedUpdateWithoutSesiInput = {
   peran?: Prisma.StringFieldUpdateOperationsInput | string
   aktif?: Prisma.BoolFieldUpdateOperationsInput | boolean
   dibuatPada?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  gerakan?: Prisma.StageMoveUncheckedUpdateManyWithoutOlehNestedInput
+  diubah?: Prisma.ServiceOrderUncheckedUpdateManyWithoutDiubahOlehNestedInput
+}
+
+export type UserCreateWithoutDiubahInput = {
+  id?: string
+  email: string
+  nama: string
+  kataSandi: string
+  peran?: string
+  aktif?: boolean
+  dibuatPada?: Date | string
+  toko: Prisma.TokoCreateNestedOneWithoutPenggunaInput
+  sesi?: Prisma.SesiCreateNestedManyWithoutUserInput
+  gerakan?: Prisma.StageMoveCreateNestedManyWithoutOlehInput
+}
+
+export type UserUncheckedCreateWithoutDiubahInput = {
+  id?: string
+  tokoId: string
+  email: string
+  nama: string
+  kataSandi: string
+  peran?: string
+  aktif?: boolean
+  dibuatPada?: Date | string
+  sesi?: Prisma.SesiUncheckedCreateNestedManyWithoutUserInput
+  gerakan?: Prisma.StageMoveUncheckedCreateNestedManyWithoutOlehInput
+}
+
+export type UserCreateOrConnectWithoutDiubahInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutDiubahInput, Prisma.UserUncheckedCreateWithoutDiubahInput>
+}
+
+export type UserUpsertWithoutDiubahInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutDiubahInput, Prisma.UserUncheckedUpdateWithoutDiubahInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutDiubahInput, Prisma.UserUncheckedCreateWithoutDiubahInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutDiubahInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutDiubahInput, Prisma.UserUncheckedUpdateWithoutDiubahInput>
+}
+
+export type UserUpdateWithoutDiubahInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  nama?: Prisma.StringFieldUpdateOperationsInput | string
+  kataSandi?: Prisma.StringFieldUpdateOperationsInput | string
+  peran?: Prisma.StringFieldUpdateOperationsInput | string
+  aktif?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  dibuatPada?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  toko?: Prisma.TokoUpdateOneRequiredWithoutPenggunaNestedInput
+  sesi?: Prisma.SesiUpdateManyWithoutUserNestedInput
+  gerakan?: Prisma.StageMoveUpdateManyWithoutOlehNestedInput
+}
+
+export type UserUncheckedUpdateWithoutDiubahInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  tokoId?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  nama?: Prisma.StringFieldUpdateOperationsInput | string
+  kataSandi?: Prisma.StringFieldUpdateOperationsInput | string
+  peran?: Prisma.StringFieldUpdateOperationsInput | string
+  aktif?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  dibuatPada?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  sesi?: Prisma.SesiUncheckedUpdateManyWithoutUserNestedInput
   gerakan?: Prisma.StageMoveUncheckedUpdateManyWithoutOlehNestedInput
 }
 
@@ -614,6 +716,7 @@ export type UserCreateWithoutGerakanInput = {
   dibuatPada?: Date | string
   toko: Prisma.TokoCreateNestedOneWithoutPenggunaInput
   sesi?: Prisma.SesiCreateNestedManyWithoutUserInput
+  diubah?: Prisma.ServiceOrderCreateNestedManyWithoutDiubahOlehInput
 }
 
 export type UserUncheckedCreateWithoutGerakanInput = {
@@ -626,6 +729,7 @@ export type UserUncheckedCreateWithoutGerakanInput = {
   aktif?: boolean
   dibuatPada?: Date | string
   sesi?: Prisma.SesiUncheckedCreateNestedManyWithoutUserInput
+  diubah?: Prisma.ServiceOrderUncheckedCreateNestedManyWithoutDiubahOlehInput
 }
 
 export type UserCreateOrConnectWithoutGerakanInput = {
@@ -654,6 +758,7 @@ export type UserUpdateWithoutGerakanInput = {
   dibuatPada?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   toko?: Prisma.TokoUpdateOneRequiredWithoutPenggunaNestedInput
   sesi?: Prisma.SesiUpdateManyWithoutUserNestedInput
+  diubah?: Prisma.ServiceOrderUpdateManyWithoutDiubahOlehNestedInput
 }
 
 export type UserUncheckedUpdateWithoutGerakanInput = {
@@ -666,6 +771,7 @@ export type UserUncheckedUpdateWithoutGerakanInput = {
   aktif?: Prisma.BoolFieldUpdateOperationsInput | boolean
   dibuatPada?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   sesi?: Prisma.SesiUncheckedUpdateManyWithoutUserNestedInput
+  diubah?: Prisma.ServiceOrderUncheckedUpdateManyWithoutDiubahOlehNestedInput
 }
 
 export type UserCreateManyTokoInput = {
@@ -688,6 +794,7 @@ export type UserUpdateWithoutTokoInput = {
   dibuatPada?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   sesi?: Prisma.SesiUpdateManyWithoutUserNestedInput
   gerakan?: Prisma.StageMoveUpdateManyWithoutOlehNestedInput
+  diubah?: Prisma.ServiceOrderUpdateManyWithoutDiubahOlehNestedInput
 }
 
 export type UserUncheckedUpdateWithoutTokoInput = {
@@ -700,6 +807,7 @@ export type UserUncheckedUpdateWithoutTokoInput = {
   dibuatPada?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   sesi?: Prisma.SesiUncheckedUpdateManyWithoutUserNestedInput
   gerakan?: Prisma.StageMoveUncheckedUpdateManyWithoutOlehNestedInput
+  diubah?: Prisma.ServiceOrderUncheckedUpdateManyWithoutDiubahOlehNestedInput
 }
 
 export type UserUncheckedUpdateManyWithoutTokoInput = {
@@ -720,11 +828,13 @@ export type UserUncheckedUpdateManyWithoutTokoInput = {
 export type UserCountOutputType = {
   sesi: number
   gerakan: number
+  diubah: number
 }
 
 export type UserCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   sesi?: boolean | UserCountOutputTypeCountSesiArgs
   gerakan?: boolean | UserCountOutputTypeCountGerakanArgs
+  diubah?: boolean | UserCountOutputTypeCountDiubahArgs
 }
 
 /**
@@ -751,6 +861,13 @@ export type UserCountOutputTypeCountGerakanArgs<ExtArgs extends runtime.Types.Ex
   where?: Prisma.StageMoveWhereInput
 }
 
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountDiubahArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.ServiceOrderWhereInput
+}
+
 
 export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -764,6 +881,7 @@ export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   toko?: boolean | Prisma.TokoDefaultArgs<ExtArgs>
   sesi?: boolean | Prisma.User$sesiArgs<ExtArgs>
   gerakan?: boolean | Prisma.User$gerakanArgs<ExtArgs>
+  diubah?: boolean | Prisma.User$diubahArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["user"]>
 
@@ -807,6 +925,7 @@ export type UserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
   toko?: boolean | Prisma.TokoDefaultArgs<ExtArgs>
   sesi?: boolean | Prisma.User$sesiArgs<ExtArgs>
   gerakan?: boolean | Prisma.User$gerakanArgs<ExtArgs>
+  diubah?: boolean | Prisma.User$diubahArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type UserIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -822,6 +941,7 @@ export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     toko: Prisma.$TokoPayload<ExtArgs>
     sesi: Prisma.$SesiPayload<ExtArgs>[]
     gerakan: Prisma.$StageMovePayload<ExtArgs>[]
+    diubah: Prisma.$ServiceOrderPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -1229,6 +1349,7 @@ export interface Prisma__UserClient<T, Null = never, ExtArgs extends runtime.Typ
   toko<T extends Prisma.TokoDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.TokoDefaultArgs<ExtArgs>>): Prisma.Prisma__TokoClient<runtime.Types.Result.GetResult<Prisma.$TokoPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   sesi<T extends Prisma.User$sesiArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$sesiArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$SesiPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   gerakan<T extends Prisma.User$gerakanArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$gerakanArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$StageMovePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  diubah<T extends Prisma.User$diubahArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$diubahArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ServiceOrderPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1712,6 +1833,30 @@ export type User$gerakanArgs<ExtArgs extends runtime.Types.Extensions.InternalAr
   take?: number
   skip?: number
   distinct?: Prisma.StageMoveScalarFieldEnum | Prisma.StageMoveScalarFieldEnum[]
+}
+
+/**
+ * User.diubah
+ */
+export type User$diubahArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the ServiceOrder
+   */
+  select?: Prisma.ServiceOrderSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the ServiceOrder
+   */
+  omit?: Prisma.ServiceOrderOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.ServiceOrderInclude<ExtArgs> | null
+  where?: Prisma.ServiceOrderWhereInput
+  orderBy?: Prisma.ServiceOrderOrderByWithRelationInput | Prisma.ServiceOrderOrderByWithRelationInput[]
+  cursor?: Prisma.ServiceOrderWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.ServiceOrderScalarFieldEnum | Prisma.ServiceOrderScalarFieldEnum[]
 }
 
 /**

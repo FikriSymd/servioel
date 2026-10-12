@@ -8,6 +8,8 @@ import {
   daftarPesanan,
   isStageId,
   pindahTahap,
+  ubahPesanan,
+  type DataNota,
 } from "@/lib/orders";
 import type { ServiceOrder, StageId } from "@/lib/types";
 
@@ -28,16 +30,28 @@ const TIDAK_MASUK: HasilPapan = {
   orders: [],
 };
 
-export async function aksiBuatPesanan(data: {
-  perangkat: string;
-  pelanggan: string;
-  telepon: string;
-  keluhan: string;
-}): Promise<HasilPapan> {
+export async function aksiBuatPesanan(data: DataNota): Promise<HasilPapan> {
   const sesi = await sesiUntukAksi();
   if (!sesi) return TIDAK_MASUK;
 
   const hasil = await buatPesanan(sesi.toko.id, sesi.user.id, data);
+  const orders = await daftarPesanan(sesi.toko.id);
+  revalidatePath("/app");
+  return { ok: hasil.ok, pesan: hasil.pesan, orders };
+}
+
+/**
+ * Membetulkan isi nota. Semua peran yang sudah masuk boleh, sama seperti saat
+ * membuat nota: yang membetulkan biasanya orang yang sedang memegang unitnya.
+ */
+export async function aksiUbahPesanan(
+  pesananId: string,
+  data: DataNota,
+): Promise<HasilPapan> {
+  const sesi = await sesiUntukAksi();
+  if (!sesi) return TIDAK_MASUK;
+
+  const hasil = await ubahPesanan(sesi.toko.id, sesi.user.id, pesananId, data);
   const orders = await daftarPesanan(sesi.toko.id);
   revalidatePath("/app");
   return { ok: hasil.ok, pesan: hasil.pesan, orders };

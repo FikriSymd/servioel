@@ -447,10 +447,6 @@ export type StageMoveUncheckedUpdateManyWithoutPesananNestedInput = {
   deleteMany?: Prisma.StageMoveScalarWhereInput | Prisma.StageMoveScalarWhereInput[]
 }
 
-export type NullableStringFieldUpdateOperationsInput = {
-  set?: string | null
-}
-
 export type StageMoveCreateWithoutOlehInput = {
   id?: string
   tokoId: string

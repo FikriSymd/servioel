@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef } from "react";
+import { BagikanNota } from "./BagikanNota";
 import { STAGES, hariDiTahap, stageLabel } from "@/lib/stages";
 import type { ServiceOrder, StageId } from "@/lib/types";
 
@@ -8,6 +9,14 @@ type Props = {
   order: ServiceOrder;
   onTutup: () => void;
   onPindah: (id: string, ke: StageId) => void;
+  /** Membuka formulir pembetulan. Tidak ada di papan contoh tanpa server. */
+  onUbah?: () => void;
+  /**
+   * Alamat halaman cetak nota ini. Kalau tidak diisi (papan contoh, yang tidak
+   * punya baris di database), bagian cetak dan bagi tautan tidak ditampilkan
+   * sama sekali, bukan ditampilkan lalu gagal.
+   */
+  tautanCetak?: string;
 };
 
 function umurRelatif(iso: string): string {
@@ -22,7 +31,7 @@ function umurRelatif(iso: string): string {
  * jadi tidak bergantung pada seret. Karena panelnya kertas, warna pilihannya
  * memakai tinta, dan cincin fokusnya oranye gelap.
  */
-export function CardDetail({ order, onTutup, onPindah }: Props) {
+export function CardDetail({ order, onTutup, onPindah, onUbah, tautanCetak }: Props) {
   const panelRef = useRef<HTMLDivElement>(null);
   const tombolTutupRef = useRef<HTMLButtonElement>(null);
 
@@ -88,14 +97,25 @@ export function CardDetail({ order, onTutup, onPindah }: Props) {
               {hari >= 1 && <>, {hari} hari</>}
             </p>
           </div>
-          <button
-            ref={tombolTutupRef}
-            type="button"
-            onClick={onTutup}
-            className="min-h-11 shrink-0 rounded-control border border-paper-edge px-3 text-sm font-semibold hover:border-ink"
-          >
-            Tutup
-          </button>
+          <div className="flex shrink-0 items-center gap-1.5">
+            {onUbah && (
+              <button
+                type="button"
+                onClick={onUbah}
+                className="min-h-11 rounded-control border border-paper-edge px-3 text-sm font-semibold hover:border-signal-ink"
+              >
+                Betulkan
+              </button>
+            )}
+            <button
+              ref={tombolTutupRef}
+              type="button"
+              onClick={onTutup}
+              className="min-h-11 shrink-0 rounded-control border border-paper-edge px-3 text-sm font-semibold hover:border-ink"
+            >
+              Tutup
+            </button>
+          </div>
         </div>
 
         <div className="flex flex-col gap-5 px-4 py-4">
@@ -119,7 +139,30 @@ export function CardDetail({ order, onTutup, onPindah }: Props) {
           <section>
             <h3 className="font-display text-[11px] font-bold text-ink-muted">Keluhan</h3>
             <p className="mt-1 text-sm leading-relaxed">{order.keluhan}</p>
+            {order.diubahPada && (
+              <p className="mt-1.5 text-[13px] text-ink-muted">
+                Terakhir dibetulkan {umurRelatif(order.diubahPada)}
+                {order.diubahOleh ? ` oleh ${order.diubahOleh}` : ""}.
+              </p>
+            )}
           </section>
+
+          {tautanCetak && (
+            <section>
+              <h3 className="font-display text-[11px] font-bold text-ink-muted">
+                Nota pelanggan
+              </h3>
+              <a
+                href={tautanCetak}
+                className="mt-2 inline-flex min-h-11 items-center rounded-control border border-paper-edge px-4 text-sm font-semibold hover:border-ink"
+              >
+                Buka nota untuk dicetak
+              </a>
+              <div className="mt-4">
+                <BagikanNota token={order.token} />
+              </div>
+            </section>
+          )}
 
           <section>
             <h3 className="font-display text-[11px] font-bold text-ink-muted">

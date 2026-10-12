@@ -26,7 +26,23 @@ export type ServiceOrder = {
   stage: StageId;
   masukTahapPada: string; // ISO, kapan masuk tahap yang sekarang
   dibuatPada: string; // ISO
+  /** Untuk tautan nota yang boleh dibuka pelanggan tanpa masuk. */
+  token: string;
+  /** Diisi kalau isi notanya pernah dibetulkan. */
+  diubahPada: string | null;
+  diubahOleh: string | null;
   riwayat: StageMove[];
+};
+
+/** Yang boleh dilihat pelanggan lewat tautan nota. Sengaja dipilih satu-satu. */
+export type NotaPublik = {
+  nomor: string;
+  perangkat: string;
+  pelanggan: string;
+  stage: StageId;
+  /** Kapan terakhir ada perubahan, supaya pelanggan tahu ini masih hidup. */
+  diperbaruiPada: string;
+  namaToko: string;
 };
 
 export type BoardStatus = "memuat" | "siap" | "gagal";

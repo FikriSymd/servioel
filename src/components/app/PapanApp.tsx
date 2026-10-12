@@ -6,8 +6,10 @@ import {
   aksiArsipkan,
   aksiBuatPesanan,
   aksiPindahTahap,
+  aksiUbahPesanan,
   type HasilPapan,
 } from "@/app/actions/papan";
+import type { IsiNota } from "@/components/board/NewCardForm";
 import type { ServiceOrder, StageId } from "@/lib/types";
 
 type Props = {
@@ -67,6 +69,10 @@ export function PapanApp({ ordersAwal, peran }: Props) {
           jalankan(() => aksiPindahTahap(id, ke))
         }
         onTambah={(data) => jalankan(() => aksiBuatPesanan(data))}
+        onUbah={(id: string, data: IsiNota) =>
+          jalankan(() => aksiUbahPesanan(id, data))
+        }
+        tautanCetak={(o) => `/nota/${o.id}`}
         onMuatUlang={() => window.location.reload()}
         kepala={
           peran === "owner" ? (

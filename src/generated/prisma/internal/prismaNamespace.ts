@@ -949,7 +949,10 @@ export const ServiceOrderScalarFieldEnum = {
   stage: 'stage',
   masukTahapPada: 'masukTahapPada',
   dibuatPada: 'dibuatPada',
-  diarsipPada: 'diarsipPada'
+  diarsipPada: 'diarsipPada',
+  tokenPublik: 'tokenPublik',
+  diubahPada: 'diubahPada',
+  diubahOlehId: 'diubahOlehId'
 } as const
 
 export type ServiceOrderScalarFieldEnum = (typeof ServiceOrderScalarFieldEnum)[keyof typeof ServiceOrderScalarFieldEnum]

@@ -13,6 +13,7 @@
     "db:seed": "prisma db seed",
     "db:studio": "prisma studio",
     "check:isolasi": "tsx --conditions=react-server scripts/check-isolasi.ts",
+    "check:nota": "tsx --conditions=react-server scripts/check-nota.ts",
     "check:pencarian": "tsx scripts/check-pencarian.ts"
   },
   "dependencies": {
