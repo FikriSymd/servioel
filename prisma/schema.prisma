@@ -68,6 +68,7 @@ model ServiceOrder {
   id             String    @id @default(cuid())
   tokoId         String
   nomor          String // contoh SV-2026-0007
+  perangkat      String // merek dan tipe unit, ditulis apa adanya
   pelanggan      String
   telepon        String
   keluhan        String

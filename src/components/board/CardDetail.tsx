@@ -100,8 +100,19 @@ export function CardDetail({ order, onTutup, onPindah }: Props) {
 
         <div className="flex flex-col gap-5 px-4 py-4">
           <section>
+            <h3 className="font-display text-[11px] font-bold text-ink-muted">Perangkat</h3>
+            {order.perangkat.trim() ? (
+              <p className="mt-1 text-base font-semibold">{order.perangkat}</p>
+            ) : (
+              <p className="mt-1 text-sm text-ink-muted">
+                Belum dicatat, nota ini dibuat sebelum kolomnya ada.
+              </p>
+            )}
+          </section>
+
+          <section>
             <h3 className="font-display text-[11px] font-bold text-ink-muted">Pelanggan</h3>
-            <p className="mt-1 text-base font-semibold">{order.pelanggan}</p>
+            <p className="mt-1 text-sm font-semibold">{order.pelanggan}</p>
             <p className="angka mt-0.5 text-[13px] text-ink-muted">{order.telepon}</p>
           </section>
 

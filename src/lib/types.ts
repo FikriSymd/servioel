@@ -19,6 +19,7 @@ export type StageMove = {
 export type ServiceOrder = {
   id: string;
   nomor: string; // nomor servis, contoh SV-2026-0007
+  perangkat: string; // merek dan tipe unit, contoh Samsung Galaxy A54
   pelanggan: string;
   telepon: string;
   keluhan: string;

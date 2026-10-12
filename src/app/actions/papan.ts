@@ -29,6 +29,7 @@ const TIDAK_MASUK: HasilPapan = {
 };
 
 export async function aksiBuatPesanan(data: {
+  perangkat: string;
   pelanggan: string;
   telepon: string;
   keluhan: string;

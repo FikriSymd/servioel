@@ -98,7 +98,40 @@ SEMUA LULUS
 
 ---
 
-## 5. Yang belum diuji, dan itu jujur
+## 6. Perubahan setelah Fase 2: kolom perangkat
+
+Ditambahkan atas permintaan pemilik produk: nota perlu menyebut unit apa yang
+diservis, bukan cuma siapa pemiliknya.
+
+| Bagian | Perubahan |
+|---|---|
+| Skema | `ServiceOrder.perangkat` (teks, wajib) |
+| Migrasi | `20261012114154_perangkat` |
+| Formulir | Isian "Perangkat" jadi isian pertama, autofokus, wajib diisi |
+| Kartu | Perangkat jadi baris paling tebal, nama pelanggan menyusul di bawahnya |
+| Detail | Bagian "Perangkat" jadi bagian pertama |
+| Label pembaca layar | Nomor, perangkat, pelanggan, tahap dibaca berurutan |
+
+**Kenapa perangkat jadi baris paling tebal.** Papan ini papan unit: yang dicari
+teknisi lebih dulu "ini barang apa", bukan "ini punya siapa". Satu baris, bisa
+dibalik kalau pemilik produk lebih suka nama pelanggan di atas.
+
+**Nota yang sudah ada.** Ada 2 nota yang dibuat sebelum kolom ini ada. Isinya
+tidak ditebak dan tidak diisi karangan: dibiarkan kosong. Di papan, nota seperti
+itu kembali memakai susunan lama (nama pelanggan jadi baris tebal) supaya tidak
+ada baris kosong yang terlihat seperti kerusakan. Di detail, bagian perangkatnya
+menulis "Belum dicatat, nota ini dibuat sebelum kolomnya ada".
+
+**Bukti.** Migrasi dijalankan dengan data asli di dalam tabel, dan datanya utuh
+setelahnya (2 toko, 2 akun, 2 nota). Diuji di peramban: isian baru tersimpan dan
+kartunya menyebut perangkat, nota lama tampil dengan susunan lama, bagian
+perangkat di detail membedakan yang terisi dan yang belum. Audit ulang: 0 gagal
+kontras, 0 pola terlarang, HP 390px tanpa overflow dan tanpa target di bawah
+44px, konsol 0 error.
+
+---
+
+## 7. Yang belum diuji, dan itu jujur
 
 - **Beban.** Belum diuji dengan banyak toko sekaligus atau papan berisi ratusan
   nota. Angka "papan 200 kartu tetap responsif" di PRD masih belum dibuktikan.

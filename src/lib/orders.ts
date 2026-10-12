@@ -13,6 +13,7 @@ export function isStageId(nilai: unknown): nilai is StageId {
 type BarisPesanan = {
   id: string;
   nomor: string;
+  perangkat: string;
   pelanggan: string;
   telepon: string;
   keluhan: string;
@@ -42,6 +43,7 @@ function keTampilan(baris: BarisPesanan): ServiceOrder | null {
   return {
     id: baris.id,
     nomor: baris.nomor,
+    perangkat: baris.perangkat,
     pelanggan: baris.pelanggan,
     telepon: baris.telepon,
     keluhan: baris.keluhan,
@@ -63,6 +65,7 @@ export async function daftarPesanan(tokoId: string): Promise<ServiceOrder[]> {
     select: {
       id: true,
       nomor: true,
+      perangkat: true,
       pelanggan: true,
       telepon: true,
       keluhan: true,
@@ -116,12 +119,14 @@ export type HasilAksi =
 export async function buatPesanan(
   tokoId: string,
   olehId: string,
-  data: { pelanggan: string; telepon: string; keluhan: string },
+  data: { perangkat: string; pelanggan: string; telepon: string; keluhan: string },
 ): Promise<HasilAksi> {
+  const perangkat = data.perangkat.trim();
   const pelanggan = data.pelanggan.trim();
   const telepon = data.telepon.trim();
   const keluhan = data.keluhan.trim();
 
+  if (!perangkat) return { ok: false, pesan: "Nama perangkat belum diisi." };
   if (!pelanggan) return { ok: false, pesan: "Nama pelanggan belum diisi." };
   if (!telepon) return { ok: false, pesan: "Nomor HP belum diisi." };
   if (!keluhan) return { ok: false, pesan: "Keluhan belum diisi." };
@@ -134,6 +139,7 @@ export async function buatPesanan(
       data: {
         tokoId,
         nomor: n,
+        perangkat,
         pelanggan,
         telepon,
         keluhan,

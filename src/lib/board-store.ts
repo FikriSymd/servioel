@@ -75,13 +75,14 @@ export function useBoard() {
   }, []);
 
   const tambahKartu = useCallback(
-    (data: { pelanggan: string; telepon: string; keluhan: string }) => {
+    (data: { perangkat: string; pelanggan: string; telepon: string; keluhan: string }) => {
       const nomor = `SV-2026-${String(nomorBerikut).padStart(4, "0")}`;
       setNomorBerikut((n) => n + 1);
       const sekarang = new Date().toISOString();
       const baru: ServiceOrder = {
         id: idBaru("so"),
         nomor,
+        perangkat: data.perangkat.trim(),
         pelanggan: data.pelanggan.trim(),
         telepon: data.telepon.trim(),
         keluhan: data.keluhan.trim(),

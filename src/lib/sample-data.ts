@@ -2,10 +2,10 @@ import type { ServiceOrder, StageMove, StageId } from "./types";
 
 /*
   DATA CONTOH, bukan data toko nyata.
-  Dipakai di Fase 1 supaya papan dan drag-and-drop bisa dicoba sebelum
-  database tersambung. Nama sengaja generik ("Pelanggan A") supaya tidak
-  terbaca sebagai pelanggan sungguhan. Fase 2 mengganti seluruh isi file ini
-  dengan data dari PostgreSQL.
+  Dipakai supaya papan dan drag-and-drop bisa dicoba sebelum masuk ke akun toko.
+  Nama pelanggan sengaja generik ("Pelanggan A") supaya tidak terbaca sebagai
+  pelanggan sungguhan. Papan yang dipakai kerja mengambil datanya dari
+  PostgreSQL, bukan dari berkas ini.
 */
 
 const HARI = 86_400_000;
@@ -28,6 +28,7 @@ function langkah(dari: StageId | null, ke: StageId, hariLalu: number): StageMove
 
 function kartu(
   n: number,
+  perangkat: string,
   pelanggan: string,
   telepon: string,
   keluhan: string,
@@ -39,6 +40,7 @@ function kartu(
   return {
     id: `so-${n}`,
     nomor: `SV-2026-${String(n).padStart(4, "0")}`,
+    perangkat,
     pelanggan,
     telepon,
     keluhan,
@@ -54,6 +56,7 @@ export function buatDataContoh(): ServiceOrder[] {
   return [
     kartu(
       8,
+      "Samsung Galaxy A54",
       "Pelanggan A",
       "0812-0000-0008",
       "Layar retak, bagian sentuh bawah tidak responsif.",
@@ -64,6 +67,7 @@ export function buatDataContoh(): ServiceOrder[] {
     ),
     kartu(
       7,
+      "Xiaomi Redmi Note 12",
       "Pelanggan B",
       "0812-0000-0007",
       "Baterai cepat habis, badan hangat saat dicas.",
@@ -74,6 +78,7 @@ export function buatDataContoh(): ServiceOrder[] {
     ),
     kartu(
       6,
+      "iPhone 11",
       "Pelanggan C",
       "0812-0000-0006",
       "Tidak mau menyala, dicas tidak ada tanda apa pun.",
@@ -84,6 +89,7 @@ export function buatDataContoh(): ServiceOrder[] {
     ),
     kartu(
       5,
+      "Oppo A57",
       "Pelanggan D",
       "0812-0000-0005",
       "Suara panggilan masuk tidak terdengar.",
@@ -94,6 +100,7 @@ export function buatDataContoh(): ServiceOrder[] {
     ),
     kartu(
       4,
+      "Realme C55",
       "Pelanggan E",
       "0812-0000-0004",
       "Sudah ketahuan: modul cas rusak. Part dipesan.",
@@ -108,6 +115,7 @@ export function buatDataContoh(): ServiceOrder[] {
     ),
     kartu(
       3,
+      "Vivo Y17",
       "Pelanggan F",
       "0812-0000-0003",
       "Kamera belakang buram, kaca kamera tergores.",
@@ -122,6 +130,7 @@ export function buatDataContoh(): ServiceOrder[] {
     ),
     kartu(
       2,
+      "Asus Zenfone 8",
       "Pelanggan G",
       "0812-0000-0002",
       "Ganti konektor cas, unit sudah bisa dicas normal.",
@@ -137,6 +146,7 @@ export function buatDataContoh(): ServiceOrder[] {
     ),
     kartu(
       1,
+      "Laptop Lenovo Ideapad 3",
       "Pelanggan H",
       "0812-0000-0001",
       "Ganti LCD, sudah diserahkan dan dibayar.",

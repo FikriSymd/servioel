@@ -942,6 +942,7 @@ export const ServiceOrderScalarFieldEnum = {
   id: 'id',
   tokoId: 'tokoId',
   nomor: 'nomor',
+  perangkat: 'perangkat',
   pelanggan: 'pelanggan',
   telepon: 'telepon',
   keluhan: 'keluhan',

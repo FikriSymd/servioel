@@ -46,6 +46,7 @@ async function main() {
   });
 
   const dibuat = await buatPesanan(tokoA, a.data.userId, {
+    perangkat: "Unit uji A",
     pelanggan: "Pelanggan A",
     telepon: "0812-0000-0000",
     keluhan: "Uji pemisahan data.",
@@ -81,7 +82,7 @@ async function main() {
   periksa("daftar staf toko B tidak memuat orang toko A", stafB.every((s) => s.email !== `a-${cap}@uji.test`), `${stafB.length} akun`);
 
   // Nomor servis tidak boleh bertabrakan antar toko: dua toko sama-sama mulai dari 0001.
-  const notaB = await buatPesanan(tokoB, b.data.userId, { pelanggan: "Pelanggan B", telepon: "0813-0000-0000", keluhan: "Uji nomor." });
+  const notaB = await buatPesanan(tokoB, b.data.userId, { perangkat: "Unit uji B", pelanggan: "Pelanggan B", telepon: "0813-0000-0000", keluhan: "Uji nomor." });
   const nomorB = (await db.serviceOrder.findFirst({ where: { tokoId: tokoB }, select: { nomor: true } }))!.nomor;
   periksa("nomor servis toko B mulai dari 0001 sendiri", nomorB.endsWith("0001"), `${notaA.nomor} vs ${nomorB}`);
 

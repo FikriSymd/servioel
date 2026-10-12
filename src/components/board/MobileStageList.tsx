@@ -66,7 +66,7 @@ export function MobileStageList({ orders, onBuka }: Props) {
                 <button
                   type="button"
                   onClick={() => onBuka(o.id)}
-                  aria-label={`${o.nomor}, ${o.pelanggan}, tahap ${stageLabel(o.stage)}. Buka detail.`}
+                  aria-label={`${o.nomor}, ${o.perangkat}, ${o.pelanggan}, tahap ${stageLabel(o.stage)}. Buka detail.`}
                   className="block min-h-11 w-full rounded-ticket text-left"
                 >
                   <ServiceCardView order={o} />

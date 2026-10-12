@@ -74,6 +74,7 @@ export default function Beranda() {
               <dl className="mt-8 flex flex-col">
                 {[
                   ["Nomor servis", "Penanda unit. Dibuat otomatis dan tidak dipakai ulang."],
+                  ["Perangkat", "Merek dan tipe unit, ditulis apa adanya seperti kata pelanggan."],
                   ["Perforasi", "Garis putus antara kepala nota dan isinya."],
                   ["Nama dan nomor HP", "Untuk menelpon balik kalau ada yang perlu ditanya."],
                   ["Keluhan", "Ditulis seperti kata pelanggan, bukan istilah teknisi."],

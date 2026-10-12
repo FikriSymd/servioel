@@ -35,6 +35,7 @@ type Props = {
   judul?: string;
   onPindah: (id: string, ke: StageId) => Promise<string | void> | string | void;
   onTambah: (data: {
+    perangkat: string;
     pelanggan: string;
     telepon: string;
     keluhan: string;

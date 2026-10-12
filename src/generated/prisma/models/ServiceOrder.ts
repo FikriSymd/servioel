@@ -28,6 +28,7 @@ export type ServiceOrderMinAggregateOutputType = {
   id: string | null
   tokoId: string | null
   nomor: string | null
+  perangkat: string | null
   pelanggan: string | null
   telepon: string | null
   keluhan: string | null
@@ -41,6 +42,7 @@ export type ServiceOrderMaxAggregateOutputType = {
   id: string | null
   tokoId: string | null
   nomor: string | null
+  perangkat: string | null
   pelanggan: string | null
   telepon: string | null
   keluhan: string | null
@@ -54,6 +56,7 @@ export type ServiceOrderCountAggregateOutputType = {
   id: number
   tokoId: number
   nomor: number
+  perangkat: number
   pelanggan: number
   telepon: number
   keluhan: number
@@ -69,6 +72,7 @@ export type ServiceOrderMinAggregateInputType = {
   id?: true
   tokoId?: true
   nomor?: true
+  perangkat?: true
   pelanggan?: true
   telepon?: true
   keluhan?: true
@@ -82,6 +86,7 @@ export type ServiceOrderMaxAggregateInputType = {
   id?: true
   tokoId?: true
   nomor?: true
+  perangkat?: true
   pelanggan?: true
   telepon?: true
   keluhan?: true
@@ -95,6 +100,7 @@ export type ServiceOrderCountAggregateInputType = {
   id?: true
   tokoId?: true
   nomor?: true
+  perangkat?: true
   pelanggan?: true
   telepon?: true
   keluhan?: true
@@ -181,6 +187,7 @@ export type ServiceOrderGroupByOutputType = {
   id: string
   tokoId: string
   nomor: string
+  perangkat: string
   pelanggan: string
   telepon: string
   keluhan: string
@@ -215,6 +222,7 @@ export type ServiceOrderWhereInput = {
   id?: Prisma.StringFilter<"ServiceOrder"> | string
   tokoId?: Prisma.StringFilter<"ServiceOrder"> | string
   nomor?: Prisma.StringFilter<"ServiceOrder"> | string
+  perangkat?: Prisma.StringFilter<"ServiceOrder"> | string
   pelanggan?: Prisma.StringFilter<"ServiceOrder"> | string
   telepon?: Prisma.StringFilter<"ServiceOrder"> | string
   keluhan?: Prisma.StringFilter<"ServiceOrder"> | string
@@ -230,6 +238,7 @@ export type ServiceOrderOrderByWithRelationInput = {
   id?: Prisma.SortOrder
   tokoId?: Prisma.SortOrder
   nomor?: Prisma.SortOrder
+  perangkat?: Prisma.SortOrder
   pelanggan?: Prisma.SortOrder
   telepon?: Prisma.SortOrder
   keluhan?: Prisma.SortOrder
@@ -249,6 +258,7 @@ export type ServiceOrderWhereUniqueInput = Prisma.AtLeast<{
   NOT?: Prisma.ServiceOrderWhereInput | Prisma.ServiceOrderWhereInput[]
   tokoId?: Prisma.StringFilter<"ServiceOrder"> | string
   nomor?: Prisma.StringFilter<"ServiceOrder"> | string
+  perangkat?: Prisma.StringFilter<"ServiceOrder"> | string
   pelanggan?: Prisma.StringFilter<"ServiceOrder"> | string
   telepon?: Prisma.StringFilter<"ServiceOrder"> | string
   keluhan?: Prisma.StringFilter<"ServiceOrder"> | string
@@ -264,6 +274,7 @@ export type ServiceOrderOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
   tokoId?: Prisma.SortOrder
   nomor?: Prisma.SortOrder
+  perangkat?: Prisma.SortOrder
   pelanggan?: Prisma.SortOrder
   telepon?: Prisma.SortOrder
   keluhan?: Prisma.SortOrder
@@ -283,6 +294,7 @@ export type ServiceOrderScalarWhereWithAggregatesInput = {
   id?: Prisma.StringWithAggregatesFilter<"ServiceOrder"> | string
   tokoId?: Prisma.StringWithAggregatesFilter<"ServiceOrder"> | string
   nomor?: Prisma.StringWithAggregatesFilter<"ServiceOrder"> | string
+  perangkat?: Prisma.StringWithAggregatesFilter<"ServiceOrder"> | string
   pelanggan?: Prisma.StringWithAggregatesFilter<"ServiceOrder"> | string
   telepon?: Prisma.StringWithAggregatesFilter<"ServiceOrder"> | string
   keluhan?: Prisma.StringWithAggregatesFilter<"ServiceOrder"> | string
@@ -295,6 +307,7 @@ export type ServiceOrderScalarWhereWithAggregatesInput = {
 export type ServiceOrderCreateInput = {
   id?: string
   nomor: string
+  perangkat: string
   pelanggan: string
   telepon: string
   keluhan: string
@@ -310,6 +323,7 @@ export type ServiceOrderUncheckedCreateInput = {
   id?: string
   tokoId: string
   nomor: string
+  perangkat: string
   pelanggan: string
   telepon: string
   keluhan: string
@@ -323,6 +337,7 @@ export type ServiceOrderUncheckedCreateInput = {
 export type ServiceOrderUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   nomor?: Prisma.StringFieldUpdateOperationsInput | string
+  perangkat?: Prisma.StringFieldUpdateOperationsInput | string
   pelanggan?: Prisma.StringFieldUpdateOperationsInput | string
   telepon?: Prisma.StringFieldUpdateOperationsInput | string
   keluhan?: Prisma.StringFieldUpdateOperationsInput | string
@@ -338,6 +353,7 @@ export type ServiceOrderUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   tokoId?: Prisma.StringFieldUpdateOperationsInput | string
   nomor?: Prisma.StringFieldUpdateOperationsInput | string
+  perangkat?: Prisma.StringFieldUpdateOperationsInput | string
   pelanggan?: Prisma.StringFieldUpdateOperationsInput | string
   telepon?: Prisma.StringFieldUpdateOperationsInput | string
   keluhan?: Prisma.StringFieldUpdateOperationsInput | string
@@ -352,6 +368,7 @@ export type ServiceOrderCreateManyInput = {
   id?: string
   tokoId: string
   nomor: string
+  perangkat: string
   pelanggan: string
   telepon: string
   keluhan: string
@@ -364,6 +381,7 @@ export type ServiceOrderCreateManyInput = {
 export type ServiceOrderUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   nomor?: Prisma.StringFieldUpdateOperationsInput | string
+  perangkat?: Prisma.StringFieldUpdateOperationsInput | string
   pelanggan?: Prisma.StringFieldUpdateOperationsInput | string
   telepon?: Prisma.StringFieldUpdateOperationsInput | string
   keluhan?: Prisma.StringFieldUpdateOperationsInput | string
@@ -377,6 +395,7 @@ export type ServiceOrderUncheckedUpdateManyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   tokoId?: Prisma.StringFieldUpdateOperationsInput | string
   nomor?: Prisma.StringFieldUpdateOperationsInput | string
+  perangkat?: Prisma.StringFieldUpdateOperationsInput | string
   pelanggan?: Prisma.StringFieldUpdateOperationsInput | string
   telepon?: Prisma.StringFieldUpdateOperationsInput | string
   keluhan?: Prisma.StringFieldUpdateOperationsInput | string
@@ -405,6 +424,7 @@ export type ServiceOrderCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
   tokoId?: Prisma.SortOrder
   nomor?: Prisma.SortOrder
+  perangkat?: Prisma.SortOrder
   pelanggan?: Prisma.SortOrder
   telepon?: Prisma.SortOrder
   keluhan?: Prisma.SortOrder
@@ -418,6 +438,7 @@ export type ServiceOrderMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
   tokoId?: Prisma.SortOrder
   nomor?: Prisma.SortOrder
+  perangkat?: Prisma.SortOrder
   pelanggan?: Prisma.SortOrder
   telepon?: Prisma.SortOrder
   keluhan?: Prisma.SortOrder
@@ -431,6 +452,7 @@ export type ServiceOrderMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
   tokoId?: Prisma.SortOrder
   nomor?: Prisma.SortOrder
+  perangkat?: Prisma.SortOrder
   pelanggan?: Prisma.SortOrder
   telepon?: Prisma.SortOrder
   keluhan?: Prisma.SortOrder
@@ -508,6 +530,7 @@ export type ServiceOrderUpdateOneRequiredWithoutRiwayatNestedInput = {
 export type ServiceOrderCreateWithoutTokoInput = {
   id?: string
   nomor: string
+  perangkat: string
   pelanggan: string
   telepon: string
   keluhan: string
@@ -521,6 +544,7 @@ export type ServiceOrderCreateWithoutTokoInput = {
 export type ServiceOrderUncheckedCreateWithoutTokoInput = {
   id?: string
   nomor: string
+  perangkat: string
   pelanggan: string
   telepon: string
   keluhan: string
@@ -564,6 +588,7 @@ export type ServiceOrderScalarWhereInput = {
   id?: Prisma.StringFilter<"ServiceOrder"> | string
   tokoId?: Prisma.StringFilter<"ServiceOrder"> | string
   nomor?: Prisma.StringFilter<"ServiceOrder"> | string
+  perangkat?: Prisma.StringFilter<"ServiceOrder"> | string
   pelanggan?: Prisma.StringFilter<"ServiceOrder"> | string
   telepon?: Prisma.StringFilter<"ServiceOrder"> | string
   keluhan?: Prisma.StringFilter<"ServiceOrder"> | string
@@ -576,6 +601,7 @@ export type ServiceOrderScalarWhereInput = {
 export type ServiceOrderCreateWithoutRiwayatInput = {
   id?: string
   nomor: string
+  perangkat: string
   pelanggan: string
   telepon: string
   keluhan: string
@@ -590,6 +616,7 @@ export type ServiceOrderUncheckedCreateWithoutRiwayatInput = {
   id?: string
   tokoId: string
   nomor: string
+  perangkat: string
   pelanggan: string
   telepon: string
   keluhan: string
@@ -618,6 +645,7 @@ export type ServiceOrderUpdateToOneWithWhereWithoutRiwayatInput = {
 export type ServiceOrderUpdateWithoutRiwayatInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   nomor?: Prisma.StringFieldUpdateOperationsInput | string
+  perangkat?: Prisma.StringFieldUpdateOperationsInput | string
   pelanggan?: Prisma.StringFieldUpdateOperationsInput | string
   telepon?: Prisma.StringFieldUpdateOperationsInput | string
   keluhan?: Prisma.StringFieldUpdateOperationsInput | string
@@ -632,6 +660,7 @@ export type ServiceOrderUncheckedUpdateWithoutRiwayatInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   tokoId?: Prisma.StringFieldUpdateOperationsInput | string
   nomor?: Prisma.StringFieldUpdateOperationsInput | string
+  perangkat?: Prisma.StringFieldUpdateOperationsInput | string
   pelanggan?: Prisma.StringFieldUpdateOperationsInput | string
   telepon?: Prisma.StringFieldUpdateOperationsInput | string
   keluhan?: Prisma.StringFieldUpdateOperationsInput | string
@@ -644,6 +673,7 @@ export type ServiceOrderUncheckedUpdateWithoutRiwayatInput = {
 export type ServiceOrderCreateManyTokoInput = {
   id?: string
   nomor: string
+  perangkat: string
   pelanggan: string
   telepon: string
   keluhan: string
@@ -656,6 +686,7 @@ export type ServiceOrderCreateManyTokoInput = {
 export type ServiceOrderUpdateWithoutTokoInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   nomor?: Prisma.StringFieldUpdateOperationsInput | string
+  perangkat?: Prisma.StringFieldUpdateOperationsInput | string
   pelanggan?: Prisma.StringFieldUpdateOperationsInput | string
   telepon?: Prisma.StringFieldUpdateOperationsInput | string
   keluhan?: Prisma.StringFieldUpdateOperationsInput | string
@@ -669,6 +700,7 @@ export type ServiceOrderUpdateWithoutTokoInput = {
 export type ServiceOrderUncheckedUpdateWithoutTokoInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   nomor?: Prisma.StringFieldUpdateOperationsInput | string
+  perangkat?: Prisma.StringFieldUpdateOperationsInput | string
   pelanggan?: Prisma.StringFieldUpdateOperationsInput | string
   telepon?: Prisma.StringFieldUpdateOperationsInput | string
   keluhan?: Prisma.StringFieldUpdateOperationsInput | string
@@ -682,6 +714,7 @@ export type ServiceOrderUncheckedUpdateWithoutTokoInput = {
 export type ServiceOrderUncheckedUpdateManyWithoutTokoInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   nomor?: Prisma.StringFieldUpdateOperationsInput | string
+  perangkat?: Prisma.StringFieldUpdateOperationsInput | string
   pelanggan?: Prisma.StringFieldUpdateOperationsInput | string
   telepon?: Prisma.StringFieldUpdateOperationsInput | string
   keluhan?: Prisma.StringFieldUpdateOperationsInput | string
@@ -726,6 +759,7 @@ export type ServiceOrderSelect<ExtArgs extends runtime.Types.Extensions.Internal
   id?: boolean
   tokoId?: boolean
   nomor?: boolean
+  perangkat?: boolean
   pelanggan?: boolean
   telepon?: boolean
   keluhan?: boolean
@@ -742,6 +776,7 @@ export type ServiceOrderSelectCreateManyAndReturn<ExtArgs extends runtime.Types.
   id?: boolean
   tokoId?: boolean
   nomor?: boolean
+  perangkat?: boolean
   pelanggan?: boolean
   telepon?: boolean
   keluhan?: boolean
@@ -756,6 +791,7 @@ export type ServiceOrderSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.
   id?: boolean
   tokoId?: boolean
   nomor?: boolean
+  perangkat?: boolean
   pelanggan?: boolean
   telepon?: boolean
   keluhan?: boolean
@@ -770,6 +806,7 @@ export type ServiceOrderSelectScalar = {
   id?: boolean
   tokoId?: boolean
   nomor?: boolean
+  perangkat?: boolean
   pelanggan?: boolean
   telepon?: boolean
   keluhan?: boolean
@@ -779,7 +816,7 @@ export type ServiceOrderSelectScalar = {
   diarsipPada?: boolean
 }
 
-export type ServiceOrderOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "tokoId" | "nomor" | "pelanggan" | "telepon" | "keluhan" | "stage" | "masukTahapPada" | "dibuatPada" | "diarsipPada", ExtArgs["result"]["serviceOrder"]>
+export type ServiceOrderOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "tokoId" | "nomor" | "perangkat" | "pelanggan" | "telepon" | "keluhan" | "stage" | "masukTahapPada" | "dibuatPada" | "diarsipPada", ExtArgs["result"]["serviceOrder"]>
 export type ServiceOrderInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   toko?: boolean | Prisma.TokoDefaultArgs<ExtArgs>
   riwayat?: boolean | Prisma.ServiceOrder$riwayatArgs<ExtArgs>
@@ -802,6 +839,7 @@ export type $ServiceOrderPayload<ExtArgs extends runtime.Types.Extensions.Intern
     id: string
     tokoId: string
     nomor: string
+    perangkat: string
     pelanggan: string
     telepon: string
     keluhan: string
@@ -1237,6 +1275,7 @@ export interface ServiceOrderFieldRefs {
   readonly id: Prisma.FieldRef<"ServiceOrder", 'String'>
   readonly tokoId: Prisma.FieldRef<"ServiceOrder", 'String'>
   readonly nomor: Prisma.FieldRef<"ServiceOrder", 'String'>
+  readonly perangkat: Prisma.FieldRef<"ServiceOrder", 'String'>
   readonly pelanggan: Prisma.FieldRef<"ServiceOrder", 'String'>
   readonly telepon: Prisma.FieldRef<"ServiceOrder", 'String'>
   readonly keluhan: Prisma.FieldRef<"ServiceOrder", 'String'>

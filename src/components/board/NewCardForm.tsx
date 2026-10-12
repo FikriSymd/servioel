@@ -4,13 +4,24 @@ import { useEffect, useRef, useState } from "react";
 
 type Props = {
   onTutup: () => void;
-  onSimpan: (data: { pelanggan: string; telepon: string; keluhan: string }) => void;
+  onSimpan: (data: {
+    perangkat: string;
+    pelanggan: string;
+    telepon: string;
+    keluhan: string;
+  }) => void;
 };
 
-type Galat = Partial<Record<"pelanggan" | "telepon" | "keluhan", string>>;
+type Galat = Partial<Record<"perangkat" | "pelanggan" | "telepon" | "keluhan", string>>;
 
-/** Menulis nota baru: formulirnya sendiri berbentuk nota kertas. */
+/**
+ * Menulis nota baru: formulirnya sendiri berbentuk nota kertas.
+ *
+ * Perangkat ditaruh paling atas karena itu yang pertama dilihat dan ditulis
+ * saat unit diterima di meja. Nomor nota muncul di kartu setelah disimpan.
+ */
 export function NewCardForm({ onTutup, onSimpan }: Props) {
+  const [perangkat, setPerangkat] = useState("");
   const [pelanggan, setPelanggan] = useState("");
   const [telepon, setTelepon] = useState("");
   const [keluhan, setKeluhan] = useState("");
@@ -29,12 +40,13 @@ export function NewCardForm({ onTutup, onSimpan }: Props) {
   function kirim(e: React.FormEvent) {
     e.preventDefault();
     const g: Galat = {};
+    if (!perangkat.trim()) g.perangkat = "Nama perangkat belum diisi.";
     if (!pelanggan.trim()) g.pelanggan = "Nama pelanggan belum diisi.";
     if (!telepon.trim()) g.telepon = "Nomor HP belum diisi.";
     if (!keluhan.trim()) g.keluhan = "Keluhan belum diisi.";
     setGalat(g);
     if (Object.keys(g).length > 0) return;
-    onSimpan({ pelanggan, telepon, keluhan });
+    onSimpan({ perangkat, pelanggan, telepon, keluhan });
   }
 
   const kelasInput =
@@ -75,12 +87,36 @@ export function NewCardForm({ onTutup, onSimpan }: Props) {
 
         <form onSubmit={kirim} className="mt-4 flex flex-col gap-4" noValidate>
           <div>
+            <label htmlFor="f-perangkat" className="text-sm font-semibold">
+              Perangkat
+            </label>
+            <input
+              id="f-perangkat"
+              ref={inputRef}
+              placeholder="Samsung Galaxy A54"
+              value={perangkat}
+              onChange={(e) => setPerangkat(e.target.value)}
+              aria-invalid={galat.perangkat ? true : undefined}
+              aria-describedby={galat.perangkat ? "g-perangkat" : "b-perangkat"}
+              className={kelasInput}
+            />
+            {galat.perangkat ? (
+              <p id="g-perangkat" className="mt-1 text-[13px] font-semibold text-signal-ink">
+                {galat.perangkat}
+              </p>
+            ) : (
+              <p id="b-perangkat" className="mt-1 text-[13px] text-ink-muted">
+                Merek dan tipe, tulis apa adanya.
+              </p>
+            )}
+          </div>
+
+          <div>
             <label htmlFor="f-pelanggan" className="text-sm font-semibold">
               Nama pelanggan
             </label>
             <input
               id="f-pelanggan"
-              ref={inputRef}
               value={pelanggan}
               onChange={(e) => setPelanggan(e.target.value)}
               aria-invalid={galat.pelanggan ? true : undefined}

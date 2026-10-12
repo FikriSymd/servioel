@@ -26,7 +26,7 @@ export function DraggableCard({ order, onBuka }: Props) {
       {...attributes}
       {...listeners}
       onClick={() => onBuka(order.id)}
-      aria-label={`${order.nomor}, ${order.pelanggan}, tahap ${stageLabel(order.stage)}. Buka detail.`}
+      aria-label={`${order.nomor}, ${order.perangkat}, ${order.pelanggan}, tahap ${stageLabel(order.stage)}. Buka detail.`}
       className={[
         "block w-full cursor-grab rounded-ticket text-left",
         isDragging ? "opacity-40" : "",

@@ -53,7 +53,7 @@ Nota kertas, buku catatan, atau grup WhatsApp. Tidak ada satu tempat yang menunj
 **US1. Terima barang (kasir)**
 Sebagai kasir, saya mau membuat kartu servis baru saat pelanggan menyerahkan unit, supaya unit itu langsung terlihat di papan.
 - Kartu baru masuk ke tahap "Barang Masuk".
-- Isi kartu: nama pelanggan, nomor HP pelanggan, keluhan/kerusakan yang dilaporkan.
+- Isi kartu: nama perangkat (merek dan tipe), nama pelanggan, nomor HP pelanggan, keluhan/kerusakan yang dilaporkan.
 - Nomor servis dibuat otomatis dan tidak boleh dobel.
 - Setelah simpan, kartu langsung muncul di papan tanpa muat ulang.
 
@@ -77,7 +77,7 @@ Sebagai pemilik, saya mau menambah akun teknisi dan kasir dari dalam aplikasi, s
 
 **US5. Lihat detail unit (semua peran)**
 Sebagai pengguna, saya mau membuka satu kartu dan melihat isinya, supaya bisa menjawab pertanyaan pelanggan.
-- Detail menampilkan data pelanggan, keluhan, tahap sekarang, dan riwayat perpindahan.
+- Detail menampilkan perangkat, data pelanggan, keluhan, tahap sekarang, dan riwayat perpindahan.
 
 ---
 
@@ -89,7 +89,7 @@ Sebagai pengguna, saya mau membuka satu kartu dan melihat isinya, supaya bisa me
 - Login dan logout. Sesi bertahan.
 - Tiga peran: owner, teknisi, kasir. Owner bisa membuat akun staf.
 - Papan kanban 6 tahap: Barang Masuk, Diagnosa, Nunggu Sparepart, Dikerjakan, Selesai, Sudah Diambil.
-- Buat kartu servis baru (nama, nomor HP, keluhan).
+- Buat kartu servis baru (perangkat, nama, nomor HP, keluhan).
 - Pindah kartu antar tahap lewat drag-and-drop (laptop), ketuk (HP), dan keyboard.
 - Riwayat perpindahan per kartu (siapa, kapan, dari dan ke tahap mana).
 - Detail kartu.
@@ -208,7 +208,7 @@ Kalau pemilik produk memilih lain, perubahannya kecil.
 
 ### Out of Scope (V1), dengan aturan masuk kembali
 
-- **Field unit, IMEI, estimasi biaya, tanggal janji, catatan teknisi, penanggung jawab.** Pemilik produk tidak memilih ini di V1. Masuk kembali hanya kalau ada toko nyata yang bilang kartunya kurang. Tempatnya disiapkan di struktur data Fase 2 supaya tidak perlu migrasi besar.
+- **IMEI, estimasi biaya, tanggal janji, catatan teknisi, penanggung jawab.** Pemilik produk tidak memilih ini di V1. Nama perangkat sudah masuk (merek dan tipe, satu kolom teks), karena tanpa itu nota tidak menjawab "ini barang apa". Sisanya masuk kembali hanya kalau ada toko nyata yang bilang kartunya kurang. Tempatnya disiapkan di struktur data Fase 2 supaya tidak perlu migrasi besar.
 - **Cetak nota, invoice, pembayaran.** Masuk kembali hanya setelah V1 dipakai harian di satu toko.
 - **Notifikasi WhatsApp.** Masuk kembali setelah papan terbukti dipakai, karena butuh biaya dan akun pihak ketiga.
 - **Halaman harga dan billing.** Masuk kembali setelah ada calon pembeli nyata.
