@@ -12,7 +12,8 @@
     "db:generate": "prisma generate",
     "db:seed": "prisma db seed",
     "db:studio": "prisma studio",
-    "check:isolasi": "tsx --conditions=react-server scripts/check-isolasi.ts"
+    "check:isolasi": "tsx --conditions=react-server scripts/check-isolasi.ts",
+    "check:pencarian": "tsx scripts/check-pencarian.ts"
   },
   "dependencies": {
     "@dnd-kit/core": "^6.3.1",

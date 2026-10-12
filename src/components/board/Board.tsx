@@ -18,6 +18,7 @@ import { NewCardForm } from "./NewCardForm";
 import { ServiceCardView } from "./ServiceCardView";
 import { keyboardPindahKolom } from "./keyboardCoordinates";
 import { AMBANG_NYANGKUT_HARI, STAGES, hariDiTahap } from "@/lib/stages";
+import { saringPesanan } from "@/lib/pencarian";
 import type { BoardStatus, ServiceOrder, StageId } from "@/lib/types";
 
 /**
@@ -28,6 +29,9 @@ import type { BoardStatus, ServiceOrder, StageId } from "@/lib/types";
  *
  * Tiap aksi mengembalikan pesan untuk diumumkan pembaca layar. Pesannya datang
  * dari server, jadi yang diucapkan adalah hasil sebenarnya.
+ *
+ * Pencarian menyaring di peramban, bukan lewat server: seluruh nota papan sudah
+ * ada di sini, jadi hasilnya muncul sambil mengetik tanpa menunggu jaringan.
  */
 type Props = {
   orders: ServiceOrder[];
@@ -64,6 +68,7 @@ export function Board({
   const [formBuka, setFormBuka] = useState(false);
   const [dragId, setDragId] = useState<string | null>(null);
   const [pesan, setPesan] = useState("");
+  const [cari, setCari] = useState("");
 
   const sensors = useSensors(
     // Jarak 8px: klik tanpa geser tetap membuka detail, bukan dibaca sebagai seret.
@@ -71,12 +76,15 @@ export function Board({
     useSensor(KeyboardSensor, { coordinateGetter: keyboardPindahKolom }),
   );
 
+  const terfilter = useMemo(() => saringPesanan(orders, cari), [orders, cari]);
+  const sedangCari = terfilter.length !== orders.length;
+
   const perTahap = useMemo(() => {
     const peta = new Map<StageId, ServiceOrder[]>();
     for (const s of STAGES) peta.set(s.id, []);
-    for (const o of orders) peta.get(o.stage)?.push(o);
+    for (const o of terfilter) peta.get(o.stage)?.push(o);
     return peta;
-  }, [orders]);
+  }, [terfilter]);
 
   const jumlahNyangkut = orders.filter(
     (o) =>
@@ -99,6 +107,8 @@ export function Board({
     await pindahDanUmumkan(String(active.id), over.id as StageId);
   }
 
+  const adaIsi = status === "siap" && orders.length > 0;
+
   return (
     <div className="flex flex-col gap-6" aria-busy={sibuk}>
       <div className="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
@@ -107,9 +117,11 @@ export function Board({
             {judul}
           </h1>
           <p className="mt-1 text-sm text-bench-muted" aria-live="polite">
-            {status === "siap"
-              ? `${orders.length} unit di papan, ${jumlahNyangkut} menginap lebih dari ${AMBANG_NYANGKUT_HARI} hari.`
-              : "\u00A0"}
+            {status !== "siap"
+              ? "\u00A0"
+              : sedangCari
+                ? `${terfilter.length} dari ${orders.length} unit cocok dengan pencarian.`
+                : `${orders.length} unit di papan, ${jumlahNyangkut} menginap lebih dari ${AMBANG_NYANGKUT_HARI} hari.`}
           </p>
         </div>
 
@@ -124,6 +136,46 @@ export function Board({
           {kepala}
         </div>
       </div>
+
+      {adaIsi && (
+        <div className="flex flex-col gap-2 sm:flex-row sm:items-end sm:gap-3">
+          <div className="min-w-0 flex-1">
+            <label
+              htmlFor="cari-unit"
+              className="text-[13px] font-semibold text-bench-text"
+            >
+              Cari unit
+            </label>
+            <input
+              id="cari-unit"
+              type="text"
+              inputMode="search"
+              enterKeyHint="search"
+              autoComplete="off"
+              placeholder="Nama, nomor HP, perangkat, atau nomor nota"
+              value={cari}
+              onChange={(e) => setCari(e.target.value)}
+              onKeyDown={(e) => {
+                if (e.key === "Escape" && cari) {
+                  e.stopPropagation();
+                  setCari("");
+                }
+              }}
+              className="mt-1.5 min-h-11 w-full rounded-control border border-bench-line bg-bench-panel px-3 text-sm text-bench-text placeholder:text-bench-muted"
+            />
+          </div>
+
+          {cari && (
+            <button
+              type="button"
+              onClick={() => setCari("")}
+              className="min-h-11 shrink-0 rounded-control border border-bench-line px-4 text-sm font-semibold text-bench-text hover:border-signal"
+            >
+              Bersihkan
+            </button>
+          )}
+        </div>
+      )}
 
       {catatan}
 
@@ -188,9 +240,31 @@ export function Board({
         </div>
       )}
 
-      {status === "siap" && orders.length > 0 && (
+      {adaIsi && terfilter.length === 0 && (
+        <div className="border border-bench-line px-4 py-14 text-center">
+          <h2 className="font-display text-lg font-bold text-bench-text">
+            Tidak ada unit yang cocok
+          </h2>
+          <p className="mx-auto mt-2 max-w-md text-sm text-bench-muted">
+            Tidak ada nota di papan yang cocok dengan pencarian itu. Coba potongan
+            nama yang lain, atau nomor HP tanpa tanda pemisah.
+          </p>
+          <p className="mx-auto mt-2 max-w-md text-[13px] text-bench-muted">
+            Unit yang sudah diarsipkan belum ikut dicari.
+          </p>
+          <button
+            type="button"
+            onClick={() => setCari("")}
+            className="mt-4 min-h-11 rounded-control border border-bench-line px-4 text-sm font-semibold text-bench-text hover:border-signal"
+          >
+            Bersihkan pencarian
+          </button>
+        </div>
+      )}
+
+      {adaIsi && terfilter.length > 0 && (
         <>
-          <MobileStageList orders={orders} onBuka={setDetailId} />
+          <MobileStageList orders={terfilter} onBuka={setDetailId} kueri={cari} />
 
           <div className="hidden lg:block">
             <DndContext

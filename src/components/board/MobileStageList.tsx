@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { ServiceCardView } from "./ServiceCardView";
 import { STAGES, stageLabel } from "@/lib/stages";
 import type { ServiceOrder, StageId } from "@/lib/types";
@@ -8,6 +8,8 @@ import type { ServiceOrder, StageId } from "@/lib/types";
 type Props = {
   orders: ServiceOrder[];
   onBuka: (id: string) => void;
+  /** Kueri pencarian yang sedang aktif. Dipakai untuk melompat ke hasil. */
+  kueri?: string;
 };
 
 /**
@@ -15,11 +17,28 @@ type Props = {
  * digeser ke samping. Enam lajur tidak mungkin berdampingan di layar HP, dan
  * menyeret di layar kecil tidak nyaman, jadi jalur utama di sini adalah buka
  * notanya lalu pindah tahap dari tombol di dalamnya.
+ *
+ * Saat mencari, hasilnya bisa ada di tahap lain. Daripada menyuruh orang
+ * menebak tab mana, tahap yang dibuka ikut melompat ke tahap pertama yang punya
+ * hasil, dan itu hanya terjadi saat kuerinya berubah. Kalau tidak begitu, menekan
+ * tab yang kosong saat mencari akan langsung terlempar balik, dan itu bikin bingung.
  */
-export function MobileStageList({ orders, onBuka }: Props) {
+export function MobileStageList({ orders, onBuka, kueri = "" }: Props) {
   const [aktif, setAktif] = useState<StageId>("barang-masuk");
+  const kueriSebelumnya = useRef(kueri);
+
+  useEffect(() => {
+    if (kueri === kueriSebelumnya.current) return;
+    kueriSebelumnya.current = kueri;
+    setAktif((lama) => {
+      if (orders.some((o) => o.stage === lama)) return lama;
+      return STAGES.find((s) => orders.some((o) => o.stage === s.id))?.id ?? lama;
+    });
+  }, [kueri, orders]);
+
   const tahap = STAGES.find((s) => s.id === aktif)!;
   const isi = orders.filter((o) => o.stage === aktif);
+  const sedangCari = kueri.trim().length > 0;
 
   return (
     <div className="lg:hidden">
@@ -56,8 +75,9 @@ export function MobileStageList({ orders, onBuka }: Props) {
 
         {isi.length === 0 ? (
           <p className="mt-3 rounded-ticket border border-dashed border-bench-line px-4 py-8 text-center text-sm text-bench-muted">
-            Belum ada unit di tahap {tahap.label}. Buka nota dari tahap lain lalu
-            pindahkan ke sini.
+            {sedangCari
+              ? `Tidak ada unit yang cocok di tahap ${tahap.label}.`
+              : `Belum ada unit di tahap ${tahap.label}. Buka nota dari tahap lain lalu pindahkan ke sini.`}
           </p>
         ) : (
           <ul className="mt-3 flex flex-col gap-2">

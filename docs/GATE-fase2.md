@@ -131,7 +131,59 @@ kontras, 0 pola terlarang, HP 390px tanpa overflow dan tanpa target di bawah
 
 ---
 
-## 7. Yang belum diuji, dan itu jujur
+## 7. Perubahan setelah Fase 2: bar pencarian, dan satu cacat yang ketemu
+
+Pemilik produk minta bisa mencari nota dari nomor HP, nama, atau nama perangkat.
+
+| Bagian | Perubahan |
+|---|---|
+| Pencarian | `src/lib/pencarian.ts` (logika murni), dipakai `Board.tsx` |
+| Saringan | Menyaring di peramban, bukan lewat server, jadi hasil muncul sambil mengetik |
+| Yang dicocokkan | Nomor nota, perangkat, nama pelanggan, nomor HP |
+| Bentuk tulisan | Spasi, tanda hubung, titik, tanda kurung, dan besar-kecil huruf diabaikan |
+| Uji | `npm run check:pencarian`, 21 pemeriksaan |
+
+**Pencocokan tidak menuntut tulisan yang persis.** `081234567890`,
+`0812-3456-7890`, dan `0812 3456 7890` sama-sama ketemu. Huruf besar-kecil juga
+diabaikan. Nomor nota ikut dicari karena itu yang paling sering disebut pelanggan
+di telepon. Substring, bukan awalan: orang mencari potongan nama, bukan awalannya.
+
+**Di HP, hasil bisa ada di tahap lain.** Kalau tab yang sedang dibuka kosong,
+papan berpindah sendiri ke tahap pertama yang punya hasil. Itu hanya terjadi
+saat kuerinya berubah, supaya menekan tab yang kosong tidak langsung terlempar
+balik. Satu kueri = satu perpindahan.
+
+### Cacat yang ketemu waktu menguji: `/app` nyangkut "Memuat papan servis"
+
+Ini cacat nyata dan sudah ada sejak Fase 2, tapi belum pernah ketahuan karena
+semua pengujian sebelumnya masuk ke `/app` lewat perpindahan di dalam aplikasi
+(setelah masuk/daftar), bukan dengan membuka atau menyegarkan alamatnya langsung.
+
+Gejalanya: buka `/app` langsung, halaman berhenti di kerangka memuat. Isinya
+sebenarnya ada di HTML yang dikirim server, tapi tidak pernah ditampilkan, dan
+React tidak pernah menyambung ke halaman itu (hidrasi mati) sehingga kotak
+pencarian pun tidak bisa dipakai.
+
+Sebabnya: `src/app/app/loading.tsx` membuat satu batas Suspense. Next 16 menunda
+penampilan batas itu untuk ditampilkan berpasangan, dan syaratnya minimal dua
+batas (`2 === $RB.length`). Karena di halaman ini batasnya cuma satu, penukaran
+kerangka memuat dengan isi asli tidak pernah dijadwalkan. Akibatnya kerangka
+memuat tinggal di layar selamanya.
+
+Perbaikannya: `src/app/app/loading.tsx` dibuang. Halaman ini membaca satu kueri
+database yang selesai dalam puluhan milidetik, jadi kerangka memuatnya memang
+tidak memberi apa-apa; tanpa batas Suspense, isinya langsung ikut di HTML
+pertama. Keadaan memuat dan keadaan gagal tetap ada di dalam papan (`Board`),
+jadi kalau koneksi putus tetap ada pesan dan tombol coba lagi.
+
+**Bukti.** `/app` dibuka langsung tiga kali berturut-turut: hidrasi jalan, tidak
+ada kerangka memuat yang tertinggal, kotak pencarian bisa dipakai. Cacat ini juga
+diuji di halaman lain (`/`, `/papan`, `/masuk`, `/daftar`) yang tidak punya
+`loading.tsx` dan tidak pernah kena.
+
+---
+
+## 8. Yang belum diuji, dan itu jujur
 
 - **Beban.** Belum diuji dengan banyak toko sekaligus atau papan berisi ratusan
   nota. Angka "papan 200 kartu tetap responsif" di PRD masih belum dibuktikan.

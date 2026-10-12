@@ -89,6 +89,7 @@ Sebagai pengguna, saya mau membuka satu kartu dan melihat isinya, supaya bisa me
 - Login dan logout. Sesi bertahan.
 - Tiga peran: owner, teknisi, kasir. Owner bisa membuat akun staf.
 - Papan kanban 6 tahap: Barang Masuk, Diagnosa, Nunggu Sparepart, Dikerjakan, Selesai, Sudah Diambil.
+- Pencarian unit di papan: nomor HP, nama pelanggan, nama perangkat, atau nomor nota. Bentuk tulisan tidak perlu persis (spasi, tanda hubung, besar-kecil huruf diabaikan).
 - Buat kartu servis baru (perangkat, nama, nomor HP, keluhan).
 - Pindah kartu antar tahap lewat drag-and-drop (laptop), ketuk (HP), dan keyboard.
 - Riwayat perpindahan per kartu (siapa, kapan, dari dan ke tahap mana).
@@ -97,7 +98,6 @@ Sebagai pengguna, saya mau membuka satu kartu dan melihat isinya, supaya bisa me
 
 ### Functional, P1 (setelah V1 terbukti)
 
-- Filter dan pencarian kartu (nama pelanggan, nomor servis).
 - Estimasi biaya dan tanggal janji selesai di kartu.
 - Catatan teknisi (internal, tidak dilihat pelanggan).
 - Tandai teknisi penanggung jawab di kartu.
@@ -229,6 +229,8 @@ Kalau pemilik produk memilih lain, perubahannya kecil.
 | Toko bisa mendaftar sendiri lalu langsung masuk | Isi formulir `/daftar` lewat peramban, catat URL setelahnya | **Lolos.** Pindah ke `/app` dengan nama toko yang didaftarkan. Jalan lewat tunnel publik juga |
 | Nota tersimpan di database, bukan di memori | Buat nota, muat ulang, lalu baca `pesanan_servis` lewat `psql` | **Lolos.** Nota masih ada setelah muat ulang dan setelah server dinyalakan ulang |
 | Tiga peran punya wewenang berbeda | Masuk sebagai teknisi, buka `/app/staf` langsung | **Lolos.** Dialihkan ke `/app?ditolak=peran`, menu Staf dan tombol arsip tidak muncul |
+| Pencarian unit ketemu walau tulisan berbeda | Cari dengan nama, nomor HP tanpa pemisah, perangkat, dan nomor nota | **Lolos.** `npm run check:pencarian`: 21 dari 21 pemeriksaan lolos. Di peramban: "08222222222" dan "0822-2222-2222" sama-sama menemukan nota yang sama; "SITI" dan "siti" sama; kueri kosong tidak menyembunyikan apa pun |
+| `/app` bisa dibuka langsung tanpa nyangkut di kerangka memuat | Buka `/app` langsung tiga kali berturut-turut, cek hidrasi | **Lolos.** Cacat lama ketemu dan diperbaiki (lihat `docs/GATE-fase2.md` bagian 7). Hidrasi jalan, kotak pencarian bisa dipakai, tidak ada kerangka memuat tertinggal |
 | Database mati tidak jadi halaman berbahasa Inggris | Matikan PostgreSQL, buka `/app`, lalu nyalakan lagi dan tekan Coba lagi | **Lolos.** Muncul pesan Indonesia dengan tindakan, dan papan pulih setelah database hidup |
 
 ### Known Gaps
