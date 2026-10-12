@@ -10,9 +10,9 @@ const PILIHAN: { id: PreviewMode; label: string }[] = [
 ];
 
 /**
- * Alat bantu review Fase 1: memaksa papan menampilkan salah satu status layar,
- * supaya status kosong, memuat, dan gagal bisa diperiksa tanpa menunggu
- * backend. Alat ini dihapus di Fase 2.
+ * Alat bantu review Fase 1: memaksa papan menampilkan salah satu keadaan layar,
+ * supaya keadaan kosong, memuat, dan gagal bisa diperiksa tanpa menunggu
+ * backend. Alat ini dibuang di Fase 2.
  */
 export function StatePreview({
   mode,
@@ -23,14 +23,8 @@ export function StatePreview({
 }) {
   return (
     <div className="flex flex-wrap items-center gap-2">
-      <span className="text-xs font-semibold text-muted">
-        Pratinjau status (Fase 1)
-      </span>
-      <div
-        role="group"
-        aria-label="Pratinjau status layar"
-        className="flex flex-wrap gap-1"
-      >
+      <span className="text-[11px] text-bench-muted">Pratinjau keadaan</span>
+      <div role="group" aria-label="Pratinjau keadaan layar" className="flex flex-wrap gap-1.5">
         {PILIHAN.map((p) => (
           <button
             key={p.id}
@@ -38,10 +32,10 @@ export function StatePreview({
             aria-pressed={mode === p.id}
             onClick={() => setMode(p.id)}
             className={[
-              "min-h-11 rounded-control border px-2.5 text-xs font-semibold",
+              "min-h-11 rounded-control border px-3 text-[13px]",
               mode === p.id
-                ? "border-struct bg-struct text-paper"
-                : "border-line-strong bg-surface",
+                ? "border-signal bg-signal font-bold text-ink"
+                : "border-bench-line text-bench-muted hover:text-bench-text",
             ].join(" ")}
           >
             {p.label}

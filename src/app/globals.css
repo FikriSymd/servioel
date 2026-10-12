@@ -1,65 +1,88 @@
 @import "tailwindcss";
 
 /*
-  Token Servioel. Dunia visual: nota servis dan meja kerja.
-  Semua pasangan warna di bawah sudah dihitung rasio kontrasnya:
-  - ink/paper 15.97, muted/paper 5.64, muted/tint 5.07, accent/paper 5.01, paper/struct 11.87
-  - line-strong/tint 3.22 (batas kontrol, ambang 3:1)
-  Alasan tiap token ada di docs/DESIGN.md.
+  Servioel. Dua bahan, satu motif.
+
+  Bahan pertama: meja kerja. Permukaan gelap hijau-arang tempat papan dipasang.
+  Dipilih gelap karena papan ini dilihat di meja kerja sepanjang hari, dan
+  karena nota kertas di atasnya jadi terang sendiri tanpa perlu hiasan.
+
+  Bahan kedua: kertas nota. Kertas tetap terang, bukan putih murni, supaya
+  tidak menyilaukan di bawah lampu.
+
+  Motif: nomor servis. Tiap unit punya satu nomor, dan nomor itu dicetak di
+  kepala tiap nota seperti stempel. Motif yang sama diulang di kepala halaman,
+  detail nota, dan formulir nota baru.
+
+  Rasio kontras terukur (WCAG, ambang 4.5 untuk teks, 3.0 untuk elemen):
+    kertas/meja        14.27
+    kertas/panel       12.61
+    tinta/kertas       16.47
+    tinta-redup/kertas  5.17
+    sinyal/meja         5.62
+    sinyal-tinta/kertas 4.63
+    nyangkut/meja       9.52
+    tinta/nyangkut     10.98
+    teks-meja/meja     13.05
+    redup-meja/meja     7.37
+    garis-meja/meja     3.45
+    batas-kertas/kertas 3.48
+    tinta/sinyal        5.62
+
+  Yang sengaja tidak dipakai: gradien, kaca/blur, bayangan dekoratif, emoji,
+  sudut membulat besar. Radius kecil karena nota kertas memang bersudut tegas.
 */
+
 @theme {
-  --color-paper: #f5f2ea;
-  --color-surface: #ffffff;
-  --color-tint: #ebe6d9;
-  --color-ink: #1a1712;
-  --color-muted: #665f53;
-  --color-line: #d8d2c4;
-  --color-line-strong: #8a7e62;
-  --color-struct: #22332e;
-  --color-accent: #b4430f;
-  --color-accent-on-dark: #e0763c;
+  /* Meja kerja */
+  --color-bench: #1a241f;
+  --color-bench-panel: #222e28;
+  --color-bench-line: #647a6d; /* garis struktur: 3.45 di meja, 3.05 di panel */
+  --color-bench-text: #ede8dc;
+  --color-bench-muted: #a8b3aa;
 
-  --font-sans: var(--font-jakarta), ui-sans-serif, system-ui, sans-serif;
+  /* Nota kertas */
+  --color-paper: #f6f2e8;
+  --color-ink: #16140e;
+  --color-ink-muted: #6c6557;
+  --color-paper-line: #cfc7b4; /* garis putus hiasan di atas kertas */
+  --color-paper-edge: #8a8070; /* batas kontrol di atas kertas: 3.48 */
 
-  --radius-card: 4px;
-  --radius-control: 6px;
+  /* Sinyal */
+  --color-signal: #ff6b2c; /* dipakai di atas meja gelap */
+  --color-signal-ink: #c2410c; /* dipakai di atas kertas */
+  --color-stuck: #f0c24b; /* kepala nota yang menginap */
+
+  --font-sans: var(--font-barlow), system-ui, sans-serif;
+  --font-display: var(--font-archivo), system-ui, sans-serif;
+
+  --radius-ticket: 2px;
+  --radius-control: 2px;
 }
 
-@layer base {
-  html {
-    color-scheme: light;
-  }
-
-  body {
-    background-color: var(--color-paper);
-    color: var(--color-ink);
-    font-family: var(--font-sans);
-    -webkit-font-smoothing: antialiased;
-  }
-
-  /* Angka servis selalu rata kolom, supaya nomor tidak "bergoyang" saat berubah. */
-  .angka {
-    font-variant-numeric: tabular-nums;
-    font-feature-settings: "tnum";
-  }
-
-  :focus-visible {
-    outline: 2px solid var(--color-accent);
-    outline-offset: 2px;
-  }
-
-  /* Di atas permukaan hijau tua, aksen oranye cuma 2.37:1 terhadap latar.
-     Jadi indikator fokus di sana memakai warna kertas. */
-  .on-dark :focus-visible {
-    outline-color: var(--color-paper);
-  }
+html {
+  color-scheme: dark;
 }
 
-@media (prefers-reduced-motion: reduce) {
-  *,
-  *::before,
-  *::after {
-    animation-duration: 0.01ms !important;
-    transition-duration: 0.01ms !important;
-  }
+body {
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Angka rata kolom, supaya nomor servis dan hitungan hari tidak goyang. */
+.angka {
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: "tnum" 1;
+}
+
+/*
+  Cincin fokus. Di atas meja pakai oranye sinyal; di atas kertas oranye terang
+  tidak cukup kontras, jadi dipakai oranye gelap.
+*/
+:focus-visible {
+  outline: 2px solid var(--color-signal);
+  outline-offset: 2px;
+}
+
+.on-paper :focus-visible {
+  outline-color: var(--color-signal-ink);
 }

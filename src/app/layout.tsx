@@ -1,29 +1,40 @@
 import type { Metadata } from "next";
-import { Plus_Jakarta_Sans } from "next/font/google";
+import { Archivo, Barlow } from "next/font/google";
 import "./globals.css";
 
-// Dipilih karena dirancang untuk kebutuhan huruf Latin bahasa Indonesia,
-// bukan karena jadi bawaan model. Alasan lengkap di docs/DESIGN.md.
-const jakarta = Plus_Jakarta_Sans({
-  variable: "--font-jakarta",
+/*
+  Archivo untuk kepala dan nomor: grotesque dari dunia papan nama dan sablon,
+  tegas untuk angka besar, dan punya angka rata kolom.
+  Barlow untuk teks: netral, sedikit teknik, enak dibaca di layar HP.
+  Bukan pasangan bawaan, dan keduanya punya huruf Latin yang lengkap.
+*/
+const archivo = Archivo({
   subsets: ["latin"],
+  variable: "--font-archivo",
+  display: "swap",
+});
+
+const barlow = Barlow({
+  subsets: ["latin"],
+  weight: ["400", "500", "600", "700"],
+  variable: "--font-barlow",
   display: "swap",
 });
 
 export const metadata: Metadata = {
-  title: "Servioel, papan servis untuk toko HP dan elektronik",
+  title: "Servioel, papan servis HP dan elektronik",
   description:
-    "Papan kanban alur servis: dari barang masuk sampai sudah diambil. Dipakai di HP dan laptop.",
+    "Papan kerja untuk toko servis HP dan elektronik. Tiap unit jadi satu nota bernomor yang bergerak dari Barang Masuk sampai Sudah Diambil.",
 };
 
 export default function RootLayout({
   children,
-}: {
-  children: React.ReactNode;
-}) {
+}: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="id" className={`${jakarta.variable} h-full`}>
-      <body className="min-h-full flex flex-col">{children}</body>
+    <html lang="id" className={`${archivo.variable} ${barlow.variable}`}>
+      <body className="flex min-h-full flex-col bg-bench font-sans text-bench-text">
+        {children}
+      </body>
     </html>
   );
 }

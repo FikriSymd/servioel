@@ -2,185 +2,200 @@ import Link from "next/link";
 import { SiteFooter } from "@/components/SiteFooter";
 import { SiteHeader } from "@/components/SiteHeader";
 import { BoardPreview } from "@/components/board/BoardPreview";
-import { buatPratinjauSingkat } from "@/lib/sample-data";
-import { STAGES } from "@/lib/stages";
+import { ServiceCardView } from "@/components/board/ServiceCardView";
+import { buatDataContoh, buatPratinjauSingkat } from "@/lib/sample-data";
+import { AMBANG_NYANGKUT_HARI, STAGES } from "@/lib/stages";
 
 export default function Beranda() {
   const pratinjau = buatPratinjauSingkat();
+  const semua = buatDataContoh();
+  const notaNyangkut = semua.find((o) => o.stage === "nunggu-sparepart")!;
+  const notaJalan = semua.find((o) => o.stage === "dikerjakan")!;
 
   return (
     <>
       <SiteHeader />
 
       <main className="flex-1">
-        <section className="border-b border-line">
-          <div className="mx-auto grid max-w-6xl gap-8 px-4 py-12 lg:grid-cols-[minmax(0,1.1fr)_minmax(0,1fr)] lg:items-center lg:py-16">
+        {/* Pembuka: papannya sendiri jadi kepala halaman, bukan tangkapan layar hiasan. */}
+        <section className="border-b border-bench-line">
+          <div className="mx-auto grid max-w-6xl gap-10 px-4 py-12 lg:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)] lg:items-center lg:py-16">
             <div>
-              <p className="text-sm font-semibold text-accent">
-                Untuk toko servis HP dan elektronik
-              </p>
-              <h1 className="mt-3 text-3xl font-extrabold leading-tight tracking-tight sm:text-4xl">
-                Ganti nota kertas dengan papan servis yang bisa dilihat semua orang
-                di toko
+              <h1 className="font-display text-4xl font-extrabold leading-[1.05] tracking-tight text-bench-text sm:text-5xl">
+                Satu unit, satu nota, satu tempat di papan
               </h1>
-              <p className="mt-4 max-w-xl text-base text-muted">
-                Satu unit servis jadi satu kartu. Kartunya bergerak dari barang
-                masuk sampai sudah diambil, dan tiap perpindahan tercatat. Saat
-                pelanggan menelpon, statusnya kelihatan tanpa membalik tumpukan
-                nota.
+              <p className="mt-5 max-w-lg text-base leading-relaxed text-bench-text/85">
+                Servioel mengganti tumpukan nota kertas di toko servis HP dan
+                elektronik. Tiap unit jadi satu nota bernomor yang bergerak dari
+                Barang Masuk sampai Sudah Diambil, dan tiap perpindahan dicatat.
               </p>
-              <div className="mt-6 flex flex-col gap-3 sm:flex-row">
+              <div className="mt-7 flex flex-col gap-3 sm:flex-row">
                 <Link
                   href="/papan"
-                  className="inline-flex min-h-11 items-center justify-center rounded-control bg-accent px-5 text-sm font-semibold text-paper"
+                  className="inline-flex min-h-11 items-center justify-center rounded-control bg-signal px-5 text-sm font-bold text-ink"
                 >
                   Buka papan contoh
                 </Link>
                 <Link
-                  href="#tahap"
-                  className="inline-flex min-h-11 items-center justify-center rounded-control border border-line-strong px-5 text-sm font-semibold"
+                  href="#nota"
+                  className="inline-flex min-h-11 items-center justify-center rounded-control border border-bench-line px-5 text-sm font-semibold text-bench-text hover:border-signal"
                 >
-                  Lihat alur tahapnya
+                  Lihat isi satu nota
                 </Link>
               </div>
-              <p className="mt-3 text-xs text-muted">
+              <p className="mt-3 text-[13px] text-bench-muted">
                 Papan contoh memakai data contoh, bukan data toko nyata.
               </p>
             </div>
 
-            <div className="min-w-0 lg:pl-4">
+            <div className="min-w-0">
               <BoardPreview orders={pratinjau} />
-              <p className="mt-2 text-xs text-muted">
-                Tampilan papan sebenarnya. Bisa digeser ke samping untuk melihat
-                tahap lain.
+              <p className="mt-2.5 text-[13px] text-bench-muted">
+                Tampilan papan yang sebenarnya, bisa digeser ke samping.
               </p>
             </div>
           </div>
         </section>
 
-        <section className="border-b border-line bg-surface">
-          <div className="mx-auto max-w-6xl px-4 py-12">
-            <h2 className="text-2xl font-extrabold tracking-tight">
-              Kenapa kertas dan grup chat bikin repot
-            </h2>
-            <div className="mt-6 grid gap-8 md:grid-cols-2">
-              <div>
-                <h3 className="text-base font-bold">Yang terjadi sekarang</h3>
-                <ul className="mt-3 flex flex-col gap-3 text-sm">
-                  <li className="border-l-2 border-line-strong pl-3">
-                    Unit yang nyangkut nunggu sparepart tidak kelihatan, jadi
-                    diam-diam menginap berminggu-minggu.
-                  </li>
-                  <li className="border-l-2 border-line-strong pl-3">
-                    Pemilik tidak tahu berapa unit yang sedang dikerjakan tanpa
-                    bertanya ke teknisi.
-                  </li>
-                  <li className="border-l-2 border-line-strong pl-3">
-                    Nota hilang atau tulisan tidak terbaca, dan riwayat unit
-                    lenyap bersamanya.
-                  </li>
-                </ul>
+        {/* Satu nota, dibedah. Bukan grid kartu fitur. */}
+        <section id="nota" className="border-b border-bench-line">
+          <div className="mx-auto grid max-w-6xl gap-10 px-4 py-12 lg:grid-cols-[minmax(0,1fr)_minmax(0,0.8fr)] lg:gap-16 lg:py-16">
+            <div>
+              <h2 className="font-display text-3xl font-extrabold tracking-tight text-bench-text">
+                Isi satu nota
+              </h2>
+              <p className="mt-4 max-w-lg text-base leading-relaxed text-bench-text/85">
+                Notanya kecil karena yang dibaca sambil berdiri di meja kerja cuma
+                empat hal: unit apa, punya siapa, rusaknya apa, dan sudah berapa
+                lama.
+              </p>
+
+              <dl className="mt-8 flex flex-col">
+                {[
+                  ["Nomor servis", "Penanda unit. Dibuat otomatis dan tidak dipakai ulang."],
+                  ["Perforasi", "Garis putus antara kepala nota dan isinya."],
+                  ["Nama dan nomor HP", "Untuk menelpon balik kalau ada yang perlu ditanya."],
+                  ["Keluhan", "Ditulis seperti kata pelanggan, bukan istilah teknisi."],
+                ].map(([istilah, arti]) => (
+                  <div key={istilah} className="border-t border-bench-line py-4 first:border-t-0 first:pt-0">
+                    <dt className="font-display text-sm font-bold text-bench-text">{istilah}</dt>
+                    <dd className="mt-1 text-sm text-bench-muted">{arti}</dd>
+                  </div>
+                ))}
+              </dl>
+            </div>
+
+            <div className="self-start">
+              <div className="max-w-[17rem]">
+                <ServiceCardView order={notaJalan} />
               </div>
-              <div>
-                <h3 className="text-base font-bold">Yang jadi kalau pakai papan</h3>
-                <ul className="mt-3 flex flex-col gap-3 text-sm">
-                  <li className="border-l-2 border-accent pl-3">
-                    Semua unit dan tahapnya kelihatan dalam satu layar, termasuk
-                    yang sudah lama tidak bergerak.
-                  </li>
-                  <li className="border-l-2 border-accent pl-3">
-                    Tiap perpindahan tahap dicatat: siapa yang mindahin dan kapan.
-                  </li>
-                  <li className="border-l-2 border-accent pl-3">
-                    Teknisi memindahkan kartu langsung dari HP sambil bekerja.
-                  </li>
-                </ul>
+              <p className="mt-3 text-[13px] text-bench-muted">Nota contoh, dari data contoh.</p>
+            </div>
+          </div>
+        </section>
+
+        {/* Bedanya nota biasa dan nota yang menginap, ditunjukkan bukan dijelaskan. */}
+        <section className="border-b border-bench-line">
+          <div className="mx-auto max-w-6xl px-4 py-12 lg:py-16">
+            <h2 className="font-display text-3xl font-extrabold tracking-tight text-bench-text">
+              Yang menginap kelihatan sendiri
+            </h2>
+            <p className="mt-4 max-w-2xl text-base leading-relaxed text-bench-text/85">
+              Kerugian terbesar toko servis bukan unit yang lama dikerjakan, tapi
+              unit yang diam-diam menunggu sparepart berhari-hari tanpa ada yang
+              sadar. Lewat {AMBANG_NYANGKUT_HARI} hari, kepala notanya berubah
+              kuning dan angkanya menyebut sudah berapa lama.
+            </p>
+
+            <div className="mt-9 flex flex-col gap-6 sm:flex-row sm:items-start sm:gap-10">
+              <div className="max-w-[17rem]">
+                <ServiceCardView order={notaJalan} />
+                <p className="mt-3 text-[13px] text-bench-muted">
+                  Berjalan normal. Kepala nota tetap tinta.
+                </p>
+              </div>
+              <div className="max-w-[17rem]">
+                <ServiceCardView order={notaNyangkut} />
+                <p className="mt-3 text-[13px] text-bench-muted">
+                  Menginap. Kepala nota kuning, angkanya menyebut berapa hari.
+                </p>
               </div>
             </div>
           </div>
         </section>
 
-        <section id="tahap" className="border-b border-line">
-          <div className="mx-auto max-w-6xl px-4 py-12">
-            <h2 className="text-2xl font-extrabold tracking-tight">
-              Enam tahap, mengikuti alur kerja nyata
+        {/* Alur tahap sebagai satu deret yang bisa digeser, bukan kartu bernomor. */}
+        <section className="border-b border-bench-line">
+          <div className="mx-auto max-w-6xl px-4 py-12 lg:py-16">
+            <h2 className="font-display text-3xl font-extrabold tracking-tight text-bench-text">
+              Alur yang dipakai toko servis
             </h2>
-            <p className="mt-2 max-w-2xl text-sm text-muted">
-              Bukan tiga kolom template. Tahapnya dibuat dari cara unit servis
-              benar-benar berpindah tangan.
+            <p className="mt-4 max-w-2xl text-base leading-relaxed text-bench-text/85">
+              Enam tahap, mengikuti cara unit benar-benar berpindah tangan. Bukan
+              tiga kolom template.
             </p>
-            <ol className="mt-6 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-              {STAGES.map((s, i) => (
-                <li
-                  key={s.id}
-                  className="rounded-card border border-line bg-surface p-4"
-                >
-                  <div className="flex items-baseline gap-2">
-                    <span className="angka text-xs font-bold text-accent">
-                      {String(i + 1).padStart(2, "0")}
-                    </span>
-                    <h3 className="text-sm font-bold">{s.label}</h3>
-                  </div>
-                  <p className="mt-1.5 text-sm text-muted">{s.arti}</p>
+
+            <ol className="mt-8 -mx-4 flex gap-4 overflow-x-auto border-t border-bench-line px-4 pt-4">
+              {STAGES.map((s) => (
+                <li key={s.id} className="w-[14rem] shrink-0">
+                  <h3 className="font-display text-sm font-bold text-bench-text">{s.label}</h3>
+                  <p className="mt-2 text-[13px] leading-snug text-bench-muted">{s.arti}</p>
                 </li>
               ))}
             </ol>
           </div>
         </section>
 
-        <section className="border-b border-line bg-surface">
-          <div className="mx-auto max-w-6xl px-4 py-12">
-            <h2 className="text-2xl font-extrabold tracking-tight">
-              Yang belum jadi
-            </h2>
-            <p className="mt-2 max-w-2xl text-sm text-muted">
-              Bagian ini ditulis apa adanya supaya tidak ada yang dikira sudah ada
-              padahal belum.
-            </p>
-            <ul className="mt-5 grid gap-3 text-sm md:grid-cols-2">
-              {[
-                "Penyimpanan permanen: papan masih memakai data contoh dan belum tersambung database.",
-                "Daftar toko dan login belum ada, jadi belum ada pemisahan data antar toko.",
-                "Akun staf (teknisi dan kasir) belum bisa dibuat.",
-                "Cetak nota, invoice, dan pembayaran belum ada.",
-                "Notifikasi WhatsApp ke pelanggan belum ada.",
-                "Harga dan langganan belum diputuskan.",
-              ].map((t) => (
-                <li
-                  key={t}
-                  className="rounded-card border border-dashed border-line-strong px-4 py-3 text-muted"
-                >
-                  {t}
-                </li>
-              ))}
-            </ul>
+        {/* Bagian jujur: yang belum jadi, ditulis apa adanya. */}
+        <section className="border-b border-bench-line">
+          <div className="mx-auto max-w-6xl px-4 py-12 lg:py-16">
+            <div className="grid gap-8 lg:grid-cols-[minmax(0,0.7fr)_minmax(0,1.3fr)]">
+              <h2 className="font-display text-3xl font-extrabold tracking-tight text-bench-text">
+                Yang belum jadi
+              </h2>
+              <ul className="flex flex-col">
+                {[
+                  "Papan masih memakai data contoh, belum tersambung database.",
+                  "Daftar toko dan login belum ada, jadi belum ada pemisahan data antar toko.",
+                  "Akun staf, teknisi dan kasir, belum bisa dibuat.",
+                  "Cetak nota, invoice, dan pembayaran belum ada.",
+                  "Notifikasi WhatsApp ke pelanggan belum ada.",
+                  "Harga dan langganan belum diputuskan.",
+                ].map((t) => (
+                  <li
+                    key={t}
+                    className="border-t border-bench-line py-4 text-sm text-bench-muted first:border-t-0 first:pt-0"
+                  >
+                    {t}
+                  </li>
+                ))}
+              </ul>
+            </div>
           </div>
         </section>
 
         <section>
-          <div className="mx-auto max-w-6xl px-4 py-12">
-            <div className="rounded-card border border-line-strong bg-tint px-5 py-8 sm:px-8">
-              <h2 className="text-2xl font-extrabold tracking-tight">
-                Cobain papannya dulu
-              </h2>
-              <p className="mt-2 max-w-xl text-sm text-muted">
-                Papan contoh bisa dibuka tanpa daftar. Pindahkan kartu, buat kartu
-                baru, dan lihat riwayat perpindahannya.
-              </p>
-              <div className="mt-5 flex flex-col gap-3 sm:flex-row">
-                <Link
-                  href="/papan"
-                  className="inline-flex min-h-11 items-center justify-center rounded-control bg-accent px-5 text-sm font-semibold text-paper"
-                >
-                  Buka papan contoh
-                </Link>
-                <Link
-                  href="/masuk"
-                  className="inline-flex min-h-11 items-center justify-center rounded-control border border-line-strong bg-surface px-5 text-sm font-semibold"
-                >
-                  Lihat status daftar
-                </Link>
-              </div>
+          <div className="mx-auto max-w-6xl px-4 py-12 lg:py-16">
+            <h2 className="font-display text-3xl font-extrabold tracking-tight text-bench-text">
+              Coba papannya
+            </h2>
+            <p className="mt-4 max-w-xl text-base leading-relaxed text-bench-text/85">
+              Papan contoh bisa dibuka tanpa akun. Seret notanya, tulis nota baru,
+              lalu lihat riwayat perpindahannya.
+            </p>
+            <div className="mt-7 flex flex-col gap-3 sm:flex-row">
+              <Link
+                href="/papan"
+                className="inline-flex min-h-11 items-center justify-center rounded-control bg-signal px-5 text-sm font-bold text-ink"
+              >
+                Buka papan contoh
+              </Link>
+              <Link
+                href="/masuk"
+                className="inline-flex min-h-11 items-center justify-center rounded-control border border-bench-line px-5 text-sm font-semibold text-bench-text hover:border-signal"
+              >
+                Lihat status daftar
+              </Link>
             </div>
           </div>
         </section>

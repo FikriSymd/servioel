@@ -11,9 +11,9 @@ type Props = {
 };
 
 /**
- * Kartu yang bisa di-drag (jalur laptop) sekaligus tombol (jalur keyboard).
- * Jarak aktivasi 8px dipasang di sensor supaya klik tanpa geser tetap
- * membuka detail, bukan dianggap drag.
+ * Nota yang bisa diangkat dengan mouse sekaligus tombol untuk keyboard.
+ * Jarak aktivasi 8px dipasang di sensornya, jadi klik tanpa geser tetap
+ * membuka detail dan tidak salah dibaca sebagai seret.
  */
 export function DraggableCard({ order, onBuka }: Props) {
   const { attributes, listeners, setNodeRef, transform, isDragging } = useDraggable({
@@ -28,7 +28,7 @@ export function DraggableCard({ order, onBuka }: Props) {
       onClick={() => onBuka(order.id)}
       aria-label={`${order.nomor}, ${order.pelanggan}, tahap ${stageLabel(order.stage)}. Buka detail.`}
       className={[
-        "block w-full cursor-grab text-left",
+        "block w-full cursor-grab rounded-ticket text-left",
         isDragging ? "opacity-40" : "",
       ].join(" ")}
       style={

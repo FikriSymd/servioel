@@ -6,7 +6,7 @@ import { Board } from "@/components/board/Board";
 export const metadata: Metadata = {
   title: "Papan servis (contoh), Servioel",
   description:
-    "Papan kanban alur servis dengan data contoh: tarik kartu antar tahap, atau ketuk kartu untuk memindahkannya.",
+    "Papan kerja servis dengan data contoh: seret nota antar tahap, atau buka notanya untuk memindahkan.",
 };
 
 export default function PapanPage() {

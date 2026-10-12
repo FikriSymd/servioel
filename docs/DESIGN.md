@@ -1,89 +1,84 @@
 # DESIGN: Servioel
 
-Arah desain. Ini yang bikin hasilnya punya karakter sendiri, bukan tampilan AI yang bisa ditukar logonya.
+Arah desain. Ini yang bikin hasilnya punya karakter sendiri, bukan tampilan yang bisa ditukar logonya.
 
-Status: **usulan, minta persetujuan pemilik produk**. Belum final.
+Status: **dipakai di Fase 1**. Revisi terakhir 2026-10-12, setelah arah pertama ditolak pemilik produk karena masih terasa seperti templat.
 
 ---
 
-## Design Read
+## Kenapa arah pertama dibuang
 
-Membaca ini sebagai: papan kerja operasional untuk teknisi servis HP/elektronik, dipakai di HP dan laptop, dengan bahasa visual "meja kerja servis dan nota servis", dial **ENERGY 2 / RHYTHM 2 / MOTION 1**.
+Arah pertama memakai kertas krem, hijau tua, dan oranye terakota. Itu bukan pilihan yang buruk, tapi terlalu mudah: pasangan krem-terakota itu sudah jadi klise, dan hasilnya jatuh ke pola pendaratan yang bisa ditukar logo: teks pengantar kecil di atas judul, tiga kartu fitur bernomor, blok ajakan berbingkai, dan setiap bagian bersusun sama.
 
-Alasan dialnya:
-- **ENERGY 2** (bukan 1, bukan 3): ini alat kerja, bukan panggung. Harus tenang saat dipakai seharian, tapi tidak boleh jadi mati. Landing page boleh naik sedikit, papan tetap kalem.
-- **RHYTHM 2**: papan itu sendiri berirama (kolom dan kartu), jadi bagian lain tidak perlu ikut ramai.
-- **MOTION 1**: gerakan hanya di tempat yang menjelaskan sesuatu (kartu yang baru pindah, kartu yang sedang diangkat). Tidak ada animasi yang jalan sendiri terus-menerus.
+Yang juga ikut dibuang: Plus Jakarta Sans (sudah jadi pilihan bawaan), garis warna di tepi kiri daftar, dan nomor bagian 01/02/03 yang tidak membawa informasi.
 
 ---
 
 ## Dunia Visual
 
-Dunia yang dipilih: **nota servis dan meja kerja**, bukan "dashboard SaaS gelap".
+Dua bahan, satu motif.
 
-Alasannya: nota servis kertas itu benda nyata di toko servis. Pelanggan pegang salinannya, unitnya ditempeli nomornya. Kalau identitasnya diambil dari benda itu, halaman ini kelihatan seperti punya sejarah, bukan seperti templat.
+**Bahan pertama: meja kerja.** Permukaan gelap hijau-arang tempat papan dipasang. Dipilih gelap bukan supaya terlihat teknologi, tapi karena papan ini dilihat di meja kerja sepanjang hari, dan karena nota kertas di atasnya jadi terang sendiri tanpa perlu hiasan.
 
-Yang sengaja **ditolak**: gradasi biru-ungu, latar gelap "karena kelihatan teknologi", kartu-kartu kaca, glow, ikon kilau/berlian/robot, tombol pil semua, dan tata letak pendaratan klon Linear/Vercel.
+**Bahan kedua: kertas nota.** Kertas tetap terang, dan bukan putih murni, supaya tidak menyilaukan di bawah lampu ruang.
 
----
+**Motif: nomor servis.** Tiap unit punya satu nomor, dan nomor itu dicetak di kepala tiap nota seperti stempel. Motif yang sama diulang di kepala halaman, panel detail, dan formulir nota baru. Kalau logonya ditukar, nomor stempel ini tetap bikin halaman ini kelihatan punya pemilik.
 
-## Identitas
-
-**Motif identitas: nomor servis sebagai stempel.** Tiap kartu servis punya nomor besar yang jadi penanda utamanya. Nomor itu muncul konsisten di papan, di detail, dan di riwayat. Kalau logo ditukar, nomor stempel ini tetap bikin halaman ini kelihatan punya pemilik.
-
-**Aksen tunggal: satu warna sinyal.** Dipakai hanya untuk dua hal: tindakan utama, dan penanda "kartu ini sudah lama di satu tahap". Tidak dipakai di setiap ikon, garis, dan latar.
+Yang ditolak: gradien, kaca/blur, bayangan dekoratif, emoji, sudut membulat besar, dan kartu-kartu yang mengapung di atas latar abu.
 
 ---
 
 ## Palet
 
-Inti 2 warna plus 1 aksen, ditambah netral. Warna status (untuk tahap) dihitung terpisah karena status itu fungsi, bukan hiasan.
+Semua pasangan dihitung rasio kontrasnya sebelum dipakai. Angka di bawah hasil hitungan, bukan perkiraan.
 
-| Peran | Warna | Alasan satu baris |
-|---|---|---|
-| Kertas (latar) | `#F5F2EA` | Putih kertas nota, bukan putih layar, biar hangat dan tidak menyilaukan |
-| Tinta (teks) | `#1A1712` | Hitam kecoklatan seperti tinta cetak, bukan hitam pekat |
-| Netral redup | `#6E675C` | Untuk teks sekunder, tetap lolos kontras di atas kertas |
-| Struktur | `#22332E` | Hijau tua meja kerja, untuk header dan navigasi |
-| Aksen | `#B4430F` | Oranye sinyal, satu-satunya warna yang "berteriak", dipakai hemat |
+| Peran | Warna | Kontras terukur | Alasan satu baris |
+|---|---|---|---|
+| Meja | `#1A241F` | kertas di atasnya 14.27 | Permukaan kerja, gelap tapi hijau, bukan hitam |
+| Panel meja | `#222E28` | teks redup di atasnya 6.51 | Sedikit lebih terang dari meja, untuk blok yang perlu dibedakan |
+| Garis meja | `#647A6D` | 3.45 di meja, 3.05 di panel | Garis struktur harus lolos 3:1 supaya terbaca, bukan cuma kelihatan |
+| Teks meja | `#EDE8DC` | 13.05 di meja | Teks utama di permukaan gelap |
+| Teks meja redup | `#A8B3AA` | 7.37 di meja, 6.51 di panel | Teks sekunder, tetap jauh di atas ambang |
+| Kertas | `#F6F2E8` | 14.27 di meja | Kertas nota, bukan putih layar |
+| Tinta | `#16140E` | 16.47 di atas kertas | Hitam kecoklatan seperti tinta cetak |
+| Tinta redup | `#6C6557` | 5.17 di atas kertas | Teks sekunder di atas kertas |
+| Batas kertas | `#8A8070` | 3.48 di atas kertas | Batas kontrol di atas kertas, lolos 3:1 |
+| Sinyal | `#FF6B2C` | 5.62 di meja | Satu-satunya warna yang berteriak, dipakai hemat |
+| Sinyal tinta | `#C2410C` | 4.63 di atas kertas | Versi sinyal untuk di atas kertas, karena oranye terang gagal di sana |
+| Menginap | `#F0C24B` | 9.52 di meja, 10.98 dengan tinta | Kepala nota yang menginap |
 
-Semua pasangan warna di atas dihitung rasio kontrasnya sebelum dipakai (target: teks 4.5:1, batas komponen 3:1). Angka pastinya ditulis di komponen saat Fase 1.
+Aturan pemakaian sinyal: hanya untuk tindakan utama, keadaan terpilih, dan penanda nota menginap. Tidak dipakai di setiap ikon, garis, dan latar.
 
 ---
 
 ## Tipografi
 
-- **UI dan isi:** Plus Jakarta Sans. Alasan: dirancang di Jakarta untuk kebutuhan huruf Latin bahasa Indonesia, jadi cocok dengan produk ini, dan bukan pilihan bawaan model (Inter/Geist/Space Grotesk).
-- **Nomor servis dan angka teknis:** satu rupa huruf angka yang lebih tegas dan sempit, supaya nomor besar tetap terbaca di kartu kecil. Pilihannya diputuskan di Fase 1 dan ditulis alasannya di sini.
-- Tidak pakai monospace raksasa sebagai gaya, dan tidak pakai label HURUF BESAR dengan jarak lebar sebagai hiasan.
+- **Kepala dan angka: Archivo.** Grotesque dari dunia papan nama dan sablon. Tegas untuk angka besar, dan punya angka rata kolom.
+- **Isi: Barlow.** Netral, sedikit teknik, enak dibaca di layar HP.
+- Keduanya punya huruf Latin lengkap, dan keduanya bukan pasangan bawaan model.
+- Tidak pakai monospace raksasa sebagai gaya, dan tidak pakai label HURUF BESAR berjarak lebar sebagai hiasan.
 
 ---
 
 ## Prinsip Tata Letak
 
-- **Papan adalah halamannya.** Di papan, tidak ada baris kartu statistik di atas, tidak ada grafik yang tidak menjawab pertanyaan. Yang dilihat pertama adalah kartu dan tahapnya.
-- **Satu titik fokus per layar.** Di papan, fokusnya kartu yang sedang diangkat atau kartu yang paling lama nyangkut.
-- **Kartu berbicara lewat isi, bukan lewat warna.** Nomor servis besar, nama pelanggan, keluhan singkat. Warna hanya menandai keadaan.
-- **Ruang kosong memisahkan tahap**, bukan sisa tempat.
+- **Papan adalah halamannya.** Di papan tidak ada baris kartu statistik, tidak ada grafik yang tidak menjawab pertanyaan. Yang dilihat pertama adalah nota dan tahapnya.
+- **Lajur tahap bukan kotak.** Lajur dipisahkan garis tegak, seperti rak di dinding. Enam kotak berbingkai di atas krem itu yang bikin arah pertama terasa seperti templat.
+- **Nota kertas di atas meja gelap.** Kontras bahan yang jadi pembeda, bukan warna hiasan.
+- **Kepala nota menandai keadaan.** Nota biasa berkepala tinta, nota yang menginap berkepala kuning. Warnanya satu-satunya bedanya, jadi kelihatan sambil menyapu pandangan.
 - **Papan di HP bukan versi kecil dari papan di laptop.** Di HP, satu tahap tampil penuh, tahap lain jadi pemilih yang bisa digeser.
+- **Ruang kosong memisahkan**, bukan sisa tempat.
 
 ---
 
 ## Gerakan (Motion 1)
 
-Yang bergerak hanya:
-- Kartu yang diangkat saat di-drag (terangkat dikit, bayangannya naik).
-- Kartu yang baru berpindah tahap (satu kilasan singkat supaya mata bisa mengikuti).
-- Umpan balik saat tombol ditekan.
-
-Yang tidak: tidak ada elemen yang berdenyut terus, tidak ada animasi masuk untuk setiap bagian halaman.
+Yang bergerak hanya nota yang diangkat saat diseret, dan umpan balik tombol yang ditekan. Tidak ada elemen yang berdenyut terus, tidak ada animasi masuk untuk setiap bagian halaman.
 
 ---
 
-## Yang Masih Perlu Diputuskan Pemilik Produk
+## Yang Masih Terbuka
 
-1. Setuju dengan dunia "nota servis dan meja kerja", atau mau arah lain?
-2. Setuju dengan palet kertas, hijau tua, dan oranye sinyal? Kalau mau warna toko tertentu, sebutkan.
-3. Nama produk: "Servioel" atau "Servio"?
-
-Arah ini **belum final** sampai ketiganya dijawab. Kalau dibangun sebelum dijawab, hasilnya ditandai "draft tanpa arah" dan bukan hasil yang layak rilis.
+1. Lambang toko. Sampai ada, nama ditulis sebagai teks. Lambang karangan tidak dibuat.
+2. Alamat kontak. Dibiarkan kosong atas permintaan pemilik produk.
+3. Warna toko tertentu, kalau pemilik produk mau menyesuaikan dengan warna tokonya.

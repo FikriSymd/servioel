@@ -1,47 +1,57 @@
 "use client";
 
-import { hariDiTahap, AMBANG_NYANGKUT_HARI } from "@/lib/stages";
+import { AMBANG_NYANGKUT_HARI, hariDiTahap, stageLabel } from "@/lib/stages";
 import type { ServiceOrder } from "@/lib/types";
 
 type Props = {
   order: ServiceOrder;
-  /** Angka lama di tahap dihitung dari waktu sekarang; dimatikan saat pratinjau statis. */
+  /** Umur dihitung dari waktu sekarang. Papan statis di halaman depan mematikan ini. */
   hitungUmur?: boolean;
 };
 
 /**
- * Tampilan satu kartu servis. Murni presentasi, tanpa perilaku.
- * Nomor servis jadi penanda utama kartu (motif identitas di docs/DESIGN.md).
+ * Satu nota servis. Ini unit tampilan terkecil dan yang paling sering dilihat.
+ *
+ * Susunannya meniru nota kertas: kepala berisi nomor, perforasi, lalu isi.
+ * Kepala nota jadi penanda keadaan. Nota biasa berkepala tinta; nota yang
+ * menginap di satu tahap berkepala kuning. Warnanya satu-satunya bedanya, jadi
+ * kelihatan sambil menyapu pandangan, tanpa perlu membaca.
  */
 export function ServiceCardView({ order, hitungUmur = true }: Props) {
-  const hari = hitungUmur ? hariDiTahap(order.masukTahapPada) : 0;
-  const nyangkut = hitungUmur && hari >= AMBANG_NYANGKUT_HARI;
+  const hari = hariDiTahap(order.masukTahapPada);
+  const nyangkut =
+    hitungUmur && hari >= AMBANG_NYANGKUT_HARI && order.stage !== "sudah-diambil";
 
   return (
-    <article className="rounded-card border border-line-strong bg-surface p-3">
-      <div className="flex items-start justify-between gap-2">
-        <span className="angka text-base font-extrabold tracking-tight">
+    <article className="overflow-hidden rounded-ticket border border-ink/15 bg-paper text-ink">
+      <div
+        className={[
+          "flex items-baseline justify-between gap-2 px-3 py-1.5",
+          nyangkut ? "bg-stuck" : "bg-ink text-paper",
+        ].join(" ")}
+      >
+        <span className="angka font-display text-[13px] font-extrabold tracking-tight">
           {order.nomor}
+        </span>
+        <span
+          className={[
+            "angka text-[11px] font-semibold",
+            nyangkut ? "text-ink" : "text-paper/80",
+          ].join(" ")}
+        >
+          {hitungUmur ? `${hari} hari` : stageLabel(order.stage)}
         </span>
       </div>
 
-      <p className="mt-1.5 text-sm font-semibold">{order.pelanggan}</p>
+      <div className="border-t border-dashed border-ink/30" />
 
-      <p className="mt-1 line-clamp-2 text-sm text-muted">{order.keluhan}</p>
-
-      <p className="angka mt-2 text-xs text-muted">{order.telepon}</p>
-
-      {hitungUmur && hari >= 1 && (
-        <p
-          className={
-            nyangkut
-              ? "mt-2 text-xs font-semibold text-accent"
-              : "mt-2 text-xs text-muted"
-          }
-        >
-          {nyangkut ? `${hari} hari nyangkut di tahap ini` : `${hari} hari di tahap ini`}
+      <div className="px-3 py-2.5">
+        <p className="truncate text-sm font-semibold leading-snug">{order.pelanggan}</p>
+        <p className="angka mt-0.5 text-[12px] text-ink-muted">{order.telepon}</p>
+        <p className="mt-2 line-clamp-2 text-[13px] leading-snug text-ink/85">
+          {order.keluhan}
         </p>
-      )}
+      </div>
     </article>
   );
 }

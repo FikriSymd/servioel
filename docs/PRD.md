@@ -213,17 +213,18 @@ Halaman harga dan langganan, cetak nota, notifikasi, laporan, pengerasan (rate l
 
 | Klaim | Cara bukti | Hasil |
 |---|---|---|
-| Papan bisa dipakai di HP tanpa scroll horizontal | Ukur lebar dokumen vs lebar layar di viewport 390 px | **Lolos.** 390px di ketiga halaman: scrollWidth 375 = clientWidth 375, overflow false |
-| Drag-and-drop jalan | Pindahkan kartu antar semua tahap, catat tiap aksi | **Lolos.** Mouse: SV-2026-0007 Barang Masuk ke Dikerjakan. Lewat tunnel publik: SV-2026-0008 Barang Masuk ke Diagnosa |
-| Papan bisa dipakai tanpa mouse | Tab ke kartu, pindah tahap lewat keyboard | **Lolos.** Tab berhenti di semua kontrol dengan outline terlihat; Space, panah kanan, Space memindahkan SV-2026-0008 ke Diagnosa |
-| Ketuk kartu di HP lalu pindah tahap | Buka detail, tekan tombol tahap | **Lolos.** Di iframe 390px: detail terbuka, fokus pindah ke tombol Tutup, tombol Sudah Diambil memindahkan kartu |
-| Kontras teks lolos AA | Hitung rasio tiap pasangan warna | **Lolos.** Audit di DOM: 0 gagal di /, /papan, /masuk. Script resmi: ink/paper 15.97, muted/paper 5.64, muted/tint 5.07, accent/paper 5.01, paper/struct 11.87 |
-| Tautan publik hidup | Buka tautan tunnel dari luar, cek status HTTP | **Lolos.** / , /papan, /masuk semuanya 200 lewat trycloudflare |
+| Papan bisa dipakai di HP tanpa scroll horizontal | Ukur lebar dokumen vs lebar layar di viewport 390 px | **Lolos.** 390px di ketiga halaman: scrollWidth 375 = clientWidth 375, overflow false. Target ketuk di bawah 44px: nol |
+| Seret nota antar tahap jalan | Pindahkan nota antar tahap dengan mouse, catat tiap aksi | **Lolos.** SV-2026-0007 Barang Masuk ke Nunggu Sparepart, dan ke Dikerjakan. Lewat tunnel publik juga jalan |
+| Papan bisa dipakai tanpa mouse | Tab ke nota, pindah tahap lewat keyboard | **Lolos.** Tab berhenti di semua kontrol dengan outline terlihat; Space, panah kanan, Space memindahkan nota satu tahap |
+| Ketuk nota di HP lalu pindah tahap | Buka detail, tekan tombol tahap | **Lolos.** Di iframe 390px: detail terbuka penuh lebar, fokus pindah ke tombol Tutup, tombol tahap memindahkan nota |
+| Kontras teks lolos AA | Hitung rasio tiap pasangan warna | **Lolos.** Audit di DOM: 0 gagal di /, /papan, /masuk. Script resmi, 13 pasangan PASS. Nilai: kertas/meja 14.27, tinta/kertas 16.47, tinta-redup/kertas 5.17, sinyal/meja 5.62, garis/meja 3.45, batas-kertas/kertas 3.48 |
+| Tautan publik hidup | Buka tautan tunnel dari luar, cek status HTTP | **Lolos.** /, /papan, /masuk semuanya 200 lewat trycloudflare, dan menyajikan build terbaru |
+| Tidak ada pola tampilan terlarang | Audit DOM: gradien, blur, bayangan dekoratif, garis tepi kiri, emoji | **Lolos.** Semuanya nol di ketiga halaman |
 | Data satu toko tidak bocor ke toko lain | Panggil fungsi domain langsung dari skrip dengan sesi toko lain | (diisi saat Fase 2) |
 
 ### Known Gaps
 
-- Belum ada kode. Semua di dokumen ini masih rencana.
+- Fase 1 (frontend) sudah dibangun dan diuji; lihat `docs/GATE.md`.
 - PostgreSQL belum terpasang di mesin ini.
 - Belum ada data toko nyata. Fase 1 memakai data contoh yang ditandai.
 - Harga dan model bisnis belum diputuskan.

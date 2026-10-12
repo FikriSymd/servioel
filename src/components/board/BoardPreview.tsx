@@ -3,28 +3,28 @@ import { STAGES } from "@/lib/stages";
 import type { ServiceOrder } from "@/lib/types";
 
 /**
- * Papan statis untuk landing page. Sengaja tanpa interaksi: yang ditampilkan
- * memang tampilan aslinya, cuma tidak bisa digeser. Bukan tangkapan layar
- * palsu dan bukan gambar dekoratif.
+ * Papan statis untuk halaman depan. Tanpa interaksi: yang ditampilkan memang
+ * tampilan papannya, cuma tidak bisa digeser. Bukan tangkapan layar palsu.
  */
 export function BoardPreview({ orders }: { orders: ServiceOrder[] }) {
   return (
-    <div className="overflow-x-auto rounded-card border border-line bg-paper p-3">
-      <div className="flex gap-3">
+    <div className="overflow-x-auto rounded-control border border-bench-line bg-bench-panel p-3">
+      <div className="flex gap-4">
         {STAGES.map((s) => {
           const isi = orders.filter((o) => o.stage === s.id);
           return (
-            <div
-              key={s.id}
-              className="w-[220px] shrink-0 rounded-card border border-line bg-tint p-2"
-            >
-              <div className="flex items-baseline justify-between gap-2 px-1 pb-2">
-                <h3 className="text-xs font-bold">{s.label}</h3>
-                <span className="angka text-xs text-muted">{isi.length}</span>
+            <div key={s.id} className="w-[196px] shrink-0">
+              <div className="flex items-baseline justify-between gap-2 border-b border-bench-line pb-1.5">
+                <h3 className="font-display text-[12px] font-bold text-bench-text">
+                  {s.label}
+                </h3>
+                <span className="angka text-[12px] font-bold text-bench-muted">
+                  {isi.length}
+                </span>
               </div>
-              <div className="flex flex-col gap-2">
+              <div className="mt-2 flex flex-col gap-2">
                 {isi.length === 0 ? (
-                  <p className="px-1 py-3 text-center text-xs text-muted">
+                  <p className="rounded-ticket border border-dashed border-bench-line px-2 py-3 text-center text-[11px] text-bench-muted">
                     belum ada unit
                   </p>
                 ) : (

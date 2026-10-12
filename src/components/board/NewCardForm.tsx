@@ -9,6 +9,7 @@ type Props = {
 
 type Galat = Partial<Record<"pelanggan" | "telepon" | "keluhan", string>>;
 
+/** Menulis nota baru: formulirnya sendiri berbentuk nota kertas. */
 export function NewCardForm({ onTutup, onSimpan }: Props) {
   const [pelanggan, setPelanggan] = useState("");
   const [telepon, setTelepon] = useState("");
@@ -37,7 +38,7 @@ export function NewCardForm({ onTutup, onSimpan }: Props) {
   }
 
   const kelasInput =
-    "mt-1 min-h-11 w-full rounded-control border border-line-strong bg-surface px-3 text-sm";
+    "mt-1.5 min-h-11 w-full rounded-control border border-paper-edge bg-paper px-3 text-sm text-ink";
 
   return (
     <div className="fixed inset-0 z-50 flex items-end justify-center sm:items-center">
@@ -45,20 +46,31 @@ export function NewCardForm({ onTutup, onSimpan }: Props) {
         type="button"
         aria-label="Tutup formulir"
         onClick={onTutup}
-        className="absolute inset-0 bg-ink/40"
+        className="absolute inset-0 bg-black/60"
       />
 
       <div
         role="dialog"
         aria-modal="true"
-        aria-labelledby="judul-kartu-baru"
-        className="relative w-full max-w-md rounded-t-card border border-line-strong bg-paper p-4 sm:rounded-card"
+        aria-labelledby="judul-nota-baru"
+        className="on-paper relative max-h-[92vh] w-full overflow-y-auto border-t-4 border-signal bg-paper p-4 text-ink sm:max-w-lg"
       >
-        <h2 id="judul-kartu-baru" className="text-lg font-bold">
-          Kartu servis baru
-        </h2>
-        <p className="mt-1 text-sm text-muted">
-          Kartu masuk ke tahap Barang Masuk dan langsung tampil di papan.
+        <div className="flex items-baseline justify-between gap-3">
+          <h2
+            id="judul-nota-baru"
+            className="font-display text-xl font-extrabold tracking-tight"
+          >
+            Nota servis baru
+          </h2>
+          <span className="angka text-[11px] font-semibold text-ink-muted">
+            nomor dibuat otomatis
+          </span>
+        </div>
+
+        <div className="mt-3 border-t border-dashed border-ink/30" />
+
+        <p className="mt-3 text-sm text-ink-muted">
+          Nota langsung masuk tahap Barang Masuk dan muncul di papan.
         </p>
 
         <form onSubmit={kirim} className="mt-4 flex flex-col gap-4" noValidate>
@@ -76,7 +88,10 @@ export function NewCardForm({ onTutup, onSimpan }: Props) {
               className={kelasInput}
             />
             {galat.pelanggan && (
-              <p id="g-pelanggan" className="mt-1 text-xs font-semibold text-accent">
+              <p
+                id="g-pelanggan"
+                className="mt-1 text-[13px] font-semibold text-signal-ink"
+              >
                 {galat.pelanggan}
               </p>
             )}
@@ -96,7 +111,7 @@ export function NewCardForm({ onTutup, onSimpan }: Props) {
               className={kelasInput}
             />
             {galat.telepon && (
-              <p id="g-telepon" className="mt-1 text-xs font-semibold text-accent">
+              <p id="g-telepon" className="mt-1 text-[13px] font-semibold text-signal-ink">
                 {galat.telepon}
               </p>
             )}
@@ -113,10 +128,10 @@ export function NewCardForm({ onTutup, onSimpan }: Props) {
               onChange={(e) => setKeluhan(e.target.value)}
               aria-invalid={galat.keluhan ? true : undefined}
               aria-describedby={galat.keluhan ? "g-keluhan" : undefined}
-              className="mt-1 w-full rounded-control border border-line-strong bg-surface px-3 py-2 text-sm"
+              className="mt-1.5 w-full rounded-control border border-paper-edge bg-paper px-3 py-2 text-sm text-ink"
             />
             {galat.keluhan && (
-              <p id="g-keluhan" className="mt-1 text-xs font-semibold text-accent">
+              <p id="g-keluhan" className="mt-1 text-[13px] font-semibold text-signal-ink">
                 {galat.keluhan}
               </p>
             )}
@@ -126,15 +141,15 @@ export function NewCardForm({ onTutup, onSimpan }: Props) {
             <button
               type="button"
               onClick={onTutup}
-              className="min-h-11 rounded-control border border-line-strong px-4 text-sm font-semibold"
+              className="min-h-11 rounded-control border border-paper-edge px-4 text-sm font-semibold hover:border-ink"
             >
               Batal
             </button>
             <button
               type="submit"
-              className="min-h-11 rounded-control bg-accent px-4 text-sm font-semibold text-paper"
+              className="min-h-11 rounded-control bg-ink px-4 text-sm font-semibold text-paper hover:bg-ink/90"
             >
-              Simpan kartu
+              Simpan nota
             </button>
           </div>
         </form>
