@@ -1,0 +1,65 @@
+@import "tailwindcss";
+
+/*
+  Token Servioel. Dunia visual: nota servis dan meja kerja.
+  Semua pasangan warna di bawah sudah dihitung rasio kontrasnya:
+  - ink/paper 15.97, muted/paper 5.64, muted/tint 5.07, accent/paper 5.01, paper/struct 11.87
+  - line-strong/tint 3.22 (batas kontrol, ambang 3:1)
+  Alasan tiap token ada di docs/DESIGN.md.
+*/
+@theme {
+  --color-paper: #f5f2ea;
+  --color-surface: #ffffff;
+  --color-tint: #ebe6d9;
+  --color-ink: #1a1712;
+  --color-muted: #665f53;
+  --color-line: #d8d2c4;
+  --color-line-strong: #8a7e62;
+  --color-struct: #22332e;
+  --color-accent: #b4430f;
+  --color-accent-on-dark: #e0763c;
+
+  --font-sans: var(--font-jakarta), ui-sans-serif, system-ui, sans-serif;
+
+  --radius-card: 4px;
+  --radius-control: 6px;
+}
+
+@layer base {
+  html {
+    color-scheme: light;
+  }
+
+  body {
+    background-color: var(--color-paper);
+    color: var(--color-ink);
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* Angka servis selalu rata kolom, supaya nomor tidak "bergoyang" saat berubah. */
+  .angka {
+    font-variant-numeric: tabular-nums;
+    font-feature-settings: "tnum";
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--color-accent);
+    outline-offset: 2px;
+  }
+
+  /* Di atas permukaan hijau tua, aksen oranye cuma 2.37:1 terhadap latar.
+     Jadi indikator fokus di sana memakai warna kertas. */
+  .on-dark :focus-visible {
+    outline-color: var(--color-paper);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}
