@@ -1,36 +1,81 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Servioel
 
-## Getting Started
+Papan Kanban multi-toko untuk toko servis (HP dan elektronik). Satu sistem dipakai
+banyak toko sekaligus, tapi data tiap toko terisolasi: Toko A tidak bisa melihat atau
+mengubah nota Toko B.
 
-First, run the development server:
+![Servioel — halaman muka](docs/screenshot.png)
+
+## Masalah yang diselesaikan
+
+Toko servis kecil biasanya mencatat unit yang masuk di kertas. Kertasnya hilang, tulisan
+tangan susah dibaca, dan tidak ada jejak siapa yang memindahkan unit ke tahap berikutnya.
+Servioel mengganti tumpukan kertas itu dengan satu papan digital: setiap unit jadi satu
+nota bernomor yang berpindah dari **Barang Masuk** sampai **Sudah Diambil**, dan setiap
+perpindahan tercatat siapa yang melakukannya.
+
+Satu akun bisa menaungi beberapa toko dalam satu sistem. Karena toko-toko ini berbagi
+database yang sama, bagian tersulitnya bukan papan Kanban-nya, melainkan memastikan data
+antar toko tidak pernah bocor. Isolasi itulah inti proyek ini, dan diuji otomatis.
+
+## Stack
+
+- **Next.js 16** (App Router) + **React 19** + **TypeScript**
+- **Prisma 7** + **PostgreSQL**
+- **Tailwind CSS v4**
+- **@dnd-kit** untuk drag-and-drop kartu di papan
+
+## Fitur
+
+- **Multi-toko dengan isolasi data.** Setiap baris punya kolom `tokoId`, dan nilainya
+  diambil dari sesi login di server, bukan dari apa yang dikirim browser. Setiap query
+  disaring dengan `tokoId` itu, sehingga menebak id nota toko lain tidak mengembalikan
+  apa pun.
+- **Tiga peran:** owner, teknisi, kasir. Pengecekan peran ada di server.
+- **Papan Kanban** dengan antrean tahap servis dan drag-and-drop antar kolom.
+- **Nomor servis berurutan** per toko per tahun (misal `SV-2026-0007`), dinaikkan di
+  dalam transaksi yang sama dengan penyimpanan nota agar tidak ada nomor ganda.
+- **Tautan nota publik** untuk pelanggan, pakai token acak (`crypto.randomBytes`),
+  bukan id yang bisa ditebak.
+- **Sesi aman:** token sesi disimpan sebagai hash, bukan token asli; kata sandi di-hash
+  dengan scrypt.
+- **Arsip otomatis** unit yang sudah lama di tahap "Sudah Diambil".
+
+## Cara menjalankan
+
+Butuh PostgreSQL yang berjalan di lokal.
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+npm install
+cp .env.example .env          # isi DATABASE_URL
+npm run db:deploy             # terapkan migrasi
+npm run db:generate
+npm run db:seed               # data contoh (opsional)
+npm run dev                   # buka http://localhost:3000
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Uji isolasi data
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+Isolasi antar toko tidak diuji lewat tampilan (tampilan bisa saja cuma menyembunyikan
+tombol), melainkan langsung ke fungsi server. Skrip ini membuat dua toko sungguhan,
+lalu mencoba membaca dan mengubah nota toko lain, dan memastikan semuanya gagal.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```bash
+npm run check:isolasi   # isolasi data antar toko
+npm run check:nota      # alur nota
+npm run check:pencarian # pencarian di papan
+```
 
-## Learn More
+## Struktur
 
-To learn more about Next.js, take a look at the following resources:
+- `src/lib/` — logika server: autentikasi, pesanan, toko, tahap servis.
+- `src/app/` — halaman (masuk, daftar, papan, nota).
+- `prisma/` — skema database dan migrasi.
+- `scripts/` — uji otomatis isolasi, nota, dan pencarian.
+- `docs/` — PRD, desain, dan catatan keputusan (gate).
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Dokumentasi
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- `docs/PRD.md` — kebutuhan produk.
+- `docs/DESIGN.md` — keputusan desain dan arsitektur.
+- `docs/GATE.md`, `docs/GATE-fase2.md` — catatan keputusan tiap fase.
